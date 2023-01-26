@@ -23,6 +23,7 @@ let password = `${process.env.DB_PASSWORD}`;
 let endURL = `${process.env.END_URL}`;
 let url = 'mongodb+srv://' + username + ':' + password + endURL;
 app.set('view engine', 'ejs');
+mongoose.set('strictQuery', true);
 
 //connect to MongoDB
 mongoose.connect(url)
@@ -33,7 +34,6 @@ mongoose.connect(url)
     });
 })
 .catch(err=>console.log(err.message));
-mongoose.set('strictQuery', true);
 
 //mount middleware
 app.use(express.static('public'));
