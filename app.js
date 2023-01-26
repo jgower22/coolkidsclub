@@ -25,6 +25,7 @@ let url = 'mongodb+srv://' + username + ':' + password + endURL;
 mongoose.set('strictQuery', true);
 app.set('view engine', 'ejs');
 
+
 //connect to MongoDB
 mongoose.connect(url)
 .then(() => {
