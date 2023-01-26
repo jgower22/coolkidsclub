@@ -1,3 +1,3 @@
 exports.index = (req, res, next) => {
-    res.send('Index');
+    res.render('./index');
 };

@@ -22,9 +22,7 @@ let username = `${process.env.DB_USERNAME}`;
 let password = `${process.env.DB_PASSWORD}`;
 let endURL = `${process.env.END_URL}`;
 let url = 'mongodb+srv://' + username + ':' + password + endURL;
-mongoose.set('strictQuery', true);
 app.set('view engine', 'ejs');
-
 
 //connect to MongoDB
 mongoose.connect(url)
@@ -35,6 +33,7 @@ mongoose.connect(url)
     });
 })
 .catch(err=>console.log(err.message));
+mongoose.set('strictQuery', true);
 
 //mount middleware
 app.use(express.static('public'));
@@ -62,7 +61,7 @@ app.use(methodOverride("_method"));
 
 //set up routes
 app.use('/', mainRoutes);
-//app.use('/trips', programRoutes);
+//app.use('/programs', programRoutes);
 //app.use('/users', userRoutes);
 
 app.use((req, res, next) => {
@@ -78,7 +77,7 @@ app.use((err, req, res, next) => {
     } 
     res.status(err.status);
     console.log(err.stack);
-    res.render('./error/serverError', {error: err});
+    res.render('./error', {error: err});
 });
 
 
