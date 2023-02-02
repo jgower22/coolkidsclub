@@ -19,7 +19,6 @@ let port = process.env.PORT || 8084;
 let host = '0.0.0.0';
 dotenv.config();
 let url = `${process.env.DB_URL}`;
-console.log(url);
 app.set('view engine', 'ejs');
 mongoose.set('strictQuery', true);
 
