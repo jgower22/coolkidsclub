@@ -21,7 +21,7 @@ dotenv.config();
 let username = `${process.env.DB_USERNAME}`;
 let password = `${process.env.DB_PASSWORD}`;
 let endURL = `${process.env.END_URL}`;
-let url = 'mongodb+srv://' + username + ':' + password + endURL;
+let url = 'mongodb+srv://' + username + ':' + password + '@' + endURL;
 app.set('view engine', 'ejs');
 mongoose.set('strictQuery', true);
 
