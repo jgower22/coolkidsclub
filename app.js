@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 //const programRoutes = require('./routes/programRoutes');
 const mainRoutes = require('./routes/mainRoutes');
-//const userRoutes = require('./routes/userRoutes');
+const userRoutes = require('./routes/userRoutes');
 const methodOverride = require('method-override');
 const mongoose = require('mongoose');
 const session = require('express-session');
@@ -19,7 +19,6 @@ let port = process.env.PORT || 8084;
 let host = '0.0.0.0';
 dotenv.config();
 let url = `${process.env.DB_URL}`;
-console.log(url);
 app.set('view engine', 'ejs');
 mongoose.set('strictQuery', true);
 
@@ -60,7 +59,7 @@ app.use(methodOverride("_method"));
 //set up routes
 app.use('/', mainRoutes);
 //app.use('/programs', programRoutes);
-//app.use('/users', userRoutes);
+app.use('/users', userRoutes);
 
 app.use((req, res, next) => {
     let err = new Error('The server cannot locate resource ' + req.url);
