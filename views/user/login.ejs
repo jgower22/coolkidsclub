@@ -1,0 +1,16 @@
+<%- include('../partials/header.ejs')%>
+    <main>
+        <div class="login-container centered">
+            <h2>Login to your account</h2>
+            <form action="/users/login" method="POST">
+                <label class="required" for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+
+                <label class="required" for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+
+                <input type="submit" value="Log In" id="submit">
+            </form>
+       </div>
+    </main>
+<%- include('../partials/footer.ejs')%>
