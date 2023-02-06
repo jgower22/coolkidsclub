@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/@primer/css@20.7.1/dist/primer.css">
+    <%if (locals.title) {%>
+        <title><%=title%></title>
+    <%} else {%>
+        <title>Cool Kids Club</title>
+    <%}%>
+</head>
+
+<body>
+    <header>
+        <div class="header-container">
+            <div class="top-banner">
+                <nav>
+                    <ul id="icon-list">
+                        <a><img class="icon" src="/images/facebook.png"></a>
+                        <a><img class="icon" src="/images/twitter.png"></a>
+                        <a><img class="icon" src="/images/instagram.png"></a>
+                        <a><img class="icon" src="/images/pintrest.png"></a>
+                    </ul>
+                    <ul id="nav-links">
+                        <a href="https://coolkidspro.wpengine.com/donate-now/" target="_blank">Donate</a>
+                        <a href="https://coolkidspro.wpengine.com/become-a-cool-kid/" target="_blank">Become a cool kids
+                            family</a>
+                    </ul>
+                </nav>
+            </div>
+            <div class="logo-banner">
+                <a href="/"><img id="logo" src="/images/logo.png"></a>
+            </div>
+            <div class="bottom-banner">
+                <nav>
+                    <ul id="bottom-banner-links">
+                        <a href="/users/login">Login</a>
+                        <a href="/users/new">Sign Up</a>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+</body>
+
+</html>
