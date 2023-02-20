@@ -39,22 +39,22 @@ app.use(morgan('tiny'));
 app.use(methodOverride("_method"));
 
 //Session
-/*app.use(session({
+app.use(session({
     secret: `${process.env.SESSION_KEY}`,
     resave: false,
     saveUninitialized: false,
     cookie: {maxAge: 60 * 60 * 1000}, //1 hour
     store: new MongoStore({mongoUrl: url})
-}));*/
+}));
 
 //Flash
-//app.use(flash());
+app.use(flash());
 
-/*app.use((req, res, next) => {
+app.use((req, res, next) => {
     res.locals.successMessages = req.flash('success');
     res.locals.errorMessages = req.flash('error');
     next();
-});*/
+});
 
 //set up routes
 app.use('/', mainRoutes);
