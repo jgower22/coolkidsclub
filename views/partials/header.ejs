@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://unpkg.com/@primer/css@20.7.1/dist/primer.css">
+    <script defer src="/javascript/userMenu.js"></script>
     <%if (locals.title) {%>
         <title><%=title%></title>
     <%} else {%>
@@ -40,11 +41,26 @@
                     <ul id="bottom-banner-links">
                         <a href="/users/login">Login</a>
                         <a href="/users/new">Sign Up</a>
+                        <a href=""><img id="userIcon" src="/images/user.png"></a>
                     </ul>
                 </nav>
             </div>
         </div>
     </header>
+    <div class="drop-down-menu-container">
+        <div class="profile">
+            <h3>Profile Name</h3>
+        </div>
+        <div class="drop-drop-menu">
+            <ul class="drop-down-links">
+                <li><img class="drop-down-icon" src="/images/profile.png"><a href="">View Profile</a></li>
+                <li><img class="drop-down-icon" src="/images/rsvp.png"><a href="">View RSVPs</a></li>
+                <li><img class="drop-down-icon" src="/images/inbox.png"><a href="">Inbox</a></li>
+                <li><img class="drop-down-icon" src="/images/settings.png"><a href="">Settings</a></li>
+                <li><img class="drop-down-icon" src="/images/log-out.png"><a href="">Logout</a></li>
+            </ul>
+        </div>
+    </div>
 </body>
 
 </html>
