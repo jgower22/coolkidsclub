@@ -74,6 +74,50 @@ a:hover {
     font-family: sans-serif;
 }
 
+#userIcon {
+    float: right;
+}
+
+.drop-down-menu-container {
+    max-height: 0px;
+    width: 250px;
+    background-color: #6ABF4B;
+    
+}
+
+.drop-down-menu-container.active {
+    max-height: 320px;
+} 
+
+.profile {
+    padding: 5px 0px 10px 10px;
+}
+
+.drop-down-links li {
+    list-style: none;
+    padding: 10px 0px;
+    display: flex;
+    align-items: center;
+}
+
+.drop-down-links li img {
+   margin-left: 30px;
+   margin-right: 0px;
+}
+
+.drop-down-menu-container h3 {
+    color: white;
+    text-decoration: none;
+    font-family: sans-serif;
+}
+
+.drop-down-links li a  {
+    color: white;
+    text-decoration: none;
+    font-family: sans-serif;
+    font-size: 18px;
+}
+
 .logo-banner {
     display: flex;
     margin-top: 10px;
