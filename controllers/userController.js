@@ -28,7 +28,7 @@ exports.addUser = (req, res, next) => {
 
     user.save()
     .then(() => {
-        req.flash('success', 'Account created successfully! Check your email for your password.');
+        req.flash('success', 'Account created successfully! Check your email for your username and password.');
         res.redirect('/users/login');
     })
     .catch(err => {
@@ -40,10 +40,11 @@ exports.addUser = (req, res, next) => {
 
         if (err.code === 11000) {
             console.log(err);
-            //console.log('USERNAME USED');
             //req.flash('error', 'Username has been used');
             if (Object.keys(err.keyPattern)[0] == 'username') {
-                console.log('ERROR GENERATING USERNAME - PLEASE TRY AGAIN.');
+                console.log('ERROR GENERATING USERNAME - TRYING AGAIN.');
+                this.addUser(req, res, next);
+                return;
             } else {
                 console.log('EMAIL IS NOT UNIQUE - PLEASE TRY AGAIN');
             }
