@@ -76,6 +76,3 @@ app.use((err, req, res, next) => {
     console.log(err.stack);
     res.render('./error', {error: err});
 });
-
-
-
