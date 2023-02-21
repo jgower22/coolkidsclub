@@ -15,10 +15,8 @@ const userSchema = new Schema({
 userSchema.pre('save', function(next) {
     let user = this;
 
-    console.log('TESt')
     if (!user.isModified('password'))
         return next();
-    console.log('TEST2')
 
     //Hash password
     bcrypt.hash(user.password, 10)
