@@ -156,7 +156,7 @@ label {
 
 #username, #password, #email, #firstName, #lastName  {
     width: 100%;
-    padding: 8px 20px;
+    padding: 8px 5px;
     border-radius: 6px;
     border: 1px solid grey;
 
@@ -172,7 +172,6 @@ label {
     padding: 8px 20px;
     text-transform: uppercase;
     float: right;
+    cursor: pointer;
 }
-
-
 
