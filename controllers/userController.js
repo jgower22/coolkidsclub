@@ -59,6 +59,16 @@ exports.login = (req, res) => {
     res.render('./user/login');
 };
 
+exports.logout = (req, res, next) => {
+    req.session.destroy(err => {
+        if (err)
+            return next(err);
+        else
+            res.redirect('/');
+    });
+
+};
+
 exports.processLogin = (req, res, next) => {
     let username = req.body.username;
     if (username)
@@ -83,7 +93,8 @@ exports.processLogin = (req, res, next) => {
                     console.log('Success');
                     if (user.firstLogin) {
                         //Redirect to ask user to change username/password
-                        User.findOne({  })
+                        //User.findOne({  })
+                        res.redirect('/users/profile');
                     } else {
                         req.flash('success', 'You have successfully logged in');
                         res.redirect('/users/profile');
