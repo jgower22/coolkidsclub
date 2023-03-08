@@ -1,6 +1,6 @@
 const express = require('express');
 const controller = require('../controllers/userController');
-const { isLoggedIn, isGuest } = require('../middlewares/auth.js');
+const { isLoggedIn, isGuest, isAdmin } = require('../middlewares/auth.js');
 
 const router = express.Router();
 
@@ -19,6 +19,8 @@ router.get('/rsvps', isLoggedIn, controller.rsvps);
 router.get('/inbox', isLoggedIn, controller.inbox);
 
 router.get('/settings', isLoggedIn, controller.settings);
+
+router.get('/admin', isLoggedIn, isAdmin, controller.admin);
 
 router.get('/logout', isLoggedIn, controller.logout);
 
