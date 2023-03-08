@@ -1,0 +1,11 @@
+<%- include('../partials/header.ejs')%>
+    <main>
+        <h2>Admin Dashboard</h2>
+        <%let numUsers = users.length;
+        let numAdmins = users.filter(user => user.role === 'Admin').length;
+        let numPatients = users.filter(user => user.role === 'Patient').length;%>
+        <h3>Total Users: <%=numUsers%></h3>
+        <h3>Num Admins: <%=numAdmins%></h3>
+        <h3>Num Patients: <%=numPatients%></h3>
+    </main>
+<%- include('../partials/footer.ejs')%>
