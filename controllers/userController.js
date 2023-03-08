@@ -128,3 +128,11 @@ exports.inbox = (req, res, next) => {
 exports.settings = (req, res, next) => {
     res.render('./user/settings');
 };
+
+exports.admin = (req, res, next) => {
+    User.find({}, {firstName: 1, lastName: 1, email: 1, role: 1})
+        .then(users => {
+            res.render('./user/admin', {users});
+        })
+        .catch(err => next(err));
+};
