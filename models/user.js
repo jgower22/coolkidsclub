@@ -8,7 +8,8 @@ const userSchema = new Schema({
     email: {type: String, required: [true, 'email cannot be empty'], unique: true},
     username: {type: String, unique: true},
     password: {type: String},
-    firstLogin: {type: Boolean}
+    firstLogin: {type: Boolean},
+    role: {type: String}
 },
 {timestamps: true});
 
