@@ -41,6 +41,9 @@
                     <ul id="bottom-banner-links">
                         <%if (user) {%>
                             <a href="/programs">Programs</a>
+                            <%if (role === 'Admin') {%>
+                                <a href="/programs/new">New Program</a>
+                            <%}%>
                             <a href=""><img id="userIcon" src="/images/user.png"></a>
                         <%} else {%>
                             <a href="/users/login">Login</a>
@@ -60,7 +63,11 @@
             <div class="drop-drop-menu">
                 <ul class="drop-down-links">
                     <li><img class="drop-down-icon" src="/images/profile.png"><a href="/users/profile">My Profile</a></li>
-                    <li><img class="drop-down-icon" src="/images/rsvp.png"><a href="/users/rsvps">My RSVPs</a></li>
+                    <%if (role === 'Patient') {%>
+                        <li><img class="drop-down-icon" src="/images/rsvp.png"><a href="/users/rsvps">My RSVPs</a></li>
+                    <%} else {%>
+                        <li><img class="drop-down-icon" src="/images/rsvp.png"><a href="/users/admin">Admin Tools</a></li>
+                    <%}%>
                     <li><img class="drop-down-icon" src="/images/inbox.png"><a href="/users/inbox">Inbox</a></li>
                     <li><img class="drop-down-icon" src="/images/settings.png"><a href="/users/settings">Settings</a></li>
                     <li><img class="drop-down-icon" src="/images/log-out.png"><a href="/users/logout">Logout</a></li>
