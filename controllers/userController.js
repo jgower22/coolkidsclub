@@ -116,3 +116,15 @@ exports.processLogin = (req, res, next) => {
 exports.profile = (req, res, next) => {
     res.render('./user/profile');
 };
+
+exports.rsvps = (req, res, next) => {
+    res.render('./user/rsvps');
+};
+
+exports.inbox = (req, res, next) => {
+    res.render('./user/inbox');
+};
+
+exports.settings = (req, res, next) => {
+    res.render('./user/settings');
+};
