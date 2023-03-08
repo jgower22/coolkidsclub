@@ -3,6 +3,7 @@ const morgan = require('morgan');
 //const programRoutes = require('./routes/programRoutes');
 const mainRoutes = require('./routes/mainRoutes');
 const userRoutes = require('./routes/userRoutes');
+const programRoutes = require('./routes/programRoutes');
 const methodOverride = require('method-override');
 const mongoose = require('mongoose');
 const session = require('express-session');
@@ -51,8 +52,9 @@ app.use(session({
 app.use(flash());
 
 app.use((req, res, next) => {
-    res.locals.user = req.session.user||null;
-    res.locals.fullName = req.session.fullName||null;
+    res.locals.user = req.session.user || null;
+    res.locals.fullName = req.session.fullName || null;
+    res.locals.role = req.session.role || null;
     res.locals.successMessages = req.flash('success');
     res.locals.errorMessages = req.flash('error');
     next();
@@ -60,7 +62,7 @@ app.use((req, res, next) => {
 
 //set up routes
 app.use('/', mainRoutes);
-//app.use('/programs', programRoutes);
+app.use('/programs', programRoutes);
 app.use('/users', userRoutes);
 
 app.use((req, res, next) => {
