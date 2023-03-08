@@ -14,6 +14,12 @@ router.post('/login', isGuest, controller.processLogin);
 
 router.get('/profile', isLoggedIn, controller.profile);
 
+router.get('/rsvps', isLoggedIn, controller.rsvps);
+
+router.get('/inbox', isLoggedIn, controller.inbox);
+
+router.get('/settings', isLoggedIn, controller.settings);
+
 router.get('/logout', isLoggedIn, controller.logout);
 
 module.exports = router;
