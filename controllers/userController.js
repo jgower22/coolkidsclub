@@ -9,6 +9,8 @@ exports.new = (req, res) => {
 exports.addUser = (req, res, next) => {
     let user = new User(req.body);
     user.firstLogin = true;
+    //Users are patients by default
+    user.role = 'Patient';
     
     //Generate a username from email
     user.username = generateFromEmail(
@@ -89,6 +91,7 @@ exports.processLogin = (req, res, next) => {
                     req.session.user = user._id;
                     req.session.fullName = user.firstName + ' ' + user.lastName;
                     req.session.email = user.email;
+                    req.session.role = user.role;
 
                     console.log('Success');
                     if (user.firstLogin) {
