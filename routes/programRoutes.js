@@ -1,10 +1,11 @@
 const express = require('express');
 const controller = require('../controllers/programController');
+const { isLoggedIn, isAdmin } = require('../middlewares/auth.js');
 
 const router = express.Router();
 
-router.get('/', controller.index);
+router.get('/', isLoggedIn, controller.index);
 
-router.get('/new', controller.newProgram);
+router.get('/new', isLoggedIn, isAdmin, controller.newProgram);
 
 module.exports = router;
