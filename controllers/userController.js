@@ -87,7 +87,7 @@ exports.processLogin = (req, res, next) => {
             .then(result => {
                 if (result) {
                     req.session.user = user._id;
-                    req.session.userFullName = user.firstName + ' ' + user.lastName;
+                    req.session.fullName = user.firstName + ' ' + user.lastName;
                     req.session.email = user.email;
 
                     console.log('Success');
@@ -108,4 +108,8 @@ exports.processLogin = (req, res, next) => {
         }
     })
     .catch(err => next(err));
+};
+
+exports.profile = (req, res, next) => {
+    res.render('./user/profile');
 };
