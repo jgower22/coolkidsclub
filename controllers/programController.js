@@ -11,7 +11,7 @@ exports.index = (req, res, next) => {
 
 exports.newProgram = (req, res, next) => {
     res.locals.title = 'New Program - Cool Kids Campaign';
-    res.render('./program/new');
+    res.render('./program/newProgram');
 };
 
 exports.createProgram = (req, res, next) => {
@@ -39,4 +39,38 @@ exports.showProgram = (req, res, next) => {
             }
         })
         .catch(err => next(err));
+};
+
+exports.editProgram = (req, res, next) => {
+    let id = req.params.id;
+
+    Program.findById(id)
+        .then(program => {
+            if (program) {
+                res.render('./program/editProgram', { program });
+            } else {
+                let err = new Error('Cannot find program with id: ' + id);
+                err.status = 404;
+                next(err);
+            }
+        })
+        .catch(err => next(err));
+};
+
+exports.updateProgram = (req, res, next) => {
+    let id = req.params.id;
+    let program = req.body;
+    Program.findByIdAndUpdate(id, program, { useFindAndModify: false, runValidators: true })
+        .then(program => {
+            if (program) {
+                req.flash('success', 'Program was updated successfully');
+                res.redirect('/programs/' + id);
+            } else {
+                let err = new Error('Cannot find program with id: ' + id);
+                err.status = 404;
+                next(err);
+            }
+        })
+        .catch(err => next(err));
+
 }
