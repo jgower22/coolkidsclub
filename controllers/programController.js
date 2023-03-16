@@ -72,5 +72,20 @@ exports.updateProgram = (req, res, next) => {
             }
         })
         .catch(err => next(err));
+};
 
+exports.deleteProgram = (req, res, next) => {
+    let id = req.params.id;
+    Program.findByIdAndDelete(id)
+        .then(program => {
+            if (program) {
+                req.flash('success', 'Program was deleted successfully');
+                res.redirect('/programs');
+            } else {
+                let err = new Error('Cannot find program with id: ' + id);
+                err.status = 404;
+                next(err);
+            }
+        })
+        .catch(err => next(err));
 }
