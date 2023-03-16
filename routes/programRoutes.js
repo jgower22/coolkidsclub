@@ -14,6 +14,13 @@ router.get('/new', isLoggedIn, isAdmin, controller.newProgram);
 //Save new program to database
 router.post('/', isLoggedIn, isAdmin, controller.createProgram);
 
+//Show program with specified id
 router.get('/:id', validateId, isLoggedIn, controller.showProgram);
+
+//Send edit form for program with specified id
+router.get('/:id/edit', validateId, isLoggedIn, isAdmin, controller.editProgram);
+
+//Update the program with specified id
+router.put('/:id', validateId, isLoggedIn, isAdmin, controller.updateProgram);
 
 module.exports = router;
