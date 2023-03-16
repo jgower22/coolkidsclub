@@ -1,5 +1,13 @@
 <%- include('../partials/header.ejs')%>
     <main>
         <h2>Programs</h2>
+        <%if (programs.length === 0) {%>
+            <h4>There are no programs to show.</h4>
+        <%} else {%>
+            <%for (let i = 0; i < programs.length; i++) {
+                let program = programs[i];%>
+                <h3><a href="/programs/<%=program.id%>"><%=program.name%></a></h3>
+            <%}
+        }%>
     </main>
 <%- include('../partials/footer.ejs')%>
