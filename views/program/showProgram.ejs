@@ -9,6 +9,7 @@
         <h2><%=program.details%></h2>
         <form>
             <button type="submit" formmethod="GET" formaction="/programs/<%=program._id%>/edit">Edit program</button>
+            <button type="submit" formmethod="POST" formaction="/programs/<%=program._id%>?_method=DELETE">Delete program</button>
         </form>
     </main>
 <%- include('../partials/footer.ejs')%>
