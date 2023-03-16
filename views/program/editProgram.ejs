@@ -1,0 +1,33 @@
+<%- include('../partials/header.ejs')%>
+    <main>
+        <div class="centered">
+            <div id="form-container">
+                <form action="/programs/<%=program._id%>?_method=PUT" method="POST">
+                    <h2>Edit this program</h2>
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" placeholder="Program Name" value="<%=program.name%>" required>
+
+                    <label for="location">Location:</label>
+                    <input type="text" id="location" name="location" placeholder="Location" value="<%=program.location%>"required>
+                    
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate" name="startDate" value="<%=program.startDate%>" required>
+
+                    <label for="startTime">Start Time:</label>
+                    <input type="time" id="startTime" name="startTime" value="12:00" value="<%=program.startTime%>" required>
+
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="endDate" name="endDate" value="<%=program.endDate%>" required>
+
+                    <label for="endTime">End Time:</label>
+                    <input type="time" id="endTime" name="endTime" value="13:00" value="<%=program.endTime%>" required>
+
+                    <label for="details">Details:</label>
+                    <textarea id="details" name="details" placeholder="Description of Program" rows="4" required><%=program.details%></textarea>
+
+                    <input type="submit" id="submit" value="Create Event">
+                </form>
+            </div>
+        </div>
+    </main>
+<%- include('../partials/footer.ejs')%>
