@@ -23,4 +23,7 @@ router.get('/:id/edit', validateId, isLoggedIn, isAdmin, controller.editProgram)
 //Update the program with specified id
 router.put('/:id', validateId, isLoggedIn, isAdmin, controller.updateProgram);
 
+//Delete the program with specified id
+router.delete('/:id', validateId, isLoggedIn, isAdmin, controller.deleteProgram);
+
 module.exports = router;
