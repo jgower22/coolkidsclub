@@ -7,9 +7,18 @@
         <h2><%=program.endDate%></h2>
         <h2><%=program.endTime%></h2>
         <h2><%=program.details%></h2>
-        <form>
-            <button type="submit" formmethod="GET" formaction="/programs/<%=program._id%>/edit">Edit program</button>
-            <button type="submit" formmethod="POST" formaction="/programs/<%=program._id%>?_method=DELETE">Delete program</button>
-        </form>
+        <%if (role === 'Admin') {%>
+            <form>
+                <button type="submit" formmethod="GET" formaction="/programs/<%=program._id%>/edit">Edit program</button>
+                <button type="submit" formmethod="POST" formaction="/programs/<%=program._id%>?_method=DELETE">Delete program</button>
+            </form>
+        <%}%>
+        <h2>RSVP</h2>
+        <%if (role === 'Patient') {%>
+            <form action="/programs/<%=program._id%>/rsvp" method="POST">
+                <button id="yes" value="yes" name="response" type="submit">Yes</button>
+                <button id="no" value="no" name="response" type="submit">No</button>
+            </form>
+        <%}%>
     </main>
 <%- include('../partials/footer.ejs')%>
