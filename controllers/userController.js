@@ -10,15 +10,39 @@ exports.new = (req, res) => {
 
 exports.addUser = (req, res, next) => {
     let user = new User(req.body);
+    let numDigits = 6;
     user.firstLogin = true;
     //Users are patients by default
     user.role = 'Patient';
-    
+
     //Generate a username from email
-    user.username = generateFromEmail(
-        user.email,
-        6
-    );
+    console.log('TEMP EMAIL: ' + req.body.tempEmail);
+    if (req.body.tempEmail) {
+        //If username has to be regenerated
+        user.username = generateFromEmail(
+            req.body.tempEmail,
+            numDigits
+        );
+
+        /*Testing
+        if (req.body.tempEmail.length === 7)
+            user.username = 'p360165';
+        if (req.body.tempEmail.length === 8)
+            user.username = 'p8348222';
+        if (req.body.tempEmail.length === 9)
+            user.username = 'p89784709';
+        console.log('TEMP EMAIL HERE: ' + req.body.tempEmail);*/
+        
+    } else {
+        user.username = generateFromEmail(
+            req.body.email,
+            numDigits
+        );
+
+        /*Testing
+        if (user.email.length === 7)
+            user.username = 'p360165';*/
+    }
     console.log('USERNAME: ' + user.username);
 
     //Generate a random password
@@ -31,31 +55,36 @@ exports.addUser = (req, res, next) => {
     console.log('PASSWORD: ' + password);
 
     user.save()
-    .then(() => {
-        req.flash('success', 'Account created successfully! Check your email for your username and password.');
-        res.redirect('/users/login');
-    })
-    .catch(err => {
-        if (err.name === 'ValidationError') {
-            req.flash('error', err.message);
-            console.log('ERROR: ' + err);
-            return res.redirect('/users/new');
-        }
-
-        if (err.code === 11000) {
-            console.log(err);
-            //req.flash('error', 'Username has been used');
-            if (Object.keys(err.keyPattern)[0] == 'username') {
-                console.log('ERROR GENERATING USERNAME - TRYING AGAIN.');
-                this.addUser(req, res, next);
-                return;
-            } else {
-                console.log('EMAIL IS NOT UNIQUE - PLEASE TRY AGAIN');
+        .then(() => {
+            req.flash('success', 'Account created successfully! Check your email for your username and password.');
+            res.redirect('/users/login');
+        })
+        .catch(err => {
+            if (err.name === 'ValidationError') {
+                req.flash('error', err.message);
+                console.log('ERROR: ' + err);
+                return res.redirect('/users/new');
             }
-            return res.redirect('/users/new');
-        }
-        next(err);
-    })
+
+            if (err.code === 11000) {
+                console.log(err);
+                //If username already exists, this will run until a unique username is generated
+                if (Object.keys(err.keyPattern)[0] == 'username') {
+                    let randomNum = Math.floor(Math.random() * 10);
+                    let curEmail = (req.body.tempEmail) ? req.body.tempEmail: req.body.email;
+                    let index = curEmail.indexOf('@');
+
+                    //Add random num to end of email
+                    req.body.tempEmail = curEmail.slice(0, index) + randomNum + curEmail.slice(index, curEmail.length);
+                    this.addUser(req, res, next);
+                    return;
+                } else {
+                    req.flash('error', 'Email has been used');
+                    return res.redirect('/users/new');
+                }
+            }
+            next(err);
+        })
 };
 
 exports.login = (req, res) => {
@@ -81,38 +110,38 @@ exports.processLogin = (req, res, next) => {
     let errorMessage = 'Invalid email and/or password';
 
     User.findOne({ username: username })
-    .then(user => {
-        if (!user) {
-            console.log('Cannot find username');
-            req.flash('error', errorMessage);
-            res.redirect('/users/login');
-        } else {
-            user.comparePassword(password)
-            .then(result => {
-                if (result) {
-                    req.session.user = user._id;
-                    req.session.fullName = user.firstName + ' ' + user.lastName;
-                    req.session.email = user.email;
-                    req.session.role = user.role;
+        .then(user => {
+            if (!user) {
+                console.log('Cannot find username');
+                req.flash('error', errorMessage);
+                res.redirect('/users/login');
+            } else {
+                user.comparePassword(password)
+                    .then(result => {
+                        if (result) {
+                            req.session.user = user._id;
+                            req.session.fullName = user.firstName + ' ' + user.lastName;
+                            req.session.email = user.email;
+                            req.session.role = user.role;
 
-                    console.log('Success');
-                    if (user.firstLogin) {
-                        //Redirect to ask user to change username/password
-                        //User.findOne({  })
-                        res.redirect('/users/profile');
-                    } else {
-                        req.flash('success', 'You have successfully logged in');
-                        res.redirect('/users/profile');
-                    }
-                } else {
-                    console.log('Error');
-                    req.flash('error', errorMessage);
-                    res.redirect('/users/login')
-                }
-            })
-        }
-    })
-    .catch(err => next(err));
+                            console.log('Success');
+                            if (user.firstLogin) {
+                                //Redirect to ask user to change username/password
+                                //User.findOne({  })
+                                res.redirect('/users/profile');
+                            } else {
+                                req.flash('success', 'You have successfully logged in');
+                                res.redirect('/users/profile');
+                            }
+                        } else {
+                            console.log('Error');
+                            req.flash('error', errorMessage);
+                            res.redirect('/users/login')
+                        }
+                    })
+            }
+        })
+        .catch(err => next(err));
 };
 
 exports.profile = (req, res, next) => {
@@ -121,7 +150,7 @@ exports.profile = (req, res, next) => {
 
 exports.rsvps = (req, res, next) => {
     let id = req.session.user;
-    Promise.all([User.find({_id: id}, {firstName: 1, lastName: 1}), rsvp.find({ user: id }).populate('program', '_id name')])
+    Promise.all([User.find({ _id: id }, { firstName: 1, lastName: 1 }), rsvp.find({ user: id }).populate('program', '_id name')])
         .then(results => {
             const [user, rsvps] = results;
             console.log(user);
@@ -140,9 +169,9 @@ exports.settings = (req, res, next) => {
 };
 
 exports.admin = (req, res, next) => {
-    User.find({}, {firstName: 1, lastName: 1, email: 1, role: 1})
+    User.find({}, { firstName: 1, lastName: 1, email: 1, role: 1 })
         .then(users => {
-            res.render('./user/admin', {users});
+            res.render('./user/admin', { users });
         })
         .catch(err => next(err));
 };
