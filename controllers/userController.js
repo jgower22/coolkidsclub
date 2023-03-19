@@ -37,7 +37,7 @@ exports.addUser = (req, res, next) => {
     })
     .catch(err => {
         if (err.name === 'ValidationError') {
-            //req.flash('error', err.message);
+            req.flash('error', err.message);
             console.log('ERROR: ' + err);
             return res.redirect('/users/new');
         }
