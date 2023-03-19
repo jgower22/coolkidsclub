@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const Program = require('../models/program');
+const rsvp = require('../models/rsvp');
 const { generateFromEmail, generateUsername } = require("unique-username-generator");
 const generator = require('generate-password');
 
@@ -114,11 +116,19 @@ exports.processLogin = (req, res, next) => {
 };
 
 exports.profile = (req, res, next) => {
-    res.render('./user/profile');
+    res.render('./user/profile', { user, rsvps });
 };
 
 exports.rsvps = (req, res, next) => {
-    res.render('./user/rsvps');
+    let id = req.session.user;
+    Promise.all([User.find({_id: id}, {firstName: 1, lastName: 1}), rsvp.find({ user: id }).populate('program', '_id name')])
+        .then(results => {
+            const [user, rsvps] = results;
+            console.log(user);
+            console.log(rsvps);
+            res.render('./user/rsvps', { user, rsvps });
+        })
+        .catch(err => next(err));
 };
 
 exports.inbox = (req, res, next) => {
