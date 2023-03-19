@@ -141,7 +141,7 @@ a:hover {
     justify-content: center;
 }
 
-#login-container {
+#login-container, #signup-container {
     display: block;
     width: 30%;
 }
