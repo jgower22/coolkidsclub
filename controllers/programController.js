@@ -1,4 +1,5 @@
 const Program = require('../models/program');
+const rsvp = require('../models/rsvp');
 
 exports.index = (req, res, next) => {
     res.locals.title = 'Programs - Cool Kids Campaign';
@@ -16,6 +17,8 @@ exports.newProgram = (req, res, next) => {
 
 exports.createProgram = (req, res, next) => {
     let program = new Program(req.body);
+    program.createdBy = req.session.user;
+    program.lastModifiedBy = req.session.user;
     
     program.save()
         .then(program => {
@@ -28,10 +31,12 @@ exports.createProgram = (req, res, next) => {
 exports.showProgram = (req, res, next) => {
     let id = req.params.id;
 
-    Program.findById(id)
-        .then(program => {
+    Promise.all([Program.findById(id), rsvp.find( { program: id, user: req.session.user })])
+        .then(results => {
+            const [program, rsvp] = results;
+            console.log(rsvp);
             if (program) {
-                res.render('./program/showProgram', { program });
+                res.render('./program/showProgram', { program, rsvp });
             } else {
                 let err = new Error('Cannot find program with id: ' + id);
                 err.status = 404;
@@ -88,4 +93,17 @@ exports.deleteProgram = (req, res, next) => {
             }
         })
         .catch(err => next(err));
-}
+};
+
+exports.rsvp = (req, res, next) => {
+    let id = req.params.id;
+    const updateObj = {
+        response: req.body.response.toLowerCase()
+    };
+    rsvp.findOneAndUpdate({ user: res.locals.user, program: id}, updateObj, { upsert: true, runValidators: true })
+        .then(rsvp => {
+            req.flash('success', 'Successfully RSVP\'d for this program');
+            res.redirect('/programs/' + id);
+        })
+        .catch(err => next(err));
+};
