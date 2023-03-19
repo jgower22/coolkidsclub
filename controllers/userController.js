@@ -116,7 +116,7 @@ exports.processLogin = (req, res, next) => {
 };
 
 exports.profile = (req, res, next) => {
-    res.render('./user/profile', { user, rsvps });
+    res.render('./user/profile');
 };
 
 exports.rsvps = (req, res, next) => {
