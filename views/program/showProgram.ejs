@@ -15,6 +15,9 @@
         <%}%>
         <%if (role === 'Patient') {%>
             <h2>RSVP</h2>
+            <%if (rsvp) {%>
+                <h3>You have successfully responsed with <%=rsvp[0].response%>.</h3>
+            <%}%>
             <form action="/programs/<%=program._id%>/rsvp" method="POST">
                 <button id="yes" value="yes" name="response" type="submit">Yes</button>
                 <button id="no" value="no" name="response" type="submit">No</button>
