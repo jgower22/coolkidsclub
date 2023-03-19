@@ -31,12 +31,12 @@ exports.createProgram = (req, res, next) => {
 exports.showProgram = (req, res, next) => {
     let id = req.params.id;
 
-    Promise.all([Program.findById(id), rsvp.find( { program: id, user: req.session.user })])
+    //rsvp.find( { program: id, user: req.session.user })
+    Promise.all([Program.findById(id), rsvp.find({ program: id })])
         .then(results => {
-            const [program, rsvp] = results;
-            console.log(rsvp);
+            const [program, rsvps] = results;
             if (program) {
-                res.render('./program/showProgram', { program, rsvp });
+                res.render('./program/showProgram', { program, rsvps });
             } else {
                 let err = new Error('Cannot find program with id: ' + id);
                 err.status = 404;
