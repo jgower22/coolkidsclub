@@ -12,12 +12,22 @@
                 <button type="submit" formmethod="GET" formaction="/programs/<%=program._id%>/edit">Edit program</button>
                 <button type="submit" formmethod="POST" formaction="/programs/<%=program._id%>?_method=DELETE">Delete program</button>
             </form>
-        <%}%>
+            <h2>RSVPs</h2>
+            <%if (rsvps.length) {
+                let yesRsvps = rsvps.filter(rsvp => rsvp.response === 'yes');
+                let numNo = rsvps.length - yesRsvps.length;%>
+                <h3>Num Yes: <%=yesRsvps.length%></h3>
+                <h3>Num No: <%=numNo%></h3>
+            <%}
+        }%>
         <%if (role === 'Patient') {%>
             <h2>RSVP</h2>
-            <%if (rsvp) {%>
-                <h3>You have successfully responsed with <%=rsvp[0].response%>.</h3>
+
+            <%let myRsvp = rsvps.filter(rsvp => rsvp.user == user);
+            if (myRsvp.length) {%>
+                <h3>You have successfully responsed with <%=myRsvp[0].response%>.</h3>
             <%}%>
+
             <form action="/programs/<%=program._id%>/rsvp" method="POST">
                 <button id="yes" value="yes" name="response" type="submit">Yes</button>
                 <button id="no" value="no" name="response" type="submit">No</button>
