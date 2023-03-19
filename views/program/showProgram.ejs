@@ -13,8 +13,8 @@
                 <button type="submit" formmethod="POST" formaction="/programs/<%=program._id%>?_method=DELETE">Delete program</button>
             </form>
         <%}%>
-        <h2>RSVP</h2>
         <%if (role === 'Patient') {%>
+            <h2>RSVP</h2>
             <form action="/programs/<%=program._id%>/rsvp" method="POST">
                 <button id="yes" value="yes" name="response" type="submit">Yes</button>
                 <button id="no" value="no" name="response" type="submit">No</button>
