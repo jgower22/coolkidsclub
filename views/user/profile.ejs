@@ -1,6 +1,10 @@
 <%- include('../partials/header.ejs')%>
     <main>
-        <h2>Welcome, <%=user.firstName  + ' ' + user.lastName%></h2>
+        <%if (adminView) {%>
+            <h2>Name: <%=user.firstName  + ' ' + user.lastName%></h2>
+        <%} else {%>
+            <h2>Hello, <%=user.firstName  + ' ' + user.lastName%></h2>
+        <%}%>
         <h3>Member since: <%=user.createdAt%></h3>
         <h3>Role: <%=user.role%></h3>
     </main>
