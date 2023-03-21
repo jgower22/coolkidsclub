@@ -22,14 +22,16 @@
             if (admin.email === email) {%>
                 <p><%=admin.firstName + ' ' + admin.lastName + ' ' + admin.email + ' '%><b>(you)</b></p>
             <%} else {%>
-                <p><a href="/users/profile/<%=admin.id%>"><%=admin.firstName + ' ' + admin.lastName + ' '%></a><%=admin.email%></p>
+                <p><a href="/users/profile/<%=admin.id%>"><%=admin.firstName + ' ' + admin.lastName + ' '%></a></p>
+                <a href="mailto:<%=admin.email%>"><%=admin.email%></a>
             <%}
         }%>
 
         <h3>Patients</h3>
         <%for (let i = 0; i < patients.length; i++) {
             let patient = patients[i];%>
-            <p><a href="/users/profile/<%=patient.id%>"><%=patient.firstName + ' ' + patient.lastName + ' '%></a><%=patient.email%></p>
+            <p><a href="/users/profile/<%=patient.id%>"><%=patient.firstName + ' ' + patient.lastName + ' '%></a></p>
+            <a href="mailto:<%=patient.email%>"><%=patient.email%></a>
         <%}%>
 
     </main>
