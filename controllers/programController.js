@@ -81,8 +81,10 @@ exports.updateProgram = (req, res, next) => {
 
 exports.deleteProgram = (req, res, next) => {
     let id = req.params.id;
-    Program.findByIdAndDelete(id)
-        .then(program => {
+    //Delete program and all associated RSVPs
+    Promise.all([Program.findByIdAndDelete(id, { useFindAndModify: false }), rsvp.deleteMany({ program: id })])
+        .then(results => {
+            const [program, rsvp] = results;
             if (program) {
                 req.flash('success', 'Program was deleted successfully');
                 res.redirect('/programs');
