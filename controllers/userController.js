@@ -145,8 +145,9 @@ exports.processLogin = (req, res, next) => {
 
 exports.myProfile = (req, res, next) => {
     let id = req.session.user;
-    User.findById(id)
+    User.findById( { _id: id }, { _id: 0, password: 0 })
         .then(user => {
+            console.log('USER: ' + user);
             let adminView = false;
             res.render('./user/profile', { user, adminView });
         })
@@ -156,11 +157,12 @@ exports.myProfile = (req, res, next) => {
 exports.userProfile = (req, res, next) => {
     let id = req.params.id;
     console.log('ID: ' + id);
-    User.findById(id)
-        .then(user => {
+    Promise.all([User.findById( { _id: id }, { password: 0 }), rsvp.find({ user: id }).populate('program', '_id name')])
+        .then(results => {
+            const [user, rsvps] = results;
             let adminView = true;
             if (user) {
-                res.render('./user/profile', { user, adminView });
+                res.render('./user/profile', { user, rsvps, adminView });
             } else {
                 let err = new Error('Cannot find user with id: ' + id);
                 err.status = 404;
