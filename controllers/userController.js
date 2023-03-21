@@ -145,7 +145,12 @@ exports.processLogin = (req, res, next) => {
 };
 
 exports.profile = (req, res, next) => {
-    res.render('./user/profile');
+    let id = req.session.user;
+    User.findById(id)
+        .then(user => {
+            res.render('./user/profile', { user });
+        })
+        .catch(err => next(err));
 };
 
 exports.rsvps = (req, res, next) => {
