@@ -99,7 +99,6 @@ exports.logout = (req, res, next) => {
         else
             res.redirect('/');
     });
-
 };
 
 exports.processLogin = (req, res, next) => {
@@ -158,8 +157,8 @@ exports.rsvps = (req, res, next) => {
     Promise.all([User.find({ _id: id }, { firstName: 1, lastName: 1 }), rsvp.find({ user: id }).populate('program', '_id name')])
         .then(results => {
             const [user, rsvps] = results;
-            console.log(user);
-            console.log(rsvps);
+            console.log('USER: ' + user);
+            console.log('RSVPS: ' + rsvps);
             res.render('./user/rsvps', { user, rsvps });
         })
         .catch(err => next(err));
