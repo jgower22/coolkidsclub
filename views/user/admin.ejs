@@ -2,10 +2,35 @@
     <main>
         <h2>Admin Dashboard</h2>
         <%let numUsers = users.length;
-        let numAdmins = users.filter(user => user.role === 'Admin').length;
-        let numPatients = users.filter(user => user.role === 'Patient').length;%>
+        let admins = [];
+        let patients = [];
+        for (let i = 0; i < users.length; i++) {
+            let user = users[i];
+            if (user.role === 'Admin')
+                admins.push(user);
+            if (user.role === 'Patient')
+                patients.push(user);
+        }%>
+
         <h3>Total Users: <%=numUsers%></h3>
-        <h3>Num Admins: <%=numAdmins%></h3>
-        <h3>Num Patients: <%=numPatients%></h3>
+        <h3>Num Admins: <%=admins.length%></h3>
+        <h3>Num Patients: <%=patients.length%></h3>
+
+        <h3>Admins</h3>
+        <%for (let i = 0; i < admins.length; i++) {
+            let admin = admins[i];
+            if (admin.email === email) {%>
+                <p><%=admin.firstName + ' ' + admin.lastName + ' ' + admin.email + ' '%><b>(you)</b></p>
+            <%} else {%>
+                <p><a href="/users/profile/<%=admin.id%>"><%=admin.firstName + ' ' + admin.lastName + ' '%></a><%=admin.email%></p>
+            <%}
+        }%>
+
+        <h3>Patients</h3>
+        <%for (let i = 0; i < patients.length; i++) {
+            let patient = patients[i];%>
+            <p><a href="/users/profile/<%=patient.id%>"><%=patient.firstName + ' ' + patient.lastName + ' '%></a><%=patient.email%></p>
+        <%}%>
+
     </main>
 <%- include('../partials/footer.ejs')%>
