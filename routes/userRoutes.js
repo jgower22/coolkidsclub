@@ -1,6 +1,7 @@
 const express = require('express');
 const controller = require('../controllers/userController');
 const { isLoggedIn, isGuest, isAdmin } = require('../middlewares/auth.js');
+const { validateUserId } = require('../middlewares/validator.js');
 
 const router = express.Router();
 
@@ -12,7 +13,9 @@ router.get('/login', isGuest, controller.login);
 
 router.post('/login', isGuest, controller.processLogin);
 
-router.get('/profile', isLoggedIn, controller.profile);
+router.get('/profile', isLoggedIn, controller.myProfile);
+
+router.get('/profile/:id', isLoggedIn, isAdmin, validateUserId, controller.userProfile);
 
 router.get('/rsvps', isLoggedIn, controller.rsvps);
 
