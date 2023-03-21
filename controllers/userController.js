@@ -143,14 +143,32 @@ exports.processLogin = (req, res, next) => {
         .catch(err => next(err));
 };
 
-exports.profile = (req, res, next) => {
+exports.myProfile = (req, res, next) => {
     let id = req.session.user;
     User.findById(id)
         .then(user => {
-            res.render('./user/profile', { user });
+            let adminView = false;
+            res.render('./user/profile', { user, adminView });
         })
         .catch(err => next(err));
 };
+
+exports.userProfile = (req, res, next) => {
+    let id = req.params.id;
+    console.log('ID: ' + id);
+    User.findById(id)
+        .then(user => {
+            let adminView = true;
+            if (user) {
+                res.render('./user/profile', { user, adminView });
+            } else {
+                let err = new Error('Cannot find user with id: ' + id);
+                err.status = 404;
+                next(err);
+            }
+        })
+        .catch(err => next(err));
+}
 
 exports.rsvps = (req, res, next) => {
     let id = req.session.user;
@@ -173,9 +191,12 @@ exports.settings = (req, res, next) => {
 };
 
 exports.admin = (req, res, next) => {
+    res.locals.title = 'Admin Tools - Cool Kids Campaign';
     User.find({}, { firstName: 1, lastName: 1, email: 1, role: 1 })
         .then(users => {
             res.render('./user/admin', { users });
         })
         .catch(err => next(err));
 };
+
+
