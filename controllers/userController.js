@@ -202,4 +202,25 @@ exports.admin = (req, res, next) => {
         .catch(err => next(err));
 };
 
+exports.makeAdmin = (req, res, next) => {
+    let patientId = req.params.id;
+    User.findById(patientId)
+        .then(user => {
+            if (user) {
+                user.role = 'Admin';
+                user.save()
+                    .then( user => {
+                        req.flash('success', 'User role has been updated to admin.');
+                        res.redirect('back');
+                    })
+                    .catch(err => next(err));
+            } else {
+                let err = new Error('Cannot find user with id: ' + id);
+                err.status = 404;
+                next(err);
+            }
+        })
+        .catch(err => next(err));
+}
+
 
