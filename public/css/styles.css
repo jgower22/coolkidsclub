@@ -196,3 +196,66 @@ label {
     width: fit-content;
 }
 
+#hamburger-btn,
+#delete-btn,
+#toggle{
+   display: none;
+}
+
+
+@media screen and (max-width: 700px) {
+    .bottom-banner {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #bottom-banner-links{
+        overflow: hidden;
+        width: 100%;
+        max-height: 0;  
+        transition: 1s opacity ease-in-out;
+        transition-delay: 1s;
+    }
+
+     #hamburger-btn {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 1rem;
+        font-size: 30px;
+        cursor: pointer;
+     }
+
+    #toggle:checked ~ * #bottom-banner-links{
+        max-height: 100%;
+        transition: 5s opacity ease-out;
+        transition-delay: 5s;
+    }
+
+    #bottom-banner-links a{
+        z-index: 100;
+        padding: 2rem;
+        background-color: #6ABF4B;
+        width: 100%;
+        left: 0;
+        text-align: center;
+    } 
+
+    #bottom-banner-links{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 100;
+        width: 100%;
+        border-bottom: 1px solid #ccc;
+        left: 0;
+        position: absolute;
+
+    } 
+ }
+    
+    
+
