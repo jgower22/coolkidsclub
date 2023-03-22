@@ -2,7 +2,8 @@
     <main>
         <div class="text-centered">
            
-            <%let numUsers = users.length;
+            <%
+            let numUsers = users.length;
             let admins = [];
             let patients = [];
             for (let i = 0; i < users.length; i++) {
@@ -11,35 +12,27 @@
                     admins.push(user);
                 if (user.role === 'Patient')
                     patients.push(user);
-            }%>
+            }
+            %>
 
-            
-            
             <h2>Admins (<%=admins.length%>)</h2>
             <table class="userTable">
                 <tr>
-                    <th>
-                        Name
-                    </th>
-                    <th>
-                        Email
-                    </th>
-                    <th>
-                        Member Since
-                    </th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Member Since</th>
                 </tr>
-                <%for (let i = 0; i < admins.length; i++) {%>
-                    
+                <%
+                for (let i = 0; i < admins.length; i++) {%>
                     <tr>
-                        
                         <%let admin = admins[i];
                         if (admin.email === email) {%>
                             <td>
-                                <%=admin.firstName + ' ' + admin.lastName + ' '%><b>(you)</b>
+                                <a href="/users/profile"><%=admin.firstName + ' ' + admin.lastName + ' '%></a><b>(you)</b>
                             </td>
                         <%} else {%>
                                 <td>
-                                    <a href="/users/profile/<%=admin.id%>"><%=admin.firstName + ' ' + admin.lastName + ' '%></a>
+                                    <a href="/users/profile/<%=admin.id%>"><%=admin.firstName + ' ' + admin.lastName%></a>
                                 </td>
                         <%}%>
                         <td>
@@ -47,8 +40,9 @@
                         </td>
                         <td>
                             <%
-                            createdAtDate = new Date(admin.createdAt); 
-                            formattedDate = createdAtDate.toLocaleString(dateFormat);
+                            const dateFormat = {...DateTime.DATE_SHORT};
+                            var createdAtDate = new Date(admin.createdAt); 
+                            var formattedDate = createdAtDate.toLocaleString(dateFormat);
                             formattedDate = formattedDate.split(',')[0];
                             %>
                             <%=formattedDate%>
@@ -60,24 +54,16 @@
             <h2>Patients (<%=patients.length%>)</h2>
             <table class="userTable">
                 <tr>
-                    <th>
-                        Name
-                    </th>
-                    <th>
-                        Email
-                    </th>
-                    <th>
-                        Member Since
-                    </th>
-                    <th>
-                        Actions
-                    </th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Member Since</th>
+                    <th>Actions</th>
                 </tr>
                 <%for (let i = 0; i < patients.length; i++) {%>
                     <tr>
                         <td>
                             <%let patient = patients[i];%>
-                            <a href="/users/profile/<%=patient.id%>"><%=patient.firstName + ' ' + patient.lastName + ' '%></a>
+                            <a href="/users/profile/<%=patient.id%>"><%=patient.firstName + ' ' + patient.lastName%></a>
                         </td>
                         <td>
                             <%=patient.email%>
@@ -85,14 +71,16 @@
                         <td>
                             <%
                             const dateFormat = {...DateTime.DATE_SHORT};
-                            const createdAtDate = new Date(patient.createdAt); 
-                            var formattedDate = createdAtDate.toLocaleString(dateFormat);
+                            createdAtDate = new Date(patient.createdAt); 
+                            formattedDate = createdAtDate.toLocaleString(dateFormat);
                             formattedDate = formattedDate.split(',')[0];
                             %>
                             <%=formattedDate%>
                         </td>
                         <td>
-                            <button class="actionButton">Make Admin</button>
+                            <form>
+                                <button class="actionButton" type="submit" formmethod="POST" formaction="/users/<%=patient.id%>/makeAdmin?_method=PUT">Make Admin</button>
+                            </form>
                         </td>
                     </tr>
                 <%}%>
