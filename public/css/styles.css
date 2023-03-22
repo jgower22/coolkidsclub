@@ -3,6 +3,10 @@
     margin: 0 auto;
 }
 
+:root {
+    --purple: #630460;
+    --green: #6ABF4B;
+}
 main {
     padding: 50px 50px;
 }
@@ -24,7 +28,7 @@ a:hover {
 .top-banner {
     width: 100%;
     height: 65px;
-    background-color: #630460;
+    background-color: var(--purple);
     align-items: center;
     
 }
@@ -32,7 +36,7 @@ a:hover {
 .bottom-banner {
     width: 100%;
     height: 65px;
-    background-color: #6ABF4B;
+    background-color: var(--green);
     display: flex;
     align-items: center;
 }
@@ -81,7 +85,7 @@ a:hover {
 .drop-down-menu-container {
     max-height: 0px;
     width: 250px;
-    background-color: #6ABF4B;
+    background-color: var(--green);
     position: absolute;
     margin-left: 45%;
     z-index: 1;
@@ -93,7 +97,7 @@ a:hover {
     border: 0;
     height: 2px;
     width: 100%;
-    background-color: #630460;
+    background-color: var(--purple);
     margin: 15px 0 20px;
 }
 
@@ -184,13 +188,26 @@ label {
 
 #submit {
     margin-top: 10px;
-    background-color: #630460;
+    background-color: var(--purple);
     color: white;
     border: none;
     text-align: center;
     border-radius: 6px;
     padding: 8px 20px;
     text-transform: uppercase;
+    float: right;
+    cursor: pointer;
+    width: fit-content;
+}
+
+ .actionButton {
+    margin-top: 10px;
+    background-color: var(--green);
+    color: white;
+    border: none;
+    text-align: center;
+    border-radius: 6px;
+    padding: 2px 10px;
     float: right;
     cursor: pointer;
     width: fit-content;
@@ -238,7 +255,7 @@ label {
     #bottom-banner-links a{
         z-index: 100;
         padding: 2rem;
-        background-color: #6ABF4B;
+        background-color: var(--green);
         width: 100%;
         left: 0;
         text-align: center;
@@ -255,6 +272,39 @@ label {
         position: absolute;
 
     } 
+
+
+ }
+
+ .userTable {
+    border: 1px solid black;
+    border-collapse: separate;
+ }
+
+ .userTable tr, td, th {
+    border: 1px solid black;
+ }
+
+ .userTable td {
+    font-size: 20px;
+    padding: 5px 5px;
+    text-align: center;
+    word-break: break-all;
+ }
+ 
+ .userTable th {
+    font-size: 20px;
+    padding: 5px 5px;
+ }
+
+ .text-centered {
+    text-align: center;
+    
+ }
+
+ .text-centered h2 {
+    margin: 15px 0px;
+    
  }
     
     
