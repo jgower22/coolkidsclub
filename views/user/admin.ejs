@@ -1,38 +1,103 @@
 <%- include('../partials/header.ejs')%>
     <main>
-        <h2>Admin Dashboard</h2>
-        <%let numUsers = users.length;
-        let admins = [];
-        let patients = [];
-        for (let i = 0; i < users.length; i++) {
-            let user = users[i];
-            if (user.role === 'Admin')
-                admins.push(user);
-            if (user.role === 'Patient')
-                patients.push(user);
-        }%>
+        <div class="text-centered">
+           
+            <%let numUsers = users.length;
+            let admins = [];
+            let patients = [];
+            for (let i = 0; i < users.length; i++) {
+                let user = users[i];
+                if (user.role === 'Admin')
+                    admins.push(user);
+                if (user.role === 'Patient')
+                    patients.push(user);
+            }%>
 
-        <h3>Total Users: <%=numUsers%></h3>
-        <h3>Num Admins: <%=admins.length%></h3>
-        <h3>Num Patients: <%=patients.length%></h3>
+            
+            
+            <h2>Admins (<%=admins.length%>)</h2>
+            <table class="userTable">
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Member Since
+                    </th>
+                </tr>
+                <%for (let i = 0; i < admins.length; i++) {%>
+                    
+                    <tr>
+                        
+                        <%let admin = admins[i];
+                        if (admin.email === email) {%>
+                            <td>
+                                <%=admin.firstName + ' ' + admin.lastName + ' '%><b>(you)</b>
+                            </td>
+                        <%} else {%>
+                                <td>
+                                    <a href="/users/profile/<%=admin.id%>"><%=admin.firstName + ' ' + admin.lastName + ' '%></a>
+                                </td>
+                        <%}%>
+                        <td>
+                            <%=admin.email%>
+                        </td>
+                        <td>
+                            <%
+                            createdAtDate = new Date(admin.createdAt); 
+                            formattedDate = createdAtDate.toLocaleString(dateFormat);
+                            formattedDate = formattedDate.split(',')[0];
+                            %>
+                            <%=formattedDate%>
+                        </td>
+                    </tr>
+                <%}%>
+            </table>
 
-        <h3>Admins</h3>
-        <%for (let i = 0; i < admins.length; i++) {
-            let admin = admins[i];
-            if (admin.email === email) {%>
-                <p><%=admin.firstName + ' ' + admin.lastName + ' ' + admin.email + ' '%><b>(you)</b></p>
-            <%} else {%>
-                <p><a href="/users/profile/<%=admin.id%>"><%=admin.firstName + ' ' + admin.lastName + ' '%></a></p>
-                <a href="mailto:<%=admin.email%>"><%=admin.email%></a>
-            <%}
-        }%>
-
-        <h3>Patients</h3>
-        <%for (let i = 0; i < patients.length; i++) {
-            let patient = patients[i];%>
-            <p><a href="/users/profile/<%=patient.id%>"><%=patient.firstName + ' ' + patient.lastName + ' '%></a></p>
-            <a href="mailto:<%=patient.email%>"><%=patient.email%></a>
-        <%}%>
-
+            <h2>Patients (<%=patients.length%>)</h2>
+            <table class="userTable">
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Member Since
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
+                <%for (let i = 0; i < patients.length; i++) {%>
+                    <tr>
+                        <td>
+                            <%let patient = patients[i];%>
+                            <a href="/users/profile/<%=patient.id%>"><%=patient.firstName + ' ' + patient.lastName + ' '%></a>
+                        </td>
+                        <td>
+                            <%=patient.email%>
+                        </td>
+                        <td>
+                            <%
+                            const dateFormat = {...DateTime.DATE_SHORT};
+                            const createdAtDate = new Date(patient.createdAt); 
+                            var formattedDate = createdAtDate.toLocaleString(dateFormat);
+                            formattedDate = formattedDate.split(',')[0];
+                            %>
+                            <%=formattedDate%>
+                        </td>
+                        <td>
+                            <button class="actionButton">Make Admin</button>
+                        </td>
+                    </tr>
+                <%}%>
+            </table>
+            <h2>Total Users: <%=numUsers%></h2>
+        </div>
     </main>
 <%- include('../partials/footer.ejs')%>
