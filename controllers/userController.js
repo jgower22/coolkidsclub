@@ -3,6 +3,7 @@ const Program = require('../models/program');
 const rsvp = require('../models/rsvp');
 const { generateFromEmail, generateUsername } = require("unique-username-generator");
 const generator = require('generate-password');
+const { DateTime } = require('luxon');
 
 exports.new = (req, res) => {
     res.render('./user/new');
@@ -194,9 +195,9 @@ exports.settings = (req, res, next) => {
 
 exports.admin = (req, res, next) => {
     res.locals.title = 'Admin Tools - Cool Kids Campaign';
-    User.find({}, { firstName: 1, lastName: 1, email: 1, role: 1 })
+    User.find({}, { firstName: 1, lastName: 1, email: 1, role: 1, createdAt: 1 })
         .then(users => {
-            res.render('./user/admin', { users });
+            res.render('./user/admin', { users, DateTime });
         })
         .catch(err => next(err));
 };
