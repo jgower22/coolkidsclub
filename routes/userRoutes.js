@@ -17,6 +17,8 @@ router.get('/profile', isLoggedIn, controller.myProfile);
 
 router.get('/profile/:id', isLoggedIn, isAdmin, validateUserId, controller.userProfile);
 
+router.put('/:id/makeAdmin', isLoggedIn, isAdmin, validateUserId, controller.makeAdmin);
+
 router.get('/rsvps', isLoggedIn, controller.rsvps);
 
 router.get('/inbox', isLoggedIn, controller.inbox);
