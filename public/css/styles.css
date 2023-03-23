@@ -336,5 +336,26 @@ label {
     
  }
     
+
+ /***error message**/
+ .error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: red;
+    padding: 0.5rem;
+    color: white;
+    font-weight: bold;
+    margin: 1rem;
+ }
+
+ /***Success message***/ 
+ .success {
+    background-color: var(--green);
+    color: white;
+    font-weight: bold;
+    padding: 0.5rem;
+    margin: 1rem;
+ }
     
 
