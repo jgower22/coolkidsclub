@@ -76,6 +76,11 @@ a:hover {
     padding-right: 25px;
     text-transform: uppercase;
     font-family: sans-serif;
+    transition: all 0.5s ease-in-out 0.5s;
+}
+
+#bottom-banner-links a:hover {
+    color: var(--purple);
 }
 
 #userIcon {
@@ -213,10 +218,16 @@ label {
     width: fit-content;
 }
 
+/****Menu navigation bar****/
 #hamburger-btn,
 #delete-btn,
 #toggle{
    display: none;
+}
+
+#hamburger-btn i,
+#delete-btn i {
+    padding: .5rem;
 }
 
 
@@ -232,33 +243,50 @@ label {
     #bottom-banner-links{
         overflow: hidden;
         width: 100%;
-        max-height: 0;  
-        transition: 1s opacity ease-in-out;
-        transition-delay: 1s;
+        max-height: 0; 
     }
 
-     #hamburger-btn {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+    #hamburger-btn {
+        display: inline-flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items:center;
         padding: 1rem;
         font-size: 30px;
         cursor: pointer;
-     }
+        color: white;
+    }
 
     #toggle:checked ~ * #bottom-banner-links{
         max-height: 100%;
-        transition: 5s opacity ease-out;
-        transition-delay: 5s;
+    }
+
+    #toggle:checked ~ #hamburger-btn{
+        display: none;
+        transition-delay: 2s;
+        transform: rotate(360deg);
+
+    }
+
+    #toggle:checked ~ #delete-btn{
+        display: inline-flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
+        cursor: pointer;
+        color: white;
+        transition-delay: 2s;
+        transform: rotate(360deg);
     }
 
     #bottom-banner-links a{
         z-index: 100;
-        padding: 2rem;
+        padding: 1rem;
         background-color: var(--green);
         width: 100%;
         left: 0;
-        text-align: center;
+        text-align: center; 
     } 
 
     #bottom-banner-links{
@@ -267,11 +295,12 @@ label {
         align-items: center;
         z-index: 100;
         width: 100%;
-        border-bottom: 1px solid #ccc;
         left: 0;
         position: absolute;
-
+        transition: all 0.3s ease-in-out 0.3s;
+        
     } 
+
 
 
  }
