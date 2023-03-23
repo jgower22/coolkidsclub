@@ -9,6 +9,7 @@ const userSchema = new Schema({
     username: {type: String, unique: true},
     password: {type: String},
     firstLogin: {type: Boolean},
+    status: {type: String, enum: ['pending', 'active', 'banned']},
     role: {type: String}
 },
 {timestamps: true});
