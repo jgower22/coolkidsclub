@@ -19,6 +19,10 @@ router.get('/profile/:id', isLoggedIn, isAdmin, validateUserId, controller.userP
 
 router.put('/:id/makeAdmin', isLoggedIn, isAdmin, validateUserId, controller.makeAdmin);
 
+router.put('/:id/ban', isLoggedIn, isAdmin, validateUserId, controller.banUser);
+
+router.put('/:id/unban', isLoggedIn, isAdmin, validateUserId, controller.unbanUser);
+
 router.get('/rsvps', isLoggedIn, controller.rsvps);
 
 router.get('/inbox', isLoggedIn, controller.inbox);
