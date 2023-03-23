@@ -14,7 +14,7 @@ exports.addUser = (req, res, next) => {
     let numDigits = 6;
     user.firstLogin = true;
     //Users are patients by default
-    user.role = 'Patient';
+    user.role = 'patient';
 
     //Generate a username from email
     console.log('TEMP EMAIL: ' + req.body.tempEmail);
@@ -112,13 +112,22 @@ exports.processLogin = (req, res, next) => {
     User.findOne({ username: username })
         .then(user => {
             if (!user) {
-                console.log('Cannot find username');
                 req.flash('error', errorMessage);
                 res.redirect('/users/login');
             } else {
                 user.comparePassword(password)
                     .then(result => {
                         if (result) {
+
+                            if (user.status === 'pending') {
+                                req.flash('error', 'Please confirm your email address before logging in.');
+                                return res.redirect('/users/login');
+                            }
+                            if (user.status === 'banned') {
+                                req.flash('error', 'Your account has been banned.');
+                                return res.redirect('/users/login');
+                            }
+
                             req.session.user = user._id;
                             req.session.fullName = user.firstName + ' ' + user.lastName;
                             req.session.email = user.email;
@@ -134,9 +143,8 @@ exports.processLogin = (req, res, next) => {
                                 res.redirect('/users/profile');
                             }
                         } else {
-                            console.log('Error');
                             req.flash('error', errorMessage);
-                            res.redirect('/users/login')
+                            res.redirect('/users/login');
                         }
                     })
             }
@@ -195,7 +203,7 @@ exports.settings = (req, res, next) => {
 
 exports.admin = (req, res, next) => {
     res.locals.title = 'Admin Tools - Cool Kids Campaign';
-    User.find({}, { firstName: 1, lastName: 1, email: 1, role: 1, createdAt: 1 })
+    User.find({}, { firstName: 1, lastName: 1, email: 1, role: 1, createdAt: 1, status: 1 })
         .then(users => {
             res.render('./user/admin', { users, DateTime });
         })
@@ -207,10 +215,72 @@ exports.makeAdmin = (req, res, next) => {
     User.findById(patientId)
         .then(user => {
             if (user) {
-                user.role = 'Admin';
+                user.role = 'admin';
                 user.save()
                     .then( user => {
                         req.flash('success', 'User role has been updated to admin.');
+                        res.redirect('back');
+                    })
+                    .catch(err => next(err));
+            } else {
+                let err = new Error('Cannot find user with id: ' + id);
+                err.status = 404;
+                next(err);
+            }
+        })
+        .catch(err => next(err));
+};
+
+exports.banUser = (req, res, next) => {
+    let patientId = req.params.id;
+    User.findById(patientId)
+        .then(user => {
+            if (user) {
+                if (user.role === 'admin') {
+                    let err = new Error('You cannot ban other admins');
+                    err.status = 400;
+                    return next(err);
+                }
+                if (user.status === 'banned') {
+                    let err = new Error('User is already banned');
+                    err.status = 400;
+                    return next(err);
+                }
+                user.status = 'banned';
+                user.save()
+                    .then(user => {
+                        req.flash('success', 'User has been banned.');
+                        res.redirect('back');
+                    })
+                    .catch(err => next(err));
+            } else {
+                let err = new Error('Cannot find user with id: ' + id);
+                err.status = 404;
+                next(err);
+            }
+        })
+        .catch(err => next(err));
+};
+
+exports.unbanUser = (req, res, next) => {
+    let patientId = req.params.id;
+    User.findById(patientId)
+        .then(user => {
+            if (user) {
+                if (user.role === 'admin') {
+                    let err = new Error('You cannot unban other admins');
+                    err.status = 400;
+                    return next(err);
+                }
+                if (user.status === 'active') {
+                    let err = new Error('User is not currently banned');
+                    err.status = 400;
+                    return next(err);
+                }
+                user.status = 'active';
+                user.save()
+                    .then(user => {
+                        req.flash('success', 'User has been unbanned.');
                         res.redirect('back');
                     })
                     .catch(err => next(err));
