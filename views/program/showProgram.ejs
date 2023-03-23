@@ -8,7 +8,7 @@
         <h2><%=program.endDate%></h2>
         <h2><%=program.endTime%></h2>
         <h2><%=program.details%></h2>
-        <%if (role === 'Admin') {%>
+        <%if (role === 'admin') {%>
             <form>
                 <button type="submit" formmethod="GET" formaction="/programs/<%=program._id%>/edit">Edit program</button>
                 <button type="submit" id="delete" formmethod="POST" formaction="/programs/<%=program._id%>?_method=DELETE">Delete program</button>
@@ -24,7 +24,7 @@
                 <h3>Num No: 0</h3>
             <%}
         }%>
-        <%if (role === 'Patient') {%>
+        <%if (role === 'patient') {%>
             <h2>RSVP</h2>
 
             <%let myRsvp = rsvps.filter(rsvp => rsvp.user == user);
