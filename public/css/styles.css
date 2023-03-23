@@ -200,7 +200,7 @@ label {
     width: fit-content;
 }
 
- .actionButton {
+ .action-button {
     margin-top: 10px;
     background-color: var(--green);
     color: white;
