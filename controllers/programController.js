@@ -12,7 +12,8 @@ exports.index = (req, res, next) => {
 
 exports.newProgram = (req, res, next) => {
     res.locals.title = 'New Program - Cool Kids Campaign';
-    res.render('./program/newProgram');
+    let data = req.flash('formdata');
+    res.render('./program/newProgram', { formData: data[0] });
 };
 
 exports.createProgram = (req, res, next) => {
@@ -52,7 +53,8 @@ exports.editProgram = (req, res, next) => {
     Program.findById(id)
         .then(program => {
             if (program) {
-                res.render('./program/editProgram', { program });
+                let data = req.flash('formdata');
+                res.render('./program/editProgram', { program, formData: data[0] });
             } else {
                 let err = new Error('Cannot find program with id: ' + id);
                 err.status = 404;

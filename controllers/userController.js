@@ -6,7 +6,9 @@ const generator = require('generate-password');
 const { DateTime } = require('luxon');
 
 exports.new = (req, res) => {
-    res.render('./user/new');
+    let data = req.flash('formdata');
+    res.locals.title = 'Sign Up - Cool Kids Campaign';
+    res.render('./user/new', { formData: data[0] });
 };
 
 exports.addUser = (req, res, next) => {
@@ -93,8 +95,9 @@ exports.addUser = (req, res, next) => {
 };
 
 exports.login = (req, res) => {
+    let data = req.flash('formdata');
     res.locals.title = 'Log In - Cool Kids Campaign';
-    res.render('./user/login');
+    res.render('./user/login', { formData: data[0] });
 };
 
 exports.logout = (req, res, next) => {
