@@ -16,6 +16,10 @@ exports.addUser = (req, res, next) => {
     //Users are patients by default
     user.role = 'patient';
 
+    //User will be pending by default
+    //user.status = 'pending';
+    user.status = 'active';
+
     //Generate a username from email
     console.log('TEMP EMAIL: ' + req.body.tempEmail);
     if (req.body.tempEmail) {
