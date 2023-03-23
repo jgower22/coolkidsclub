@@ -24,7 +24,7 @@ exports.isAdmin = (req, res, next) => {
     User.findById(req.session.user)
         .then(user => {
             if (user) {
-                if (user.role === 'Admin') {
+                if (user.role === 'admin') {
                     return next();
                 } else {
                     let err = new Error('Unauthorized to access the resource');
@@ -44,7 +44,7 @@ exports.isPatient = (req, res, next) => {
     User.findById(req.session.user)
         .then(user => {
             if (user) {
-                if (user.role === 'Patient') {
+                if (user.role === 'patient') {
                     return next();
                 } else {
                     let err = new Error('Unauthorized to access the resource');
