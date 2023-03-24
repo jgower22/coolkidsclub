@@ -76,3 +76,5 @@ body('endTime').isTime().withMessage('End time must be a valid time').custom((va
     return true;
 }).trim().escape(),
 body('details').isLength({ min: 3, max: 2000 }).withMessage('Program details must be at least 3 characters').trim().escape()];
+
+exports.validateRSVP = [body('response', 'RSVP response must be \'yes\' or \'no\'').toLowerCase().isIn(['yes', 'no']).trim().escape()];
