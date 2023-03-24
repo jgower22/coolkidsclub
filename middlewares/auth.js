@@ -25,6 +25,7 @@ exports.isAdmin = (req, res, next) => {
         .then(user => {
             if (user) {
                 if (user.role === 'admin') {
+                    res.locals.role = user.role;
                     return next();
                 } else {
                     let err = new Error('Unauthorized to access the resource');

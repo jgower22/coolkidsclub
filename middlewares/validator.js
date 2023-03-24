@@ -33,7 +33,6 @@ exports.validateResult = (req, res, next) => {
         });
         //Load form data into flash
         req.flash('formdata', req.body);
-        console.log('LOADED FORM DATA');
         return res.redirect('back');
     } else {
         return next();
@@ -44,7 +43,7 @@ exports.validateSignUp = [body('firstName', 'First name cannot be empty').notEmp
 body('lastName', 'Last name cannot be empty').notEmpty().isAlpha().withMessage('Last name can only contain letters').trim().escape(),
 body('email', 'Email must be a valid email address').isEmail().normalizeEmail({ gmail_remove_dots: false }).trim().escape()];
 
-exports.validateLogIn = [body('username', 'Username cannot be empty').notEmpty().isLength({min: 7 }).withMessage('Username must be at least 7 characters').trim().escape(),
+exports.validateLogIn = [body('username', 'Username cannot be empty').isLength({ min: 7 }).withMessage('Username must be at least 7 characters').trim().escape(),
 body('password', 'Password must be at least 8 characters and at most 64 characters').isLength({ min: 8, max: 64 })];
 
 exports.validateProgram = [body('name').isLength({ min: 2 }).withMessage('Program name must be at least 2 characters').trim().escape(),
@@ -76,3 +75,5 @@ body('endTime').isTime().withMessage('End time must be a valid time').custom((va
     return true;
 }).trim().escape(),
 body('details').isLength({ min: 3, max: 2000 }).withMessage('Program details must be at least 3 characters').trim().escape()];
+
+exports.validateRSVP = [body('response', 'RSVP response must be \'yes\' or \'no\'').toLowerCase().isIn(['yes', 'no']).trim().escape()];

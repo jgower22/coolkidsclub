@@ -7,6 +7,12 @@
     --purple: #630460;
     --green: #6ABF4B;
 }
+
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
 main {
     padding: 50px 50px;
 }
@@ -229,7 +235,6 @@ label {
     padding: .5rem;
 }
 
-
 @media screen and (max-width: 700px) {
     .bottom-banner {
         display: flex;
@@ -299,8 +304,6 @@ label {
         transition: all 0.3s ease-in-out 0.3s;
         
     } 
-
-
 
  }
 
@@ -377,7 +380,7 @@ label {
     font-size: small;
 }
 
-  .footer-text {
+.footer-text {
     text-align: center;
     margin-bottom: 0;
     background-color: #d0d7de;
