@@ -96,6 +96,7 @@ exports.addUser = (req, res, next) => {
 
 exports.login = (req, res) => {
     let data = req.flash('formdata');
+    console.log('DATA: ' + data);
     res.locals.title = 'Log In - Cool Kids Campaign';
     res.render('./user/login', { formData: data[0] });
 };
@@ -114,7 +115,7 @@ exports.processLogin = (req, res, next) => {
     if (username)
         username = username.toLowerCase();
     let password = req.body.password;
-    let errorMessage = 'Invalid email and/or password';
+    let errorMessage = 'Invalid username and/or password';
 
     User.findOne({ username: username })
         .then(user => {
