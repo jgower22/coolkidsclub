@@ -1,17 +1,17 @@
 <%- include('../partials/header.ejs')%>
     <script defer src="/javascript/deleteConfirmation.js"></script>
-    <main>
-        <h2><%=program.name%></h2>
-        <h2><%=program.location%></h2>
-        <h2><%=program.startDate%></h2>
-        <h2><%=program.startTime%></h2>
-        <h2><%=program.endDate%></h2>
-        <h2><%=program.endTime%></h2>
+    <main class="rsvp-confirm">
+        <h2 class = 'event-name'><%=program.name%></h2>
+        <h2 class = 'location'><%=program.location%></h2>
+        <h2 class = 'start'><%=program.startDate%></h2>
+        <h2 class = 'start'><%=program.startTime%></h2>
+        <h2 class = 'end'><%=program.endDate%></h2>
+        <h2 class = 'end'><%=program.endTime%></h2>
         <h2><%=program.details%></h2>
         <%if (role === 'admin') {%>
-            <form>
-                <button type="submit" formmethod="GET" formaction="/programs/<%=program._id%>/edit">Edit program</button>
-                <button type="submit" id="delete" formmethod="POST" formaction="/programs/<%=program._id%>?_method=DELETE">Delete program</button>
+            <form id= "btn-container">
+                <button id="edit-program" type="submit" formmethod="GET" formaction="/programs/<%=program._id%>/edit">Edit program</button>
+                <button id="edit-program" type="submit" id="delete" formmethod="POST" formaction="/programs/<%=program._id%>?_method=DELETE">Delete program</button>
             </form>
             <h2>RSVPs</h2>
             <%if (rsvps.length) {
@@ -25,14 +25,14 @@
             <%}
         }%>
         <%if (role === 'patient') {%>
-            <h2>RSVP</h2>
+            <h2 class="response-confirmation">RSVP</h2>
 
             <%let myRsvp = rsvps.filter(rsvp => rsvp.user == user);
             if (myRsvp.length) {%>
                 <h3>You have successfully responded with <%=myRsvp[0].response%>.</h3>
             <%}%>
 
-            <form action="/programs/<%=program._id%>/rsvp" method="POST">
+            <form id= "btn-container" action="/programs/<%=program._id%>/rsvp" method="POST">
                 <button id="yes" value="yes" name="response" type="submit">Yes</button>
                 <button id="no" value="no" name="response" type="submit">No</button>
             </form>
