@@ -120,6 +120,7 @@ exports.processLogin = (req, res, next) => {
     User.findOne({ username: username })
         .then(user => {
             if (!user) {
+                req.flash('formdata', req.body);
                 req.flash('error', errorMessage);
                 res.redirect('/users/login');
             } else {
@@ -151,6 +152,7 @@ exports.processLogin = (req, res, next) => {
                                 res.redirect('/users/profile');
                             }
                         } else {
+                            req.flash('formdata', req.body);
                             req.flash('error', errorMessage);
                             res.redirect('/users/login');
                         }
