@@ -10,6 +10,7 @@
 
 body {
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 main {
@@ -384,4 +385,13 @@ label {
 footer {
     position: sticky;
     top: 100%;
+}
+
+.noscript-message {
+    text-align: center;
+    background-color: red;
+    padding: 1rem;
+    color: white;
+    font-weight: bold;
+    font-size: 22px;
 }
