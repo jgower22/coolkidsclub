@@ -1,7 +1,7 @@
 const express = require('express');
 const controller = require('../controllers/programController');
 const { isLoggedIn, isAdmin, isPatient } = require('../middlewares/auth.js');
-const { validateProgramId, validateProgram, validateResult } = require('../middlewares/validator.js');
+const { validateProgramId, validateProgram, validateRSVP, validateResult } = require('../middlewares/validator.js');
 
 const router = express.Router();
 
@@ -27,6 +27,6 @@ router.put('/:id', validateProgramId, isLoggedIn, isAdmin, validateProgram, vali
 router.delete('/:id', validateProgramId, isLoggedIn, isAdmin, controller.deleteProgram);
 
 //RSVP for the program with specified id
-router.post('/:id/rsvp', validateProgramId, isLoggedIn, isPatient, controller.rsvp);
+router.post('/:id/rsvp', validateProgramId, isLoggedIn, isPatient, validateRSVP, validateResult, controller.rsvp);
 
 module.exports = router;
