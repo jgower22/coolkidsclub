@@ -268,8 +268,6 @@ label {
     #toggle:checked ~ #hamburger-btn{
         display: none;
         transition-delay: 2s;
-        transform: rotate(360deg);
-
     }
 
     #toggle:checked ~ #delete-btn{
@@ -281,7 +279,6 @@ label {
         cursor: pointer;
         color: white;
         transition-delay: 2s;
-        transform: rotate(360deg);
     }
 
     #bottom-banner-links a{
@@ -301,9 +298,12 @@ label {
         width: 100%;
         left: 0;
         position: absolute;
-        transition: all 0.3s ease-in-out 0.3s;
-        
+        transition: 0.2s opacity ease-in-out;
     } 
+
+    #userIcon {
+        float: none;
+    }
 }
 
  .userTable {
@@ -337,7 +337,7 @@ label {
     
  }
     
-/***error message**/
+/***error message***/
 .error {
     text-align: center;
     background-color: red;
