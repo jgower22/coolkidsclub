@@ -360,6 +360,8 @@ label {
 /***Footer Style***/
 footer{
     padding-top: 1rem;
+    position: sticky;
+    top: 100%;
 }
 
 .information-container{
@@ -367,7 +369,7 @@ footer{
     overflow-wrap: break-word;
     text-align: center;
     justify-content: center;
-    background-color: #d0d7de;
+    background-color: var(--green);
 }
 
 .information-container p{
@@ -375,18 +377,27 @@ footer{
     text-align: center;
     overflow: auto;
     padding: 0.5rem;
-    vertical-align: middle;  
+    vertical-align: top;  
     font-size: small;
+    color: white;
+    font-weight: bold;
 }
+
 
 .footer-text {
     text-align: center;
     margin-bottom: 0;
-    background-color: #d0d7de;
+    background-color: var(--green);
     font-size: small;
+    color: white;
   }
 
 /***RSVP Confirm***/
+
+#program-container {
+    width: 50%;
+}
+
 .rsvp-confirm {
     text-align: center;
     display: flex;
@@ -395,10 +406,15 @@ footer{
     flex-direction: column;
 }
 
-.event-name {
-    font-size: 30px;
+.program-header {
     font-weight: bold;
     color: darkblue;
+    
+  
+}
+
+.padding-header {
+    padding-top: 1rem;
 }
 
 #yes {
@@ -413,7 +429,7 @@ footer{
 }
 
 #no {
-    background-color: var(--green);
+    background-color: red;
     border: black;
     color: white;
     padding: 0.3rem 1rem 0.3rem 1rem;
@@ -422,34 +438,13 @@ footer{
     border-radius: 1rem;
 }
 
-#btn-container {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
-.rsvp-confirmation {
-    padding-top: 1rem;
-    font-weight: bold;
-}
-
-.start {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-}
-
-.end {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row; 
+#buttons-container {
+    float: right;
 }
 
 /*admin edit program*/
-#edit-program {
-    background-color: var(--green);
+.admin-program-button {
+    background-color: var(--purple);
     border: black;
     color: white;
     padding: 0.3rem 1rem 0.3rem 1rem;
@@ -458,10 +453,6 @@ footer{
     border-radius: 1rem;
 }
 
-.end > h2,
-.start > h2 {
-    margin-right: 1rem;
-}
 
 
 
