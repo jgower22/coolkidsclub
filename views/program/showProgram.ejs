@@ -1,45 +1,79 @@
 <%- include('../partials/header.ejs')%>
     <script defer src="/javascript/deleteConfirmation.js"></script>
-    <main class="rsvp-confirm">
-        <h2 class = 'event-name'><%=program.name%></h2>
-        <h2 class = 'location'>Location: <%=program.location%></h2>
-        <div class = 'start'>
-            <h2>Start: <%=program.startDate%></h2>
-            <h2><%=program.startTime%></h2>
-        </div>
-        <div class="end">
-            <h2>End: <%=program.endDate%></h2>
-            <h2><%=program.endTime%></h2>
-        </div>
-        <h2><%=program.details%></h2>
-        <%if (role === 'admin') {%>
-            <form id= "btn-container">
-                <button id="edit-program" type="submit" formmethod="GET" formaction="/programs/<%=program._id%>/edit">Edit program</button>
-                <button id="edit-program" type="submit" id="delete" formmethod="POST" formaction="/programs/<%=program._id%>?_method=DELETE">Delete program</button>
-            </form>
-            <h2 class = 'rsvp-confirmation'>RSVPs</h2>
-            <%if (rsvps.length) {
-                let yesRsvps = rsvps.filter(rsvp => rsvp.response === 'yes');
-                let numNo = rsvps.length - yesRsvps.length;%>
-                <h3>Num Yes: <%=yesRsvps.length%></h3>
-                <h3>Num No: <%=numNo%></h3>
-            <%} else {%>
-                <h3>Num Yes: 0</h3>
-                <h3>Num No: 0</h3>
-            <%}
-        }%>
-        <%if (role === 'patient') {%>
-            <h2 class = 'rsvp-confirmation'>RSVP</h2>
+    <main>
+        <div class="centered">
+            <div id="program-container">
+                <%if (role === 'admin') {%>
+                    <div id="buttons-container">
+                        <form>
+                            <button class="admin-program-button" type="submit" formmethod="GET" formaction="/programs/<%=program._id%>/edit">Edit Program</button>
+                            <button class="admin-program-button" type="submit" id="delete" formmethod="POST" formaction="/programs/<%=program._id%>?_method=DELETE">Delete Program</button>
+                        </form>
+                    </div>
+                <%}%>
 
-            <%let myRsvp = rsvps.filter(rsvp => rsvp.user == user);
-            if (myRsvp.length) {%>
-                <h3>You have successfully responded with <%=myRsvp[0].response%>.</h3>
-            <%}%>
+                
+                
+                <h1 class="program-header"><%=program.name%></h1>
+                <h3 class="location">Location: <%=program.location%></h3>
+                <%
+                const dateFormat = { 
+                    ...DateTime.DATE_FULL, 
+                    weekday: 'short',
+                    month: 'short'
+                };
+                const startDate = DateTime.fromISO(program.startDate);
+                const formattedStartDate = startDate.toLocaleString(dateFormat);
 
-            <form id= "btn-container" action="/programs/<%=program._id%>/rsvp" method="POST">
-                <button id="yes" value="yes" name="response" type="submit">Yes</button>
-                <button id="no" value="no" name="response" type="submit">No</button>
-            </form>
-        <%}%>
+                const endDate = DateTime.fromISO(program.endDate);
+                const formattedEndDate = endDate.toLocaleString(dateFormat);
+
+                
+                const startTime = DateTime.fromISO(program.startTime);
+                const formattedStartTime = startTime.toLocaleString(DateTime.TIME_SIMPLE);
+                const endTime = DateTime.fromISO(program.endTime);
+                const formattedEndTime = endTime.toLocaleString(DateTime.TIME_SIMPLE);%>
+                %>
+                <div class="start">
+                    <h3>Start: <%=formattedStartDate%> @ <%=formattedStartTime%></h3>
+                </div>
+                <div class="end">
+                    <h3>End: <%=formattedEndDate%> @ <%=formattedEndTime%></h3>
+                </div>
+                <%if (role === 'admin') {%>
+                
+                    <h1 class="rsvp-confirmation program-header padding-header">RSVPs</h1>
+                    <%if (rsvps.length) {
+                        let yesRsvps = rsvps.filter(rsvp => rsvp.response === 'yes');
+                        let numNo = rsvps.length - yesRsvps.length;%>
+                        <h3>Number of Yes: <%=yesRsvps.length%></h3>
+                        <h3>Number of No: <%=numNo%></h3>
+                    <%} else {%>
+                        <h3>Number of Yes: 0</h3>
+                        <h3>Number of No: 0</h3>
+                    <%}
+                }%>
+
+                <%if (role === 'patient') {%>
+                    <h1 class="program-header padding-header">RSVP</h1>
+
+                    <%let myRsvp = rsvps.filter(rsvp => rsvp.user == user);
+                    if (myRsvp.length) {%>
+                        <h3>You have successfully responded with <%=myRsvp[0].response%>.</h3>
+                    <%}%>
+
+                    <form action="/programs/<%=program._id%>/rsvp" method="POST">
+                        <button id="yes" value="yes" name="response" type="submit">Yes</button>
+                        <button id="no" value="no" name="response" type="submit">No</button>
+                    </form>
+                <%}%>
+                <div id="descriptionContainer ">
+                    <h1 class="program-header padding-header">Description</h1>
+                    <p><%=program.details%></p>
+                </div>
+                
+                
+            </div>
+        </div>
     </main>
 <%- include('../partials/footer.ejs')%>
