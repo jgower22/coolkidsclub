@@ -2,18 +2,22 @@
     <script defer src="/javascript/deleteConfirmation.js"></script>
     <main class="rsvp-confirm">
         <h2 class = 'event-name'><%=program.name%></h2>
-        <h2 class = 'location'><%=program.location%></h2>
-        <h2 class = 'start'><%=program.startDate%></h2>
-        <h2 class = 'start'><%=program.startTime%></h2>
-        <h2 class = 'end'><%=program.endDate%></h2>
-        <h2 class = 'end'><%=program.endTime%></h2>
+        <h2 class = 'location'>Location: <%=program.location%></h2>
+        <div class = 'start'>
+            <h2>Start: <%=program.startDate%></h2>
+            <h2><%=program.startTime%></h2>
+        </div>
+        <div class="end">
+            <h2>End: <%=program.endDate%></h2>
+            <h2><%=program.endTime%></h2>
+        </div>
         <h2><%=program.details%></h2>
         <%if (role === 'admin') {%>
             <form id= "btn-container">
                 <button id="edit-program" type="submit" formmethod="GET" formaction="/programs/<%=program._id%>/edit">Edit program</button>
                 <button id="edit-program" type="submit" id="delete" formmethod="POST" formaction="/programs/<%=program._id%>?_method=DELETE">Delete program</button>
             </form>
-            <h2>RSVPs</h2>
+            <h2 class = 'rsvp-confirmation'>RSVPs</h2>
             <%if (rsvps.length) {
                 let yesRsvps = rsvps.filter(rsvp => rsvp.response === 'yes');
                 let numNo = rsvps.length - yesRsvps.length;%>
@@ -25,7 +29,7 @@
             <%}
         }%>
         <%if (role === 'patient') {%>
-            <h2 class="response-confirmation">RSVP</h2>
+            <h2 class = 'rsvp-confirmation'>RSVP</h2>
 
             <%let myRsvp = rsvps.filter(rsvp => rsvp.user == user);
             if (myRsvp.length) {%>

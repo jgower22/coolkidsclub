@@ -210,7 +210,7 @@ label {
     width: fit-content;
 }
 
- .action-button {
+.action-button {
     margin-top: 10px;
     background-color: var(--green);
     color: white;
@@ -304,8 +304,7 @@ label {
         transition: all 0.3s ease-in-out 0.3s;
         
     } 
-
- }
+}
 
  .userTable {
     border: 1px solid black;
@@ -338,38 +337,38 @@ label {
     
  }
     
- /***error message**/
- .error {
+/***error message**/
+.error {
     text-align: center;
     background-color: red;
     padding: 0.5rem;
     color: white;
     font-weight: bold;
     margin: 1rem;
- }
+}
 
- /***Success message***/ 
- .success {
+/***Success message***/ 
+.success {
     background-color: var(--green);
     color: white;
     font-weight: bold;
     padding: 0.5rem;
     margin: 1rem;
     text-align: center;
- }
+}
     
- /***Footer Style***/
- footer{
+/***Footer Style***/
+footer{
     padding-top: 1rem;
- }
+}
 
- .information-container{
+.information-container{
     margin-bottom: 0;
     overflow-wrap: break-word;
     text-align: center;
     justify-content: center;
     background-color: #d0d7de;
- }
+}
 
 .information-container p{
     display: inline-block;
@@ -387,9 +386,13 @@ label {
     font-size: small;
   }
 
-  /***RSVP Confirm***/
+/***RSVP Confirm***/
 .rsvp-confirm {
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .event-name {
@@ -406,6 +409,7 @@ label {
     text-align: center;
     font-size: 20px;
     border-radius: 1rem;
+    margin-right: 1rem;
 }
 
 #no {
@@ -420,22 +424,27 @@ label {
 
 #btn-container {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
 }
 
-.response-confirmation {
+.rsvp-confirmation {
     padding-top: 1rem;
+    font-weight: bold;
 }
 
-h2 .start {
-    display: inline-block;
-    
+.start {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
 }
 
 .end {
-   display: inline-block; 
-   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row; 
 }
 
 /*admin edit program*/
@@ -449,6 +458,10 @@ h2 .start {
     border-radius: 1rem;
 }
 
+.end > h2,
+.start > h2 {
+    margin-right: 1rem;
+}
 
 
 
