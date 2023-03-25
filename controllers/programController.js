@@ -1,5 +1,6 @@
 const Program = require('../models/program');
 const rsvp = require('../models/rsvp');
+const { DateTime } = require('luxon');
 
 exports.index = (req, res, next) => {
     res.locals.title = 'Programs - Cool Kids Campaign';
@@ -37,7 +38,7 @@ exports.showProgram = (req, res, next) => {
         .then(results => {
             const [program, rsvps] = results;
             if (program) {
-                res.render('./program/showProgram', { program, rsvps });
+                res.render('./program/showProgram', { program, rsvps, DateTime });
             } else {
                 let err = new Error('Cannot find program with id: ' + id);
                 err.status = 404;
