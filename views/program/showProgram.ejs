@@ -8,7 +8,7 @@
                         <form>
                             <button class="admin-program-button" type="submit" formmethod="GET" formaction="/programs/<%=program._id%>/edit">Edit Program</button>
                             <button class="admin-program-button" type="submit" formmethod="POST" formaction="/programs/<%=program._id%>/copy">Copy Program</button>
-                            <button class="admin-program-button" type="submit" formmethod="POST" formaction="/programs/<%=program._id%>?_method=DELETE">Delete Program</button>
+                            <button class="admin-program-button" type="submit" id="delete" formmethod="POST" formaction="/programs/<%=program._id%>?_method=DELETE">Delete Program</button>
                         </form>
                     </div>
                 <%}%>
