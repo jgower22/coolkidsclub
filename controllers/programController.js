@@ -4,7 +4,7 @@ const { DateTime } = require('luxon');
 
 exports.index = (req, res, next) => {
     res.locals.title = 'Programs - Cool Kids Campaign';
-    Program.find({})
+    Program.find({}, { _id: 1, name: 1, startDate: 1, startTime: 1, endDate: 1, endTime: 1 })
         .then(programs => {
             res.render('./program/index', { programs });
         })
