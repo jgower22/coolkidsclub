@@ -23,6 +23,9 @@ router.get('/:id/edit', validateProgramId, isLoggedIn, isAdmin, controller.editP
 //Update the program with specified id
 router.put('/:id', validateProgramId, isLoggedIn, isAdmin, validateProgram, validateResult, controller.updateProgram);
 
+//Copy the program with specified id
+router.post('/:id/copy', validateProgramId, isLoggedIn, isAdmin, controller.copyProgram);
+
 //Delete the program with specified id
 router.delete('/:id', validateProgramId, isLoggedIn, isAdmin, controller.deleteProgram);
 
