@@ -1,13 +1,46 @@
 <%- include('../partials/header.ejs')%>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js'></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var events = <%-JSON.stringify(programs)%>;
+    var formattedEvents = [];
+    
+    for(let i = 0; i < events.length; i++) {
+        let event = events[i];
+        var startHour = event.startTime;
+        var endHour = event.endTime;
+        var startDate = new Date(event.startDate + " " + event.startTime);
+        var endDate = new Date(event.endDate + " " +event.endTime);
+        endDate.setDate(endDate.getDate() + 1);
+        console.log(startDate);
+        console.log(endDate);
+        let obj = {
+            title: event.name,
+            start: startDate,
+            end: endDate,
+            url: 'programs/' + event._id
+        };
+        formattedEvents.push(obj);
+    }
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      initialDate: '2023-03-07',
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+      },
+      events: formattedEvents
+    });
+  
+    calendar.render();
+  });
+
+  
+</script>
     <main>
-        <h2>Programs</h2>
-        <%if (programs.length === 0) {%>
-            <h4>There are no programs to show.</h4>
-        <%} else {%>
-            <%for (let i = 0; i < programs.length; i++) {
-                let program = programs[i];%>
-                <h3><a href="/programs/<%=program.id%>"><%=program.name%></a></h3>
-            <%}
-        }%>
+        <div id='calendar'></div>
     </main>
 <%- include('../partials/footer.ejs')%>
