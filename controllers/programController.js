@@ -82,6 +82,32 @@ exports.updateProgram = (req, res, next) => {
         .catch(err => next(err));
 };
 
+exports.copyProgram = (req, res, next) => {
+    let id = req.params.id;
+    Program.findById(id)
+        .then(program => {
+            let programCopy = program.toObject();
+            let previousName = programCopy.name;
+            programCopy.name = 'Copy of ' + program.name;
+            delete programCopy._id;
+            delete programCopy.createdBy;
+            delete programCopy.lastModifiedBy;
+            delete programCopy.updatedAt;
+            delete programCopy.createdAt;
+            programCopy.createdBy = res.locals.user;
+            programCopy.lastModifiedBy = res.locals.user;
+
+            let programCopyDocument = new Program(programCopy);
+            programCopyDocument.save()
+                .then(program => {
+                    req.flash('success', previousName + ' was copied successfully');
+                    res.redirect('/programs');
+                })
+                .catch(err => next(err));
+        })
+        .catch(err => next(err));
+};
+
 exports.deleteProgram = (req, res, next) => {
     let id = req.params.id;
     //Delete program and all associated RSVPs
