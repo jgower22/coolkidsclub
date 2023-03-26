@@ -1,8 +1,6 @@
-
 * {
     margin: 0 auto;
 }
-
 
 div:not(#calendar) {
     margin: 0;
@@ -460,6 +458,7 @@ footer{
 
 #calendar {
     max-width: 1100px;
+    z-index: -2;
 }
 
 
