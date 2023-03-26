@@ -7,7 +7,8 @@
                     <div id="buttons-container">
                         <form>
                             <button class="admin-program-button" type="submit" formmethod="GET" formaction="/programs/<%=program._id%>/edit">Edit Program</button>
-                            <button class="admin-program-button" type="submit" id="delete" formmethod="POST" formaction="/programs/<%=program._id%>?_method=DELETE">Delete Program</button>
+                            <button class="admin-program-button" type="submit" formmethod="POST" formaction="/programs/<%=program._id%>/copy">Copy Program</button>
+                            <button class="admin-program-button" type="submit" formmethod="POST" formaction="/programs/<%=program._id%>?_method=DELETE">Delete Program</button>
                         </form>
                     </div>
                 <%}%>
@@ -35,10 +36,10 @@
                 const formattedEndTime = endTime.toLocaleString(DateTime.TIME_SIMPLE);%>
                 %>
                 <div class="start">
-                    <h3>Start: <%=formattedStartDate%> @ <%=formattedStartTime%></h3>
+                    <h3>Start: <%=formattedStartDate%> @ <%=formattedStartTime%> (Eastern Time)</h3>
                 </div>
                 <div class="end">
-                    <h3>End: <%=formattedEndDate%> @ <%=formattedEndTime%></h3>
+                    <h3>End: <%=formattedEndDate%> @ <%=formattedEndTime%> (Eastern Time)</h3>
                 </div>
                 <%if (role === 'admin') {%>
                 
