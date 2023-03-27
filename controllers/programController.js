@@ -45,7 +45,7 @@ exports.createProgram = (req, res, next) => {
 
     program.save()
         .then(program => {
-            req.flash('Program created successfully');
+            req.flash('success', 'Program created successfully');
             res.redirect('/programs');
         })
         .catch(err => next(err));
