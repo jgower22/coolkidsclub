@@ -11,6 +11,28 @@ exports.index = (req, res, next) => {
         .catch(err => next(err));
 };
 
+exports.programsJSON = async (req, res, next) => {
+    let query = req._parsedOriginalUrl.query;
+    console.log(query);
+
+    const programs = await Program.find({}, { _id: 1, name: 1, startDate: 1, startTime: 1, endDate: 1, endTime: 1 });
+    var formattedPrograms = [];
+    for (let i = 0; i < programs.length; i++) {
+        let event = programs[i];
+        var startDate = new Date(event.startDate + " " + event.startTime);
+        var endDate = new Date(event.endDate + " " + event.endTime);
+        let obj = {
+            title: event.name,
+            start: startDate,
+            end: endDate,
+            url: 'programs/' + event._id,
+        };
+        formattedPrograms.push(obj);
+    }
+    console.log('FORMATTED PROGRAMS: ' + JSON.stringify(formattedPrograms));
+    res.json(formattedPrograms);
+}
+
 exports.newProgram = (req, res, next) => {
     res.locals.title = 'New Program - Cool Kids Campaign';
     let data = req.flash('formdata');
@@ -21,7 +43,7 @@ exports.createProgram = (req, res, next) => {
     let program = new Program(req.body);
     program.createdBy = req.session.user;
     program.lastModifiedBy = req.session.user;
-    
+
     program.save()
         .then(program => {
             req.flash('Program created successfully');
@@ -131,7 +153,7 @@ exports.rsvp = (req, res, next) => {
     const updateObj = {
         response: req.body.response.toLowerCase()
     };
-    rsvp.findOneAndUpdate({ user: res.locals.user, program: id}, updateObj, { upsert: true, runValidators: true })
+    rsvp.findOneAndUpdate({ user: res.locals.user, program: id }, updateObj, { upsert: true, runValidators: true })
         .then(rsvp => {
             req.flash('success', 'Successfully RSVP\'d for this program');
             res.redirect('/programs/' + id);
