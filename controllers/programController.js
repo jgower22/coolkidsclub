@@ -29,7 +29,6 @@ exports.programsJSON = async (req, res, next) => {
         };
         formattedPrograms.push(obj);
     }
-    console.log('FORMATTED PROGRAMS: ' + JSON.stringify(formattedPrograms));
     res.json(formattedPrograms);
 }
 
