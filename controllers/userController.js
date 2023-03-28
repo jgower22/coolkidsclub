@@ -97,7 +97,6 @@ exports.addUser = (req, res, next) => {
 
 exports.login = (req, res) => {
     let data = req.flash('formdata');
-    console.log('DATA: ' + data);
     res.locals.title = 'Log In - Cool Kids Campaign';
     res.render('./user/login', { formData: data[0] });
 };
@@ -309,12 +308,6 @@ exports.showUpdateCredentialsForm = (req, res, next) => {
         .then(user => {
             if (user) {
                 let data = req.flash('formdata');
-                //console.log('DATA: ' + data[0]);
-                //let data1 = req.flash('usernameFormData');
-                //let data2 = req.flash('passwordFormData');
-                //usernameFormData: data1[0], passwordFormData: data2[0]
-                let usernameError = false;
-                let passwordError = false;
                 res.render('./user/updateCredentials', { user, formData: data[0] });
             } else {
                 let err = new Error('Cannot find user account. Please log out and log in again.');
