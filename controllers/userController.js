@@ -308,9 +308,14 @@ exports.showUpdateCredentialsForm = (req, res, next) => {
     User.findById(req.session.user, { username: 1 })
         .then(user => {
             if (user) {
-                let data1 = req.flash('usernameFormData');
-                let data2 = req.flash('passwordFormData');
-                res.render('./user/updateCredentials', { user, usernameFormData: data1[0], passwordFormData: data2[0] });
+                let data = req.flash('formdata');
+                //console.log('DATA: ' + data[0]);
+                //let data1 = req.flash('usernameFormData');
+                //let data2 = req.flash('passwordFormData');
+                //usernameFormData: data1[0], passwordFormData: data2[0]
+                let usernameError = false;
+                let passwordError = false;
+                res.render('./user/updateCredentials', { user, formData: data[0] });
             } else {
                 let err = new Error('Cannot find user account. Please log out and log in again.');
                 err.status = 404;
@@ -327,7 +332,7 @@ exports.updateUsername = (req, res, next) => {
             if (user) {
                 if (username === user.username) {
                     req.flash('error', 'New username is the same as current username.');
-                    req.flash('usernameFormData', req.body);
+                    req.flash('formdata', req.body);
                     return res.redirect('back');
                 }
                 user.username = username;
@@ -376,7 +381,7 @@ exports.updatePassword = (req, res, next) => {
                                 //Check if new password is different from current password
                                 if (currentPassword === newPassword) {
                                     req.flash('error', 'New password is the same as current password.');
-                                    req.flash('passwordFormData', req.body);
+                                    req.flash('formdata', req.body);
                                     return res.redirect('back');
                                 }
                                 
@@ -395,12 +400,12 @@ exports.updatePassword = (req, res, next) => {
                                     });
                             } else {
                                 req.flash('error', 'New password must match confirm new password field.');
-                                req.flash('passwordFormData', req.body);
+                                req.flash('formdata', req.body);
                                 return res.redirect('back');
                             }
                         } else {
                             req.flash('error', 'Current password is incorrect.');
-                            req.flash('passwordFormData', req.body);
+                            req.flash('formdata', req.body);
                             return res.redirect('back');
                         }
                     });
