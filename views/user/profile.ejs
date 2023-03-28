@@ -1,28 +1,32 @@
 <%- include('../partials/header.ejs')%>
     <main>
-        <%if (adminView) {%>
-            <h2>Name: <%=user.firstName  + ' ' + user.lastName%></h2>
-            <h3>Account Status: <%=user.status.charAt(0).toUpperCase() + user.status.slice(1)%></h3>
-        <%} else {%>
-            <h2>Hello, <%=user.firstName  + ' ' + user.lastName%></h2>
-        <%}%>
-
-        <h3>Email: <%=user.email%></h3>
-        <h3>Member since: <%=user.createdAt%></h3>
-        <h3>Role: <%=user.role.charAt(0).toUpperCase() + user.role.slice(1)%></h3>
-
-        <%if (adminView) {
-            if (user.role === 'patient') {%>
-                <h2><%=user.firstName%> 's RSVP's%></h2>
-                <%if(rsvps.length) {
-                    for (let i = 0; i < rsvps.length; i++) {
-                        let rsvp = rsvps[i];%>
-                        <h3>Name: <%=rsvp.program.name%> Response: <%=rsvp.response%></h3>
-                    <%}
-                } else {%>
-                    <h3>No RSVP's found.</h3>
+        <div class="centered">
+            <div id="profile-container">
+                <%if (adminView) {%>
+                    <h2>Name: <%=user.firstName  + ' ' + user.lastName%></h2>
+                    <h3>Account Status: <%=user.status.charAt(0).toUpperCase() + user.status.slice(1)%></h3>
+                <%} else {%>
+                    <h2>Hello, <%=user.firstName  + ' ' + user.lastName%></h2>
                 <%}%>
-            <%}%>
-        <%}%>
+
+                <h3>Email: <%=user.email%></h3>
+                <h3>Member since: <%=user.createdAt%></h3>
+                <h3>Role: <%=user.role.charAt(0).toUpperCase() + user.role.slice(1)%></h3>
+
+                <%if (adminView) {
+                    if (user.role === 'patient') {%>
+                        <h2><%=user.firstName%> 's RSVP's%></h2>
+                        <%if(rsvps.length) {
+                            for (let i = 0; i < rsvps.length; i++) {
+                                let rsvp = rsvps[i];%>
+                                <h3>Name: <%=rsvp.program.name%> Response: <%=rsvp.response%></h3>
+                            <%}
+                        } else {%>
+                            <h3>No RSVP's found.</h3>
+                        <%}%>
+                    <%}%>
+                <%}%>
+            </div>
+        </div>
     </main>
 <%- include('../partials/footer.ejs')%>
