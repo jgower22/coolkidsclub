@@ -206,7 +206,7 @@ label {
     border: 1px solid grey;
 }
 
-#submit {
+#submit, .submit {
     margin-top: 10px;
     background-color: var(--purple);
     color: white;
