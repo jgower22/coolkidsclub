@@ -1,7 +1,7 @@
 const Program = require('../models/program');
 const rsvp = require('../models/rsvp');
 const { DateTime } = require('luxon');
-
+const { unescapeProgramNames, unescapeProgram } = require('../public/javascript/unescape.js');
 exports.index = (req, res, next) => {
     res.locals.title = 'Programs - Cool Kids Campaign';
     Program.find({}, { _id: 1, name: 1, startDate: 1, startTime: 1, endDate: 1, endTime: 1 })
@@ -29,6 +29,7 @@ exports.programsJSON = async (req, res, next) => {
         };
         formattedPrograms.push(obj);
     }
+    unescapeProgramNames(formattedPrograms);
     res.json(formattedPrograms);
 }
 
@@ -59,6 +60,7 @@ exports.showProgram = (req, res, next) => {
         .then(results => {
             const [program, rsvps] = results;
             if (program) {
+                unescapeProgram(program);
                 res.render('./program/showProgram', { program, rsvps, DateTime });
             } else {
                 let err = new Error('Cannot find program with id: ' + id);
@@ -76,6 +78,7 @@ exports.editProgram = (req, res, next) => {
         .then(program => {
             if (program) {
                 let data = req.flash('formdata');
+                unescapeProgram(program);
                 res.render('./program/editProgram', { program, formData: data[0] });
             } else {
                 let err = new Error('Cannot find program with id: ' + id);
