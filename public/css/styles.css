@@ -166,6 +166,10 @@ a:hover {
     width: 30%;
 }
 
+#passwordForm {
+    margin-top: 30px;
+}
+
 form {
     margin-top: 10px;
 }
@@ -195,7 +199,7 @@ label {
     font-size: 18px;
 }
 
-#username, #password, #email, #firstName, #lastName  {
+.user-input  {
     width: 100%;
     padding: 8px 5px;
     border-radius: 6px;
@@ -399,8 +403,7 @@ footer{
   }
 
 /***RSVP Confirm***/
-
-#program-container {
+#program-container, #profile-container {
     width: 50%;
 }
 
