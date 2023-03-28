@@ -33,18 +33,23 @@ exports.validateResult = (req, res, next) => {
         });
         //Load form data into flash
         req.flash('formdata', req.body);
+        //req.flash('usernameFormData', req.body);
+        //req.flash('passwordFormData', req.body);
         return res.redirect('back');
     } else {
         return next();
     }
-}
+};
 
 exports.validateSignUp = [body('firstName', 'First name cannot be empty').notEmpty().isAlpha().withMessage('First name can only contain letters').trim().escape(),
 body('lastName', 'Last name cannot be empty').notEmpty().isAlpha().withMessage('Last name can only contain letters').trim().escape(),
 body('email', 'Email must be a valid email address').isEmail().normalizeEmail({ gmail_remove_dots: false }).trim().escape()];
 
-exports.validateLogIn = [body('username', 'Username cannot be empty').isLength({ min: 7 }).withMessage('Username must be at least 7 characters').trim().escape(),
+exports.validateLogIn = [body('username', 'Username cannot be empty').isLength({ min: 7, max: 64 }).withMessage('Username must be at least 7 characters and at most 64 characters').trim().escape(),
 body('password', 'Password must be at least 8 characters and at most 64 characters').isLength({ min: 8, max: 64 })];
+
+exports.validateUsername = [body('username', 'Username cannot be empty').isLength({ min: 7, max: 64}).withMessage('Username must be at least 7 characters and at most 64 characters')
+    .isAlphanumeric().withMessage('Username can only contain letters and numbers').trim().escape()];
 
 exports.validateProgram = [body('name').isLength({ min: 2 }).withMessage('Program name must be at least 2 characters').trim().escape(),
 body('location').isLength({ min: 2 }).withMessage('Trip location must be at least 2 characters').trim().escape(),
