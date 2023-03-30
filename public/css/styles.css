@@ -229,6 +229,10 @@ label {
     width: fit-content;
 }
 
+.ban-user {
+    background-color: red;
+}
+
 /****Menu navigation bar****/
 #hamburger-btn,
 #delete-btn,
