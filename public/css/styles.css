@@ -2,7 +2,7 @@
     margin: 0 auto;
 }
 
-div:not(#calendar, .drop-down-menu-container) {
+div:not(#calendar, .drop-down-menu-container, .success, .error) {
     margin: 0;
 } 
 
@@ -166,6 +166,10 @@ a:hover {
     width: 30%;
 }
 
+#passwordForm {
+    margin-top: 30px;
+}
+
 form {
     margin-top: 10px;
 }
@@ -195,14 +199,14 @@ label {
     font-size: 18px;
 }
 
-#username, #password, #email, #firstName, #lastName  {
+.user-input  {
     width: 100%;
     padding: 8px 5px;
     border-radius: 6px;
     border: 1px solid grey;
 }
 
-#submit {
+#submit, .submit {
     margin-top: 10px;
     background-color: var(--purple);
     color: white;
@@ -403,8 +407,7 @@ footer{
   }
 
 /***RSVP Confirm***/
-
-#program-container {
+#program-container, #profile-container {
     width: 50%;
 }
 

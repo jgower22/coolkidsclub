@@ -1,7 +1,7 @@
 const Program = require('../models/program');
 const rsvp = require('../models/rsvp');
 const { DateTime } = require('luxon');
-
+const { unescapeProgramNames, unescapeProgram } = require('../public/javascript/unescape.js');
 exports.index = (req, res, next) => {
     res.locals.title = 'Programs - Cool Kids Campaign';
     Program.find({}, { _id: 1, name: 1, startDate: 1, startTime: 1, endDate: 1, endTime: 1 })
@@ -10,6 +10,28 @@ exports.index = (req, res, next) => {
         })
         .catch(err => next(err));
 };
+
+exports.programsJSON = async (req, res, next) => {
+    let query = req._parsedOriginalUrl.query;
+    console.log(query);
+
+    const programs = await Program.find({}, { _id: 1, name: 1, startDate: 1, startTime: 1, endDate: 1, endTime: 1 });
+    var formattedPrograms = [];
+    for (let i = 0; i < programs.length; i++) {
+        let event = programs[i];
+        var startDate = new Date(event.startDate + " " + event.startTime);
+        var endDate = new Date(event.endDate + " " + event.endTime);
+        let obj = {
+            title: event.name,
+            start: startDate,
+            end: endDate,
+            url: 'programs/' + event._id,
+        };
+        formattedPrograms.push(obj);
+    }
+    unescapeProgramNames(formattedPrograms);
+    res.json(formattedPrograms);
+}
 
 exports.newProgram = (req, res, next) => {
     res.locals.title = 'New Program - Cool Kids Campaign';
@@ -21,10 +43,10 @@ exports.createProgram = (req, res, next) => {
     let program = new Program(req.body);
     program.createdBy = req.session.user;
     program.lastModifiedBy = req.session.user;
-    
+
     program.save()
         .then(program => {
-            req.flash('Program created successfully');
+            req.flash('success', 'Program created successfully');
             res.redirect('/programs');
         })
         .catch(err => next(err));
@@ -38,6 +60,7 @@ exports.showProgram = (req, res, next) => {
         .then(results => {
             const [program, rsvps] = results;
             if (program) {
+                unescapeProgram(program);
                 res.render('./program/showProgram', { program, rsvps, DateTime });
             } else {
                 let err = new Error('Cannot find program with id: ' + id);
@@ -55,6 +78,7 @@ exports.editProgram = (req, res, next) => {
         .then(program => {
             if (program) {
                 let data = req.flash('formdata');
+                unescapeProgram(program);
                 res.render('./program/editProgram', { program, formData: data[0] });
             } else {
                 let err = new Error('Cannot find program with id: ' + id);
@@ -131,7 +155,7 @@ exports.rsvp = (req, res, next) => {
     const updateObj = {
         response: req.body.response.toLowerCase()
     };
-    rsvp.findOneAndUpdate({ user: res.locals.user, program: id}, updateObj, { upsert: true, runValidators: true })
+    rsvp.findOneAndUpdate({ user: res.locals.user, program: id }, updateObj, { upsert: true, runValidators: true })
         .then(rsvp => {
             req.flash('success', 'Successfully RSVP\'d for this program');
             res.redirect('/programs/' + id);

@@ -14,6 +14,9 @@ router.get('/new', isLoggedIn, isAdmin,  controller.newProgram);
 //Save new program to database
 router.post('/', isLoggedIn, isAdmin, validateProgram, validateResult, controller.createProgram);
 
+//Send programs as json for calendar
+router.get('/programsJSON', isLoggedIn, controller.programsJSON);
+
 //Show program with specified id
 router.get('/:id', validateProgramId, isLoggedIn, controller.showProgram);
 

@@ -7,22 +7,22 @@
     
                     <%if (formData) {%>
                         <label class="required" for="text">First Name:</label>
-                        <input type="text" id="firstName" name="firstName" value="<%=formData.firstName%>" required>
+                        <input type="text" class="user-input" id="firstName" name="firstName" value="<%=formData.firstName%>" required>
     
                         <label class="required" for="text">Last Name:</label>
-                        <input type="text" id="lastName" name="lastName" value="<%=formData.lastName%>" required>
+                        <input type="text" class="user-input" id="lastName" name="lastName" value="<%=formData.lastName%>" required>
     
                         <label class="required" for="email">Email:</label>
-                        <input type="email" id="email" name="email" value="<%=formData.email%>" required>
+                        <input type="email" class="user-input" id="email" name="email" value="<%=formData.email%>" required>
                     <%} else {%>
                         <label class="required" for="text">First Name:</label>
-                        <input type="text" id="firstName" name="firstName" required>
+                        <input type="text" class="user-input" id="firstName" name="firstName" required>
     
                         <label class="required" for="text">Last Name:</label>
-                        <input type="text" id="lastName" name="lastName" required>
+                        <input type="text" class="user-input" id="lastName" name="lastName" required>
     
                         <label class="required" for="email">Email:</label>
-                        <input type="email" id="email" name="email" required>
+                        <input type="email" class="user-input" id="email" name="email" required>
                     <%}%>
                 
                     <input type="submit" value="Sign Up" id="submit">
