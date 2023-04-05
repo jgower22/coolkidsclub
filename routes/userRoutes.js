@@ -29,8 +29,6 @@ router.get('/inbox', isLoggedIn, controller.inbox);
 
 router.get('/settings', isLoggedIn, controller.settings);
 
-router.get('/settings/update-credentials', isLoggedIn, controller.showUpdateCredentialsForm);
-
 router.put('/settings/update-username', isLoggedIn, validateUsername, validateResult, controller.updateUsername);
 
 router.put('/settings/update-password', isLoggedIn, controller.updatePassword);
