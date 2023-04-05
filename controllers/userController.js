@@ -208,7 +208,19 @@ exports.inbox = (req, res, next) => {
 };
 
 exports.settings = (req, res, next) => {
-    res.render('./user/settings');
+    User.findById(req.session.user, { username: 1 })
+        .then(user => {
+            if (user) {
+                let data = req.flash('formdata');
+                res.render('./user/settings', { user, formData: data[0] });
+            } else {
+                let err = new Error('Cannot find user account. Please log out and log in again.');
+                err.status = 404;
+                return next(err);
+            }
+        })
+        .catch(err => next(err));
+    
 };
 
 exports.admin = (req, res, next) => {
@@ -298,21 +310,6 @@ exports.unbanUser = (req, res, next) => {
                 let err = new Error('Cannot find user with id: ' + id);
                 err.status = 404;
                 next(err);
-            }
-        })
-        .catch(err => next(err));
-};
-
-exports.showUpdateCredentialsForm = (req, res, next) => {
-    User.findById(req.session.user, { username: 1 })
-        .then(user => {
-            if (user) {
-                let data = req.flash('formdata');
-                res.render('./user/updateCredentials', { user, formData: data[0] });
-            } else {
-                let err = new Error('Cannot find user account. Please log out and log in again.');
-                err.status = 404;
-                return next(err);
             }
         })
         .catch(err => next(err));
