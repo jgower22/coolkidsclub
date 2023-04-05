@@ -8,7 +8,7 @@
                 <%} else {%>
                     <h2>Hello, <%=user.firstName  + ' ' + user.lastName%></h2>
                 <%}%>
-
+                <h3>Username: <%=user.username%></h3>
                 <h3>Email: <%=user.email%></h3>
                 <h3>Member since: <%=user.createdAt%></h3>
                 <h3>Role: <%=user.role.charAt(0).toUpperCase() + user.role.slice(1)%></h3>
