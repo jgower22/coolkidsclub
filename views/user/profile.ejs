@@ -13,19 +13,17 @@
                 <h3>Member since: <%=user.createdAt%></h3>
                 <h3>Role: <%=user.role.charAt(0).toUpperCase() + user.role.slice(1)%></h3>
 
-                <%if (adminView) {
-                    if (user.role === 'patient') {%>
-                        <h2><%=user.firstName%> 's RSVP's%></h2>
-                        <%if(rsvps.length) {
-                            for (let i = 0; i < rsvps.length; i++) {
-                                let rsvp = rsvps[i];%>
-                                <h3>Name: <%=rsvp.program.name%> Response: <%=rsvp.response%></h3>
-                            <%}
-                        } else {%>
-                            <h3>No RSVP's found.</h3>
-                        <%}%>
-                    <%}%>
-                <%}%>
+                <%if (user.role === 'patient') {%>
+                    <h2><%=user.firstName%> 's RSVP's%></h2>
+                    <%if(rsvps.length) {
+                        for (let i = 0; i < rsvps.length; i++) {
+                            let rsvp = rsvps[i];%>
+                            <h3>Name: <%=rsvp.program.name%> Response: <%=rsvp.response%></h3>
+                        <%}
+                    } else {%>
+                        <h3>No RSVP's found.</h3>
+                    <%}
+                }%>
             </div>
         </div>
     </main>
