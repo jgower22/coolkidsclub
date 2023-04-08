@@ -23,8 +23,6 @@ router.put('/:id/ban', isLoggedIn, isAdmin, validateUserId, controller.banUser);
 
 router.put('/:id/unban', isLoggedIn, isAdmin, validateUserId, controller.unbanUser);
 
-
-
 router.get('/inbox', isLoggedIn, controller.inbox);
 
 router.get('/settings', isLoggedIn, controller.settings);
