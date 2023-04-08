@@ -19,6 +19,7 @@
                         for (let i = 0; i < rsvps.length; i++) {
                             let rsvp = rsvps[i];%>
                             <h3>Name: <%=rsvp.program.name%> Response: <%=rsvp.response%></h3>
+                            <%console.log(rsvp);%>
                         <%}
                     } else {%>
                         <h3>No RSVP's found.</h3>
