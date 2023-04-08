@@ -52,7 +52,7 @@ exports.validateUsername = [body('username', 'Username cannot be empty').isLengt
     .isAlphanumeric().withMessage('Username can only contain letters and numbers').trim().escape()];
 
 exports.validateProgram = [body('name').isLength({ min: 2 }).withMessage('Program name must be at least 2 characters').trim().escape(),
-body('location').isLength({ min: 2 }).withMessage('Trip location must be at least 2 characters').trim().escape(),
+body('location').isLength({ min: 2 }).withMessage('Program location must be at least 2 characters').trim().escape(),
 body('startDate').isDate().withMessage('Start date must be a valid date').trim().escape(),
 body('startTime').isTime().withMessage('Start time must be a valid time').trim().escape(),
 body('endDate').isDate().withMessage('End date must be a valid date').custom((value, { req }) => {
