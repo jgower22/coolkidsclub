@@ -24,10 +24,58 @@
                         var year = date.toLocaleString("default", { year: "numeric" });
                         var month = date.toLocaleString("default", { month: "2-digit" });
                         var day = date.toLocaleString("default", { day: "2-digit" });
-                        var currentDate = year + "-" + month + "-" + day;
-                        console.log(currentDate);%>
-                        <%const dateFormat = {...DateTime.DATE_SHORT};%>
-                     
+                        var currentDate = month + "/" + day + "/" + year;
+                        console.log(currentDate);
+                        const dateFormat = {...DateTime.DATE_SHORT};
+
+                        var programs = [];
+                        for (let i = 0; i < rsvps.length; i++) {
+                            let object = rsvps[i].program;
+                            object.response = rsvps[i].response;
+                            programs.push(object);
+                        }
+
+                        let sortOrder = ['ongoing', 'upcoming', 'previous'];
+                        function sortByName(a, b) {
+                            return sortOrder.indexOf(a.group) - sortOrder.indexOf(b.group);
+                        }
+                        function sortByStartDate(a, b) {
+                            a = a.startDate;
+                            b = b.startDate;
+                            if (a > b) {
+                                return 1;
+                            }
+                            if (a < b) {
+                                return -1;
+                            }
+                            return 0;
+                        }
+                        programs.sort(sortByStartDate);
+
+                        for (let i = 0; i < programs.length; i++) {
+                            let program = programs[i];
+                            let startDate = new Date(program.startDate.replace('-', '/'));
+                            let endDate = new Date(program.endDate.replace('-', '/'));
+                            let dateNow = new Date().setHours(0, 0, 0, 0);
+                            if (endDate < dateNow) {
+                                program.group = 'previous';
+                                console.log("1");
+                            } else if (startDate <= dateNow && endDate >= dateNow) {
+                                program.group = 'ongoing';
+                                console.log("2");
+                            } else if (startDate > dateNow) {
+                                program.group = 'upcoming';
+                                console.log("3");
+                            }
+                            console.log("start: " + startDate);
+                            console.log("end: " + endDate);
+                         
+                        }
+                        console.log(programs);
+                        programs.sort(sortByName);
+                        console.log("programsssssssssssssssssssssssssssssssssssssssssssss");
+                        console.log("after: " + programs);%>
+        
                         <table class="user-table rsvp-table">
                             <tr>
                                 <th>Name</th>
@@ -35,24 +83,29 @@
                                 <th>Start Date</th>
                                 <th>End Date</th>
                             </tr>
-                        <%for (let i = 0; i < rsvps.length; i++) {
-                            let rsvp = rsvps[i];
-                            var startDate = new Date(rsvp.program.startDate); 
-                            var formattedDate = startDate.toLocaleString(dateFormat);
-                            formattedStartDate = formattedDate.split(',')[0];
+                            
+                        <%for (let i = 0; i < programs.length; i++) {
+                            let program = programs[i];
+                            const dateFormat = { 
+                                ...DateTime.DATE_FULL, 
+                                weekday: 'short',
+                                month: 'short'
+                            };
+                            const startDate = DateTime.fromISO(program.startDate);
+                            const formattedStartDate = startDate.toLocaleString(dateFormat);
+            
+                            const endDate = DateTime.fromISO(program.endDate);
+                            const formattedEndDate = endDate.toLocaleString(dateFormat);
 
-                            var endDate = new Date(rsvp.program.endDate); 
-                            var endDate = endDate.toLocaleString(dateFormat);
-                            formattedEndDate = formattedDate.split(',')[0];
-
-                            const startTime = DateTime.fromISO(rsvp.program.startTime);
+                            const startTime = DateTime.fromISO(program.startTime);
                             const formattedStartTime = startTime.toLocaleString(DateTime.TIME_SIMPLE);
-
-                            const endTime = DateTime.fromISO(rsvp.program.endTime);
+                            
+                            const endTime = DateTime.fromISO(program.endTime);
                             const formattedEndTime = endTime.toLocaleString(DateTime.TIME_SIMPLE);%>
+                         
                             <tr>
-                                <td><a href="/programs/<%=rsvp.program._id%>"><%=rsvp.program.name%></a></td>
-                                <td class="capitalize"><%=rsvp.response%></td>
+                                <td><a href="/programs/<%=program._id%>"><%=program.name%></a></td>
+                                <td class="capitalize"><%=program.response%></td>
                              
                                 <td><%=formattedStartDate%>  @ <%=formattedStartTime%></td>
                                 <td><%=formattedEndDate%>  @  <%=formattedEndTime%></td>
