@@ -14,14 +14,48 @@
                 <h3>Role: <%=user.role.charAt(0).toUpperCase() + user.role.slice(1)%></h3>
 
                 <%if (user.role === 'patient') {%>
-                    <h2><%=user.firstName%> 's RSVP's%></h2>
+                    <h2><%=user.firstName%>'s RSVP's%></h2>
                     <%if(rsvps.length) {
-                        for (let i = 0; i < rsvps.length; i++) {
-                            let rsvp = rsvps[i];%>
-                            <h3>Name: <%=rsvp.program.name%> Response: <%=rsvp.response%></h3>
-                            <%console.log(rsvp);%>
-                        <%}
-                    } else {%>
+                        var date = new Date();
+                        var year = date.toLocaleString("default", { year: "numeric" });
+                        var month = date.toLocaleString("default", { month: "2-digit" });
+                        var day = date.toLocaleString("default", { day: "2-digit" });
+                        var currentDate = year + "-" + month + "-" + day;
+                        console.log(currentDate);%>
+                        <%const dateFormat = {...DateTime.DATE_SHORT};%>
+                     
+                        <table class="user-table rsvp-table">
+                            <tr>
+                                <th>Name</th>
+                                <th>Going?</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                            </tr>
+                        <%for (let i = 0; i < rsvps.length; i++) {
+                            let rsvp = rsvps[i];
+                            var startDate = new Date(rsvp.program.startDate); 
+                            var formattedDate = startDate.toLocaleString(dateFormat);
+                            formattedStartDate = formattedDate.split(',')[0];
+
+                            var endDate = new Date(rsvp.program.endDate); 
+                            var endDate = endDate.toLocaleString(dateFormat);
+                            formattedEndDate = formattedDate.split(',')[0];
+
+                            const startTime = DateTime.fromISO(rsvp.program.startTime);
+                            const formattedStartTime = startTime.toLocaleString(DateTime.TIME_SIMPLE);
+
+                            const endTime = DateTime.fromISO(rsvp.program.endTime);
+                            const formattedEndTime = endTime.toLocaleString(DateTime.TIME_SIMPLE);%>
+                            <tr>
+                                <td><a href="/programs/<%=rsvp.program._id%>"><%=rsvp.program.name%></a></td>
+                                <td class="capitalize"><%=rsvp.response%></td>
+                             
+                                <td><%=formattedStartDate%>  @ <%=formattedStartTime%></td>
+                                <td><%=formattedEndDate%>  @  <%=formattedEndTime%></td>
+                            </tr>
+                        <%}%>
+                        </table>
+                    <%} else {%>
                         <h3>No RSVP's found.</h3>
                     <%}
                 }%>
