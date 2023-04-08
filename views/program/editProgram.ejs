@@ -7,10 +7,10 @@
 
                     <%if (formData) {%>
                         <label for="name">Name:</label>
-                        <input type="text" id="name" name="name" placeholder="Program Name" value="<%=formData.name%>" required>
+                        <input type="text" id="name" name="name" placeholder="Program Name" minlength="2" value="<%=formData.name%>" required>
 
                         <label for="location">Location:</label>
-                        <input type="text" id="location" name="location" placeholder="Location" value="<%=formData.location%>"required>
+                        <input type="text" id="location" name="location" placeholder="Location" minlength="2" value="<%=formData.location%>"required>
                         
                         <label for="startDate">Start Date:</label>
                         <input type="date" id="startDate" name="startDate" value="<%=formData.startDate%>" required>
@@ -25,13 +25,13 @@
                         <input type="time" id="endTime" name="endTime" value="<%=formData.endTime%>" required>
 
                         <label for="details">Details:</label>
-                        <textarea id="details" name="details" placeholder="Description of Program" rows="4" required><%=formData.details%></textarea>
+                        <textarea id="details" name="details" placeholder="Description of Program" rows="4" minlength="3" required><%=formData.details%></textarea>
                     <%} else {%>
                         <label for="name">Name:</label>
-                        <input type="text" id="name" name="name" placeholder="Program Name" value="<%=program.name%>" required>
+                        <input type="text" id="name" name="name" placeholder="Program Name" minlength="2" value="<%=program.name%>" required>
 
                         <label for="location">Location:</label>
-                        <input type="text" id="location" name="location" placeholder="Location" value="<%=program.location%>"required>
+                        <input type="text" id="location" name="location" placeholder="Location" minlength="2" value="<%=program.location%>"required>
                         
                         <label for="startDate">Start Date:</label>
                         <input type="date" id="startDate" name="startDate" value="<%=program.startDate%>" required>
@@ -46,7 +46,7 @@
                         <input type="time" id="endTime" name="endTime" value="<%=program.endTime%>" required>
 
                         <label for="details">Details:</label>
-                        <textarea id="details" name="details" placeholder="Description of Program" rows="4" required><%=program.details%></textarea>
+                        <textarea id="details" name="details" placeholder="Description of Program" rows="4" minlength="3" required><%=program.details%></textarea>
                     <%}%>
                     
                     <input type="submit" id="submit" value="Save Program">
