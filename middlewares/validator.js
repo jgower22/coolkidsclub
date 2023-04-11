@@ -49,7 +49,7 @@ exports.validateLogIn = [body('username', 'Username cannot be empty').isLength({
 body('password', 'Password must be at least 8 characters and at most 64 characters').isLength({ min: 8, max: 64 })];
 
 exports.validateUsername = [body('username', 'Username cannot be empty').isLength({ min: 7, max: 64}).withMessage('Username must be at least 7 characters and at most 64 characters')
-    .isAlphanumeric().withMessage('Username can only contain letters and numbers').trim().escape()];
+    .isAlphanumeric().withMessage('Username can only contain letters and numbers').toLowerCase().trim().escape()];
 
 exports.validateProgram = [body('name').isLength({ min: 2 }).withMessage('Program name must be at least 2 characters').trim().escape(),
 body('location').isLength({ min: 2 }).withMessage('Program location must be at least 2 characters').trim().escape(),
