@@ -1,3 +1,4 @@
+const User = require('../models/user');
 const Program = require('../models/program');
 const rsvp = require('../models/rsvp');
 const { DateTime } = require('luxon');
@@ -56,7 +57,7 @@ exports.showProgram = (req, res, next) => {
     let id = req.params.id;
 
     //rsvp.find( { program: id, user: req.session.user })
-    Promise.all([Program.findById(id), rsvp.find({ program: id })])
+    Promise.all([Program.findById(id), rsvp.find({ program: id }).populate('user', 'firstName lastName _id, email')])
         .then(results => {
             const [program, rsvps] = results;
             if (program) {
