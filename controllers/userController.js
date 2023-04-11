@@ -116,12 +116,14 @@ exports.processLogin = (req, res, next) => {
         username = username.toLowerCase();
     let password = req.body.password;
     let errorMessage = 'Invalid username and/or password';
-
+    
     User.findOne({ username: username })
         .then(user => {
+            console.log("user" + user);
             if (!user) {
                 req.flash('formdata', req.body);
                 req.flash('error', errorMessage);
+                console.log("invalid username");
                 res.redirect('/users/login');
             } else {
                 user.comparePassword(password)
@@ -154,6 +156,7 @@ exports.processLogin = (req, res, next) => {
                         } else {
                             req.flash('formdata', req.body);
                             req.flash('error', errorMessage);
+                            console.log("invalid password");
                             res.redirect('/users/login');
                         }
                     });
