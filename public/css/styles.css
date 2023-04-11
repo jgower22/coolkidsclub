@@ -323,6 +323,7 @@ label {
 .rsvp-table {
     margin-top: 10px;
     float: left;
+    
 }
 
  .user-table {
@@ -350,6 +351,10 @@ label {
  .text-centered {
     text-align: center;
     
+ }
+
+ #descriptionContainer {
+    float: left;
  }
 
  .text-centered h2 {
