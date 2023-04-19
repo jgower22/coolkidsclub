@@ -6,7 +6,7 @@ const { validateProgramId, validateProgram, validateRSVP, validateResult } = req
 const router = express.Router();
 
 //Send all programs
-router.get('/', isLoggedIn, controller.index);
+router.get('/', controller.index);
 
 //Send new program form
 router.get('/new', isLoggedIn, isAdmin,  controller.newProgram);
@@ -15,7 +15,7 @@ router.get('/new', isLoggedIn, isAdmin,  controller.newProgram);
 router.post('/', isLoggedIn, isAdmin, validateProgram, validateResult, controller.createProgram);
 
 //Send programs as json for calendar
-router.get('/programsJSON', isLoggedIn, controller.programsJSON);
+router.get('/programsJSON', controller.programsJSON);
 
 //Show program with specified id
 router.get('/:id', validateProgramId, isLoggedIn, controller.showProgram);
