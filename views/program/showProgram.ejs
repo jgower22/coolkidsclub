@@ -6,15 +6,13 @@
                 <%if (role === 'admin') {%>
                     <div id="buttons-container">
                         <form>
-                            <button class="admin-program-button" type="submit" formmethod="GET" formaction="/programs/<%=program._id%>/edit">Edit Program</button>
-                            <button class="admin-program-button" type="submit" formmethod="POST" formaction="/programs/<%=program._id%>/copy">Copy Program</button>
-                            <button class="admin-program-button" type="submit" id="delete" formmethod="POST" formaction="/programs/<%=program._id%>?_method=DELETE">Delete Program</button>
+                            <button class="purple-button" type="submit" formmethod="GET" formaction="/programs/<%=program._id%>/edit">Edit Program</button>
+                            <button class="purple-button" type="submit" formmethod="POST" formaction="/programs/<%=program._id%>/copy">Copy Program</button>
+                            <button class="purple-button" type="submit" id="delete" formmethod="POST" formaction="/programs/<%=program._id%>?_method=DELETE">Delete Program</button>
                         </form>
                     </div>
                 <%}%>
 
-                
-                
                 <h1 class="program-header"><%=program.name%></h1>
                 <h3 class="location">Location: <%=program.location%></h3>
                 <%
@@ -48,34 +46,37 @@
                         let yesRsvps = rsvps.filter(rsvp => rsvp.response === 'yes');
                         console.log(yesRsvps);
                         let numNo = rsvps.length - yesRsvps.length;%>
-                        <h3>Number of Yes: <%=yesRsvps.length%></h3>
-                        <h3>Number of No: <%=numNo%></h3>
-                       
-                        <table class="user-table">
-                            <tr>
-                                <th colspan="100%">Yes</th>
-                            </tr>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                            </tr>
-                       
-                        <%for (let i = 0; i < yesRsvps.length; i++) {%>
-                            <tr>
-                                <td>
-                                    <%let yesUser = yesRsvps[i]%>
-                                    <a href="/users/profile/<%=yesUser.user._id%>"><%=yesUser.user.firstName + ' ' + yesUser.user.lastName%></a>
-                                </td>
-                                <td>
-                                    <%=yesUser.user.email%>
-                                </td>
-                            </tr>
-                            
-                        <%}%>
-                        </table>
+                        <h3>RSVP Yes: <%=yesRsvps.length%></h3>
+                        <h3>RSVP No: <%=numNo%></h3>
+                       <div class="float-left">
+                            <table class="user-table rsvp-table">
+                                <tr>
+                                    <th colspan="100%">Attending</th>
+                                </tr>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                </tr>
+                        
+                            <%for (let i = 0; i < yesRsvps.length; i++) {%>
+                                <tr>
+                                    <td>
+                                        <%let yesUser = yesRsvps[i]%>
+                                        <a href="/users/profile/<%=yesUser.user._id%>"><%=yesUser.user.firstName + ' ' + yesUser.user.lastName%></a>
+                                    </td>
+                                    <td>
+                                        <%=yesUser.user.email%>
+                                    </td>
+                                </tr>
+                                
+                            <%}%>
+                            </table>
+                            <h1 class="program-header padding-header">Description</h1>
+                            <p><%=program.details%></p>
+                    </div>
                     <%} else {%>
-                        <h3>Number of Yes: 0</h3>
-                        <h3>Number of No: 0</h3>
+                        <h3>RSVP Yes: 0</h3>
+                        <h3>RSVP No: 0</h3>
                     <%}
                 }%>
 
@@ -92,10 +93,7 @@
                         <button id="no" value="no" name="response" type="submit">No</button>
                     </form>
                 <%}%>
-                <div id="descriptionContainer ">
-                    <h1 class="program-header padding-header">Description</h1>
-                    <p><%=program.details%></p>
-                </div>
+                
                 
                 
             </div>
