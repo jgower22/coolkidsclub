@@ -13,13 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
       hour: 'numeric',
       minute: '2-digit'
     },
-    events: '/programs/programsJSON/',
-    eventClick: function (event) {
-      if (event.event.url) {
-        event.jsEvent.preventDefault();
-        window.open(event.event.url, "_blank");
-      }
-    }
+    events: '/programs/programsJSON/'
   });
 
   calendar.render();
