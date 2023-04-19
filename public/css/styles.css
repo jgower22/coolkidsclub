@@ -161,6 +161,10 @@ a:hover {
     justify-content: center;
 }
 
+.text-centered {
+    text-align: center;
+}
+
 #login-container, #signup-container {
     display: block;
     width: 30%;
@@ -326,10 +330,13 @@ label {
     
 }
 
+.float-left {
+    float: left;
+}
+
  .user-table {
     border: 1px solid black;
     border-collapse: separate;
-
  }
 
  .user-table tr, td, th {
@@ -450,8 +457,8 @@ footer{
     float: right;
 }
 
-/*admin edit program*/
-.admin-program-button {
+
+.purple-button {
     background-color: var(--purple);
     border: black;
     color: white;
