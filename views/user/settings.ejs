@@ -12,7 +12,7 @@
                         <label class="required" for="username">Username:</label>
                         <input type="text" class="user-input" id="username" name="username" value="<%=user.username%>" required>
                     <%}%>
-                    <input type="submit" value="Update Username" class="submit">
+                    <input type="submit" value="Update Username" class="submit float-right">
                 </form>
 
                 <form id="passwordForm" action="/users/settings/update-password?_method=PUT" method="POST">
@@ -37,7 +37,7 @@
                         <input type="password" class="user-input" id="confirmPassword" name="confirmPassword" required>
                     <%}%>
 
-                    <input type="submit" value="Update Password" class="submit">
+                    <input type="submit" value="Update Password" class="submit float-right">
                 </form>
 
             </div>
