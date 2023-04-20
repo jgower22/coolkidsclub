@@ -119,11 +119,9 @@ exports.processLogin = (req, res, next) => {
     
     User.findOne({ username: username })
         .then(user => {
-            console.log("user" + user);
             if (!user) {
                 req.flash('formdata', req.body);
                 req.flash('error', errorMessage);
-                console.log("invalid username");
                 res.redirect('/users/login');
             } else {
                 user.comparePassword(password)
@@ -148,15 +146,16 @@ exports.processLogin = (req, res, next) => {
                             if (user.firstLogin) {
                                 //Redirect to ask user to change username/password
                                 //User.findOne({  })
+                                console.log("success " + Date.now());
                                 res.redirect('/users/profile');
                             } else {
+                                console.log("success " + Date.now());
                                 req.flash('success', 'You have successfully logged in');
                                 res.redirect('/users/profile');
                             }
                         } else {
                             req.flash('formdata', req.body);
                             req.flash('error', errorMessage);
-                            console.log("invalid password");
                             res.redirect('/users/login');
                         }
                     });
