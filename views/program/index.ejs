@@ -1,13 +1,7 @@
 <%- include('../partials/header.ejs')%>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js'></script>
+<script defer src="/javascript/calendar.js"></script>
     <main>
-        <h2>Programs</h2>
-        <%if (programs.length === 0) {%>
-            <h4>There are no programs to show.</h4>
-        <%} else {%>
-            <%for (let i = 0; i < programs.length; i++) {
-                let program = programs[i];%>
-                <h3><a href="/programs/<%=program.id%>"><%=program.name%></a></h3>
-            <%}
-        }%>
+        <div id='calendar'></div>
     </main>
 <%- include('../partials/footer.ejs')%>

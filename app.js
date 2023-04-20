@@ -1,6 +1,5 @@
 const express = require('express');
 const morgan = require('morgan');
-//const programRoutes = require('./routes/programRoutes');
 const mainRoutes = require('./routes/mainRoutes');
 const userRoutes = require('./routes/userRoutes');
 const programRoutes = require('./routes/programRoutes');

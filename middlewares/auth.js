@@ -15,6 +15,7 @@ exports.isLoggedIn = (req, res, next) => {
     if (req.session.user) {
         return next();
     } else {
+        console.log("Log in first " + Date.now());
         req.flash('error', 'You need to log in first');
         return res.redirect('/users/login');
     }
@@ -25,6 +26,7 @@ exports.isAdmin = (req, res, next) => {
         .then(user => {
             if (user) {
                 if (user.role === 'admin') {
+                    res.locals.role = user.role;
                     return next();
                 } else {
                     let err = new Error('Unauthorized to access the resource');

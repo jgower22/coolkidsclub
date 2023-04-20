@@ -8,7 +8,9 @@ const nodemailer = require("nodemailer");
 
 
 exports.new = (req, res) => {
-    res.render('./user/new');
+    let data = req.flash('formdata');
+    res.locals.title = 'Sign Up - Cool Kids Campaign';
+    res.render('./user/new', { formData: data[0] });
 };
 
 exports.addUser = (req, res, next) => {
@@ -131,6 +133,7 @@ exports.addUser = (req, res, next) => {
                     return;
                 } else {
                     req.flash('error', 'Email has been used');
+                    req.flash('formdata', req.body);
                     return res.redirect('/users/new');
                 }
             }
@@ -140,8 +143,9 @@ exports.addUser = (req, res, next) => {
 
 
 exports.login = (req, res) => {
+    let data = req.flash('formdata');
     res.locals.title = 'Log In - Cool Kids Campaign';
-    res.render('./user/login');
+    res.render('./user/login', { formData: data[0] });
 };
 
 exports.logout = (req, res, next) => {
@@ -158,11 +162,12 @@ exports.processLogin = (req, res, next) => {
     if (username)
         username = username.toLowerCase();
     let password = req.body.password;
-    let errorMessage = 'Invalid email and/or password';
-
+    let errorMessage = 'Invalid username and/or password';
+    
     User.findOne({ username: username })
         .then(user => {
             if (!user) {
+                req.flash('formdata', req.body);
                 req.flash('error', errorMessage);
                 res.redirect('/users/login');
             } else {
@@ -188,16 +193,19 @@ exports.processLogin = (req, res, next) => {
                             if (user.firstLogin) {
                                 //Redirect to ask user to change username/password
                                 //User.findOne({  })
+                                console.log("success " + Date.now());
                                 res.redirect('/users/profile');
                             } else {
+                                console.log("success " + Date.now());
                                 req.flash('success', 'You have successfully logged in');
                                 res.redirect('/users/profile');
                             }
                         } else {
+                            req.flash('formdata', req.body);
                             req.flash('error', errorMessage);
                             res.redirect('/users/login');
                         }
-                    })
+                    });
             }
         })
         .catch(err => next(err));
@@ -205,7 +213,7 @@ exports.processLogin = (req, res, next) => {
 
 exports.myProfile = (req, res, next) => {
     let id = req.session.user;
-    User.findById({ _id: id }, { _id: 0, password: 0 })
+    User.findById( { _id: id }, { _id: 0, password: 0 })
         .then(user => {
             console.log('USER: ' + user);
             let adminView = false;
@@ -217,12 +225,12 @@ exports.myProfile = (req, res, next) => {
 exports.userProfile = (req, res, next) => {
     let id = req.params.id;
     console.log('ID: ' + id);
-    Promise.all([User.findById({ _id: id }, { password: 0 }), rsvp.find({ user: id }).populate('program', '_id name')])
+    Promise.all([User.findById( { _id: id }, { password: 0 }), rsvp.find({ user: id }).populate('program', '_id name')])
         .then(results => {
             const [user, rsvps] = results;
             let adminView = true;
             if (user) {
-                res.render('./user/profile', { user, rsvps, adminView });
+                res.render('./user/profile', { user, rsvps, adminView, DateTime });
             } else {
                 let err = new Error('Cannot find user with id: ' + id);
                 err.status = 404;
@@ -232,24 +240,26 @@ exports.userProfile = (req, res, next) => {
         .catch(err => next(err));
 }
 
-exports.rsvps = (req, res, next) => {
-    let id = req.session.user;
-    Promise.all([User.find({ _id: id }, { firstName: 1, lastName: 1 }), rsvp.find({ user: id }).populate('program', '_id name')])
-        .then(results => {
-            const [user, rsvps] = results;
-            console.log('USER: ' + user);
-            console.log('RSVPS: ' + rsvps);
-            res.render('./user/rsvps', { user, rsvps });
-        })
-        .catch(err => next(err));
-};
+
 
 exports.inbox = (req, res, next) => {
     res.render('./user/inbox');
 };
 
 exports.settings = (req, res, next) => {
-    res.render('./user/settings');
+    User.findById(req.session.user, { username: 1 })
+        .then(user => {
+            if (user) {
+                let data = req.flash('formdata');
+                res.render('./user/settings', { user, formData: data[0] });
+            } else {
+                let err = new Error('Cannot find user account. Please log out and log in again.');
+                err.status = 404;
+                return next(err);
+            }
+        })
+        .catch(err => next(err));
+    
 };
 
 exports.admin = (req, res, next) => {
@@ -342,6 +352,101 @@ exports.unbanUser = (req, res, next) => {
             }
         })
         .catch(err => next(err));
-}
+};
+
+exports.updateUsername = (req, res, next) => {
+    let username = req.body.username;
+    User.findById(req.session.user, { username: 1 })
+        .then(user => {
+            if (user) {
+                if (username === user.username) {
+                    req.flash('error', 'New username is the same as current username.');
+                    req.flash('formdata', req.body);
+                    return res.redirect('back');
+                }
+                user.username = username;
+                user.save()
+                    .then(user => {
+                        console.log('SUCCESS');
+                        req.flash('success', 'Username updated successfully');
+                        return res.redirect('back');
+                    })
+                    .catch(err => {
+                        if (err.name === 'ValidationError') {
+                            req.flash('error', err.message);
+                            return res.redirect('back');
+                        }
+
+                        if (err.code === 11000) {
+                            console.log(err);
+                            req.flash('error', 'Username is already taken.');
+                            req.flash('formdata', req.body);
+                            return res.redirect('back');
+                        }
+                    });
+            } else {
+                let err = new Error('Cannot find user account. Please log out and log in again.');
+                err.status = 404;
+                return next(err);
+            }
+        })
+};
+
+exports.updatePassword = (req, res, next) => {
+    User.findById(req.session.user)
+        .then(user => {
+            if (user) {
+                let currentPassword = req.body.password;
+                //Check if current password matches with database password
+                user.comparePassword(currentPassword)
+                    .then(result => {
+                        if (result) {
+                            let newPassword = req.body.newPassword;
+                            let confirmPassword = req.body.confirmPassword;
+
+                            //Check if new/confirm passwords match
+                            if (newPassword === confirmPassword) {
+
+                                //Check if new password is different from current password
+                                if (currentPassword === newPassword) {
+                                    req.flash('error', 'New password is the same as current password.');
+                                    req.flash('formdata', req.body);
+                                    return res.redirect('back');
+                                }
+                                
+                                //Update password in database
+                                user.password = newPassword;
+                                user.save()
+                                    .then(user => {
+                                        req.flash('success', 'Password updated successfully');
+                                        return res.redirect('back');
+                                    })
+                                    .catch(err => {
+                                        if (err.name === 'ValidationError') {
+                                            req.flash('error', err.message);
+                                            return res.redirect('back');
+                                        }
+                                    });
+                            } else {
+                                req.flash('error', 'New password must match confirm new password field.');
+                                req.flash('formdata', req.body);
+                                return res.redirect('back');
+                            }
+                        } else {
+                            req.flash('error', 'Current password is incorrect.');
+                            req.flash('formdata', req.body);
+                            return res.redirect('back');
+                        }
+                    });
+            } else {
+                let err = new Error('Cannot find user account. Please log out and log in again.');
+                err.status = 404;
+                return next(err);
+            }
+        })
+};
+
+
+
 
 

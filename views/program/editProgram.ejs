@@ -4,28 +4,52 @@
             <div id="form-container">
                 <form action="/programs/<%=program._id%>?_method=PUT" method="POST">
                     <h2>Edit this program</h2>
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" placeholder="Program Name" value="<%=program.name%>" required>
 
-                    <label for="location">Location:</label>
-                    <input type="text" id="location" name="location" placeholder="Location" value="<%=program.location%>"required>
+                    <%if (formData) {%>
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" placeholder="Program Name" minlength="2" value="<%=formData.name%>" required>
+
+                        <label for="location">Location:</label>
+                        <input type="text" id="location" name="location" placeholder="Location" minlength="2" value="<%=formData.location%>"required>
+                        
+                        <label for="startDate">Start Date:</label>
+                        <input type="date" id="startDate" name="startDate" value="<%=formData.startDate%>" required>
+
+                        <label for="startTime">Start Time:</label>
+                        <input type="time" id="startTime" name="startTime" value="<%=formData.startTime%>" required>
+
+                        <label for="endDate">End Date:</label>
+                        <input type="date" id="endDate" name="endDate" value="<%=formData.endDate%>" required>
+
+                        <label for="endTime">End Time:</label>
+                        <input type="time" id="endTime" name="endTime" value="<%=formData.endTime%>" required>
+
+                        <label for="details">Details:</label>
+                        <textarea id="details" name="details" placeholder="Description of Program" rows="4" minlength="3" required><%=formData.details%></textarea>
+                    <%} else {%>
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" placeholder="Program Name" minlength="2" value="<%=program.name%>" required>
+
+                        <label for="location">Location:</label>
+                        <input type="text" id="location" name="location" placeholder="Location" minlength="2" value="<%=program.location%>"required>
+                        
+                        <label for="startDate">Start Date:</label>
+                        <input type="date" id="startDate" name="startDate" value="<%=program.startDate%>" required>
+
+                        <label for="startTime">Start Time:</label>
+                        <input type="time" id="startTime" name="startTime" value="<%=program.startTime%>" required>
+
+                        <label for="endDate">End Date:</label>
+                        <input type="date" id="endDate" name="endDate" value="<%=program.endDate%>" required>
+
+                        <label for="endTime">End Time:</label>
+                        <input type="time" id="endTime" name="endTime" value="<%=program.endTime%>" required>
+
+                        <label for="details">Details:</label>
+                        <textarea id="details" name="details" placeholder="Description of Program" rows="4" minlength="3" required><%=program.details%></textarea>
+                    <%}%>
                     
-                    <label for="startDate">Start Date:</label>
-                    <input type="date" id="startDate" name="startDate" value="<%=program.startDate%>" required>
-
-                    <label for="startTime">Start Time:</label>
-                    <input type="time" id="startTime" name="startTime" value="12:00" value="<%=program.startTime%>" required>
-
-                    <label for="endDate">End Date:</label>
-                    <input type="date" id="endDate" name="endDate" value="<%=program.endDate%>" required>
-
-                    <label for="endTime">End Time:</label>
-                    <input type="time" id="endTime" name="endTime" value="13:00" value="<%=program.endTime%>" required>
-
-                    <label for="details">Details:</label>
-                    <textarea id="details" name="details" placeholder="Description of Program" rows="4" required><%=program.details%></textarea>
-
-                    <input type="submit" id="submit" value="Save Program">
+                    <input type="submit" class="submit float-right" value="Save Program">
                 </form>
             </div>
         </div>

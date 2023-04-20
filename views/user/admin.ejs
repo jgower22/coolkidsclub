@@ -2,7 +2,7 @@
     <script defer src="/javascript/adminConfirmation.js"></script>
     <main>
         <div class="text-centered">
-           
+
             <%
             let numUsers = users.length;
             let admins = [];
@@ -22,7 +22,7 @@
             %>
 
             <h2>Admins (<%=admins.length%>)</h2>
-            <table class="userTable">
+            <table class="user-table">
                 <tr>
                     <th>Name</th>
                     <th>Email</th>
@@ -59,7 +59,7 @@
 
             <%if (patients.length) {%>
                 <h2>Patients (<%=patients.length%>)</h2>
-                <table class="userTable">
+                <table class="user-table">
                     <tr>
                         <th>Name</th>
                         <th>Email</th>
@@ -86,10 +86,10 @@
                             </td>
                             <td>
                                 <form>
-                                    <button class="action-button make-admin" type="submit" formmethod="POST" formaction="/users/<%=patient.id%>/makeAdmin?_method=PUT">Make Admin</button>
+                                    <button class="action-button make-admin" type="submit" value="<%=patient.firstName + ' ' + patient.lastName%>" formmethod="POST" formaction="/users/<%=patient.id%>/make-admin?_method=PUT">Make Admin</button>
                                 </form>
                                 <form>
-                                    <button class="action-button ban-user" type="submit" formmethod="POST" formaction="/users/<%=patient.id%>/ban?_method=PUT">Ban User</button>
+                                    <button class="action-button ban-user" type="submit" value="<%=patient.firstName + ' ' + patient.lastName%>" formmethod="POST" formaction="/users/<%=patient.id%>/ban?_method=PUT">Ban User</button>
                                 </form>
                             </td>
                         </tr>
@@ -102,7 +102,7 @@
 
             <%if (bannedUsers.length) {;%>
                 <h2>Banned Users (<%=bannedUsers.length%>)</h2>
-                <table class="userTable">
+                <table class="user-table">
                     <tr>
                         <th>Name</th>
                         <th>Email</th>
@@ -131,7 +131,7 @@
                             </td>
                             <td>
                                 <form>
-                                    <button class="action-button" type="submit" formmethod="POST" formaction="/users/<%=bannedUser.id%>/unban?_method=PUT">Unban User</button>
+                                    <button class="action-button unban-user" type="submit" value="<%=bannedUser.firstName + ' ' + bannedUser.lastName%>" formmethod="POST" formaction="/users/<%=bannedUser.id%>/unban?_method=PUT">Unban User</button>
                                 </form>
                             </td>
                         </tr>
