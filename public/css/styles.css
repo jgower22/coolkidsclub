@@ -170,6 +170,12 @@ a:hover {
     width: 30%;
 }
 
+.alt-account-container {
+    clear: both;
+    text-align: center;
+    
+}
+
 #passwordForm {
     margin-top: 30px;
 }
@@ -219,7 +225,7 @@ label {
     border-radius: 6px;
     padding: 8px 20px;
     text-transform: uppercase;
-    float: right;
+    
     cursor: pointer;
     width: fit-content;
 }
@@ -332,6 +338,10 @@ label {
 
 .float-left {
     float: left;
+}
+
+.float-right {
+    float: right;
 }
 
  .user-table {
