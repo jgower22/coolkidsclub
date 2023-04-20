@@ -3,7 +3,8 @@
     <main>
         <div class="centered">
             <div id="program-container">
-                <%if (role === 'admin') {%>
+                <%
+                if (role === 'admin') {%>
                     <div id="buttons-container">
                         <form>
                             <button class="purple-button" type="submit" formmethod="GET" formaction="/programs/<%=program._id%>/edit">Edit Program</button>
@@ -40,40 +41,42 @@
                     <h3>End: <%=formattedEndDate%> @ <%=formattedEndTime%> (Eastern Time)</h3>
                 </div>
                 <%if (role === 'admin') {%>
-                
+
                     <h1 class="rsvp-confirmation program-header padding-header">RSVPs</h1>
                     <%if (rsvps.length) {
                         let yesRsvps = rsvps.filter(rsvp => rsvp.response === 'yes');
-                        console.log(yesRsvps);
                         let numNo = rsvps.length - yesRsvps.length;%>
                         <h3>RSVP Yes: <%=yesRsvps.length%></h3>
                         <h3>RSVP No: <%=numNo%></h3>
-                       <div class="float-left">
-                            <table class="user-table rsvp-table">
-                                <tr>
-                                    <th colspan="100%">Attending</th>
-                                </tr>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                </tr>
-                        
-                            <%for (let i = 0; i < yesRsvps.length; i++) {%>
-                                <tr>
-                                    <td>
-                                        <%let yesUser = yesRsvps[i]%>
-                                        <a href="/users/profile/<%=yesUser.user._id%>"><%=yesUser.user.firstName + ' ' + yesUser.user.lastName%></a>
-                                    </td>
-                                    <td>
-                                        <%=yesUser.user.email%>
-                                    </td>
-                                </tr>
-                                
+
+                        <div class="float-left">
+                            <%if (yesRsvps.length) {%>
+                                <table class="user-table rsvp-table">
+                                    <tr>
+                                        <th colspan="100%">Attending</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                    </tr>
+                            
+                                <%for (let i = 0; i < yesRsvps.length; i++) {%>
+                                    <tr>
+                                        <td>
+                                            <%let yesUser = yesRsvps[i]
+                                            console.log('YES USER: ' + yesUser);%>
+                                            <a href="/users/profile/<%=yesUser.user._id%>"><%=yesUser.user.firstName + ' ' + yesUser.user.lastName%></a>
+                                        </td>
+                                        <td>
+                                            <%=yesUser.user.email%>
+                                        </td>
+                                    </tr>
+                                <%}%>
+                                </table>
                             <%}%>
-                            </table>
                             <h1 class="program-header padding-header">Description</h1>
                             <p><%=program.details%></p>
-                    </div>
+                        </div>
                     <%} else {%>
                         <h3>RSVP Yes: 0</h3>
                         <h3>RSVP No: 0</h3>
@@ -83,7 +86,9 @@
                 <%if (role === 'patient') {%>
                     <h1 class="program-header padding-header">RSVP</h1>
 
-                    <%let myRsvp = rsvps.filter(rsvp => rsvp.user == user);
+                    <%let myRsvp = rsvps.filter(rsvp => rsvp.user._id == user);
+                    console.log('RSVPS: ' + rsvps);
+                    console.log('MY RSVP: ' + myRsvp);
                     if (myRsvp.length) {%>
                         <h3>You have successfully responded with <%=myRsvp[0].response%>.</h3>
                     <%}%>
@@ -93,8 +98,16 @@
                         <button id="no" value="no" name="response" type="submit">No</button>
                     </form>
                 <%}%>
-                
-                
+
+                <%if (role === null) {%>
+                    <h1 class="program-header padding-header">Log In to RSVP!</h1>
+                    <a href="/users/login">
+                        <button type="button" class="submit">Log In</button>
+                    </a>
+                    <a href="/users/new">
+                        <button type="button" class="submit">Sign Up</button>
+                    </a>
+                <%}%>
                 
             </div>
         </div>
