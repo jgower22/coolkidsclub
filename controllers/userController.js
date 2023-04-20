@@ -63,52 +63,34 @@ exports.addUser = (req, res, next) => {
     user.password = password;
     console.log('PASSWORD: ' + password);
 
-    async function main() {
+    let messageOptions = ({from: "servermanagementgroup5@gmail.com",
+    to: "" + req.body.email + "", //receiver
+    subject: "CKC Account Temporary Credentials",
+    text: "Username: " + user.username + " /n Password: " + password + "",
+    });
 
+    async function message(messageOptions) {
         const transporter = nodemailer.createTransport({
             service: "gmail.com",
             auth: {
-                //type: 'OAUTH2',
-                //clientId: "141323422945-tg1tbt8lqlcg6dp1eqcn9acdsa3dgebc.apps.googleusercontent.com",
-                //clientSecret: "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",
                 user: "servermanagementgroup5@gmail.com",
                 pass: "iyiezvzvkevmgxan",
             },
         });
 
-
-        const mailoptions = {
-            from: "servermanagementgroup5@gmail.com",
-            to: "" + req.body.email + "", //receiver
-            subject: "CKC Account Temporary Credentials",
-            text: "Username: " + user.username + " /n Password: " + password + "",
-        };
-        //from: 'servermanagementgroup5@gmail.com',
-        //Sender will change with ckc staff email at later point ^
-        //to: req.body.email, //receiver
-        //subject: "CKC Account Temporary Credentials",
-        //text: user.username.toString + " /n" + user.password.toString,
-        //auth: {
-        //user: "servermanagementgroup5@gmail.com",
-        //refreshToken: "https://oauth2.googleapis.com/token",
-        //accessToken: "https://www.googleapis.com/oauth2/v1/certs",
-        //accessUrl: "http://localhost:8085",
-        //},
-        transporter.sendMail(mailoptions, function (error, info) {
-            if(error){
+        transporter.sendMail(messageOptions, function (error, info) {
+            if (error) {
                 console.log(error);
-            }else {
-            console.log("Email sent: " + info.response);
+            } else {
+                console.log("Email sent: " + info.response);
             }
         });
-
     }
 
 
-    
     user.save()
         .then(() => {
-            main();
+            message(messageOptions);
             req.flash('success', 'Account created successfully! Check your email for your username and password.');
             res.redirect('/users/login');
         })
@@ -163,7 +145,7 @@ exports.processLogin = (req, res, next) => {
         username = username.toLowerCase();
     let password = req.body.password;
     let errorMessage = 'Invalid username and/or password';
-    
+
     User.findOne({ username: username })
         .then(user => {
             if (!user) {
@@ -213,7 +195,7 @@ exports.processLogin = (req, res, next) => {
 
 exports.myProfile = (req, res, next) => {
     let id = req.session.user;
-    User.findById( { _id: id }, { _id: 0, password: 0 })
+    User.findById({ _id: id }, { _id: 0, password: 0 })
         .then(user => {
             console.log('USER: ' + user);
             let adminView = false;
@@ -225,7 +207,7 @@ exports.myProfile = (req, res, next) => {
 exports.userProfile = (req, res, next) => {
     let id = req.params.id;
     console.log('ID: ' + id);
-    Promise.all([User.findById( { _id: id }, { password: 0 }), rsvp.find({ user: id }).populate('program', '_id name')])
+    Promise.all([User.findById({ _id: id }, { password: 0 }), rsvp.find({ user: id }).populate('program', '_id name')])
         .then(results => {
             const [user, rsvps] = results;
             let adminView = true;
@@ -259,7 +241,7 @@ exports.settings = (req, res, next) => {
             }
         })
         .catch(err => next(err));
-    
+
 };
 
 exports.admin = (req, res, next) => {
@@ -413,7 +395,7 @@ exports.updatePassword = (req, res, next) => {
                                     req.flash('formdata', req.body);
                                     return res.redirect('back');
                                 }
-                                
+
                                 //Update password in database
                                 user.password = newPassword;
                                 user.save()
