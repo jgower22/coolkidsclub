@@ -9,6 +9,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
 const dotenv = require('dotenv');
+const eventReminders = require('./scheduledFunctions/eventReminders');
 
 //create app
 const app = express();
@@ -80,3 +81,6 @@ app.use((err, req, res, next) => {
     console.log(err.stack);
     res.render('./error', {error: err});
 });
+
+//Email reminders
+eventReminders.initScheduledJobs();
