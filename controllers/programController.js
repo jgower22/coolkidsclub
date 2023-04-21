@@ -62,6 +62,7 @@ exports.showProgram = (req, res, next) => {
             const [program, rsvps] = results;
             if (program) {
                 unescapeProgram(program);
+                req.session.returnTo = req.originalUrl;
                 res.render('./program/showProgram', { program, rsvps, DateTime });
             } else {
                 let err = new Error('Cannot find program with id: ' + id);

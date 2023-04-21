@@ -147,11 +147,14 @@ exports.processLogin = (req, res, next) => {
                                 //Redirect to ask user to change username/password
                                 //User.findOne({  })
                                 console.log("success " + Date.now());
-                                res.redirect('/users/profile');
+                                req.flash('success', 'You have successfully logged in');
+                                res.redirect(req.session.returnTo || '/users/profile');
+                                delete req.session.returnTo;
                             } else {
                                 console.log("success " + Date.now());
                                 req.flash('success', 'You have successfully logged in');
-                                res.redirect('/users/profile');
+                                res.redirect(req.session.returnTo || '/users/profile');
+                                delete req.session.returnTo;
                             }
                         } else {
                             req.flash('formdata', req.body);
@@ -183,7 +186,6 @@ exports.myProfile = (req, res, next) => {
 
 exports.userProfile = (req, res, next) => {
     let id = req.params.id;
-    console.log('ID: ' + id);
 
     Promise.all([User.findById({ _id: id }, { password: 0 }), rsvp.find({ user: id }).populate('program', '_id name startDate endDate startTime endTime')])
         .then(results => {
