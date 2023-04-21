@@ -4,6 +4,8 @@ const rsvp = require('../models/rsvp');
 const { generateFromEmail, generateUsername } = require("unique-username-generator");
 const generator = require('generate-password');
 const { DateTime } = require('luxon');
+const nodemailer = require("nodemailer");
+
 
 exports.new = (req, res) => {
     let data = req.flash('formdata');
@@ -61,8 +63,34 @@ exports.addUser = (req, res, next) => {
     user.password = password;
     console.log('PASSWORD: ' + password);
 
+    let messageOptions = ({from: "servermanagementgroup5@gmail.com",
+    to: "" + req.body.email + "", //receiver
+    subject: "CKC Account Temporary Credentials",
+    text: "Username: " + user.username + " /n Password: " + password + "",
+    });
+
+    async function message(messageOptions) {
+        const transporter = nodemailer.createTransport({
+            service: "gmail.com",
+            auth: {
+                user: "servermanagementgroup5@gmail.com",
+                pass: "iyiezvzvkevmgxan",
+            },
+        });
+
+        transporter.sendMail(messageOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log("Email sent: " + info.response);
+            }
+        });
+    }
+
+
     user.save()
         .then(() => {
+            message(messageOptions);
             req.flash('success', 'Account created successfully! Check your email for your username and password.');
             res.redirect('/users/login');
         })
@@ -93,7 +121,8 @@ exports.addUser = (req, res, next) => {
             }
             next(err);
         })
-};
+}
+
 
 exports.login = (req, res) => {
     let data = req.flash('formdata');
@@ -116,7 +145,7 @@ exports.processLogin = (req, res, next) => {
         username = username.toLowerCase();
     let password = req.body.password;
     let errorMessage = 'Invalid username and/or password';
-    
+
     User.findOne({ username: username })
         .then(user => {
             if (!user) {
@@ -221,7 +250,7 @@ exports.settings = (req, res, next) => {
             }
         })
         .catch(err => next(err));
-    
+
 };
 
 exports.admin = (req, res, next) => {
@@ -375,7 +404,7 @@ exports.updatePassword = (req, res, next) => {
                                     req.flash('formdata', req.body);
                                     return res.redirect('back');
                                 }
-                                
+
                                 //Update password in database
                                 user.password = newPassword;
                                 user.save()
