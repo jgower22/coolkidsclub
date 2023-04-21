@@ -195,19 +195,25 @@ exports.processLogin = (req, res, next) => {
 
 exports.myProfile = (req, res, next) => {
     let id = req.session.user;
-    User.findById({ _id: id }, { _id: 0, password: 0 })
-        .then(user => {
-            console.log('USER: ' + user);
-            let adminView = false;
-            res.render('./user/profile', { user, adminView });
+    Promise.all([User.findById({ _id: id }, { _id: 0, password: 0 }), rsvp.find({ user: id }).populate('program', '_id name startDate endDate startTime endTime')])
+        .then(results => {
+            const [user, rsvps] = results;
+            let adminView = (user.role === 'admin') ? true: false;
+            if (user) {
+                res.render('./user/profile', { user, rsvps, adminView, DateTime });
+            } else {
+                let err = new Error('Cannot find user with id: ' + id);
+                err.status = 404;
+                next(err);
+            }
         })
         .catch(err => next(err));
 };
 
 exports.userProfile = (req, res, next) => {
     let id = req.params.id;
-    console.log('ID: ' + id);
-    Promise.all([User.findById({ _id: id }, { password: 0 }), rsvp.find({ user: id }).populate('program', '_id name')])
+
+    Promise.all([User.findById({ _id: id }, { password: 0 }), rsvp.find({ user: id }).populate('program', '_id name startDate endDate startTime endTime')])
         .then(results => {
             const [user, rsvps] = results;
             let adminView = true;
