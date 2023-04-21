@@ -18,7 +18,7 @@ router.post('/', isLoggedIn, isAdmin, validateProgram, validateResult, controlle
 router.get('/programsJSON', controller.programsJSON);
 
 //Show program with specified id
-router.get('/:id', validateProgramId, isLoggedIn, controller.showProgram);
+router.get('/:id', validateProgramId, controller.showProgram);
 
 //Send edit form for program with specified id
 router.get('/:id/edit', validateProgramId, isLoggedIn, isAdmin, controller.editProgram);
