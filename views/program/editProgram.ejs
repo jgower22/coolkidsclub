@@ -48,7 +48,8 @@
                         <label for="details">Details:</label>
                         <textarea id="details" name="details" placeholder="Description of Program" rows="4" minlength="3" required><%=program.details%></textarea>
                     <%}%>
-                    
+
+                    <input type="button" class="cancel" value="Cancel" onClick= window.history.back()>
                     <input type="submit" class="submit float-right" value="Save Program">
                 </form>
             </div>
