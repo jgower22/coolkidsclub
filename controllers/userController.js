@@ -121,8 +121,7 @@ exports.addUser = (req, res, next) => {
             }
             next(err);
         })
-}
-
+};
 
 exports.login = (req, res) => {
     let data = req.flash('formdata');
@@ -229,9 +228,7 @@ exports.userProfile = (req, res, next) => {
             }
         })
         .catch(err => next(err));
-}
-
-
+};
 
 exports.inbox = (req, res, next) => {
     res.render('./user/inbox');
@@ -437,13 +434,43 @@ exports.updatePassword = (req, res, next) => {
         })
 };
 
-
-/*exports.resetLogin = (req, res) => {
+exports.resetLogin = (req, res) => {
     let data = req.flash('formdata');
     res.locals.title = 'Reset Login - Cool Kids Campaign';
     res.render('./user/resetLogin', { formData: data[0] });
-};*/
-
-exports.resetLogin = (req, res, next) => {
-    res.render('./user/resetLogin');
 };
+
+exports.sendUsername = (req, res, next) => {
+    let userEmail = req.body.emailUsername;
+    let flashMessage = 'If we found an account associated with that email, then an email has been sent with your username.';
+
+    User.findOne({ email: userEmail }, { username: 1, firstName: 1})
+        .then(user => {
+            if (user) {
+                console.log(user);
+                req.flash('success', flashMessage);
+                res.redirect('back');
+            } else {
+                console.log('Cannot find user with email: ' + userEmail);
+                req.flash('success', flashMessage);
+                res.redirect('back');
+            }
+        })
+        .catch(err => next(err));
+};
+
+exports.sendPasswordReset = (req, res, next) => {
+    let userEmail = req.body.emailUsername;
+
+    User.findOne({ email: userEmail }, { username: 1, firstName: 1})
+        .then(user => {
+            if (user) {
+                console.log(user);
+                res.redirect('back');
+            } else {
+                console.log('Cannot find user with email: ' + userEmail);
+                res.redirect('back');
+            }
+        })
+        .catch(err => next(err));
+}
