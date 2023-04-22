@@ -4,8 +4,7 @@ const rsvp = require('../models/rsvp');
 const { generateFromEmail, generateUsername } = require("unique-username-generator");
 const generator = require('generate-password');
 const { DateTime } = require('luxon');
-const nodemailer = require("nodemailer");
-
+const { message } = require('../public/javascript/email.js');
 
 exports.new = (req, res) => {
     let data = req.flash('formdata');
@@ -66,33 +65,14 @@ exports.addUser = (req, res, next) => {
     let messageOptions = ({from: "servermanagementgroup5@gmail.com",
     to: "" + req.body.email + "", //receiver
     subject: "CKC Account Temporary Credentials",
-    text: "Username: " + user.username + " /n Password: " + password + "",
+    html: "Hello, " + req.body.firstName + "<br>Here are your temporary account credentials for the Cool Kids Campaign <br>Username: " + user.username + "<br>Password: " + password,
     });
-
-    async function message(messageOptions) {
-        const transporter = nodemailer.createTransport({
-            service: "gmail.com",
-            auth: {
-                user: "servermanagementgroup5@gmail.com",
-                pass: "iyiezvzvkevmgxan",
-            },
-        });
-
-        transporter.sendMail(messageOptions, function (error, info) {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log("Email sent: " + info.response);
-            }
-        });
-    }
-
 
     user.save()
         .then(() => {
-            message(messageOptions);
-            req.flash('success', 'Account created successfully! Check your email for your username and password.');
-            res.redirect('/users/login');
+            let successMessage = 'Account created successfully! Check your email for your username and password.';
+            let errorMessage = 'Error sending email with account credentials. Please use this form to reset your account.';
+            message(req, res, messageOptions, successMessage, '/users/login', errorMessage, '/users/reset-login');
         })
         .catch(err => {
             if (err.name === 'ValidationError') {
