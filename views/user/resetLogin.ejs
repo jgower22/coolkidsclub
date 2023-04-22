@@ -1,5 +1,32 @@
 <%- include('../partials/header.ejs')%>
     <main>
-
+        <div class="centered">
+            <div id="login-container">
+                <form action="/users/reset-login/send-username" method="POST">
+                    <h2>Forgot username?</h2>
+                    <%if (formData && Object.hasOwn(formData, 'username')) {%>
+                        <label class="required" for="emailUsername">Email:</label>
+                        <input type="text" class="user-input" id="emailUsername" name="email" value="<%=formData.email%>" required>
+                    <%} else {%>
+                        <label class="required" for="emailUsername">Email:</label>
+                        <input type="text" class="user-input" id="emailUsername" name="email" required>
+                    <%}%>
+                    <input type="hidden" name="username" value="username">
+                    <input type="submit" value="Submit" class="submit float-right">
+                </form>
+                <form action="/users/reset-login/send-password-reset" method="POST">
+                    <h2>Forgot password?</h2>
+                    <%if (formData && Object.hasOwn(formData, 'password')) {%>
+                        <label class="required" for="emailPassword">Email:</label>
+                        <input type="text" class="user-input" id="emailPassword" name="email" value="<%=formData.email%>" required>
+                    <%} else {%>
+                        <label class="required" for="emailPassword">Email:</label>
+                        <input type="text" class="user-input" id="emailPassword" name="email" required>
+                    <%}%>
+                    <input type="hidden" name="password" value="password">
+                    <input type="submit" value="Submit" class="submit float-right">
+                </form>
+            </div>
+        </div>
     </main>
 <%- include('../partials/footer.ejs')%>
