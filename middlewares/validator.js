@@ -32,9 +32,8 @@ exports.validateResult = (req, res, next) => {
             req.flash('error', error.msg);
         });
         //Load form data into flash
+        console.log('REQ BODY: ' + JSON.stringify(req.body));
         req.flash('formdata', req.body);
-        //req.flash('usernameFormData', req.body);
-        //req.flash('passwordFormData', req.body);
         return res.redirect('back');
     } else {
         return next();
@@ -50,6 +49,10 @@ body('password', 'Password must be at least 8 characters and at most 64 characte
 
 exports.validateUsername = [body('username', 'Username cannot be empty').isLength({ min: 7, max: 64}).withMessage('Username must be at least 7 characters and at most 64 characters')
     .isAlphanumeric().withMessage('Username can only contain letters and numbers').toLowerCase().trim().escape()];
+
+exports.validatePassword = [body('newPassword', 'New password must be at least 8 characters and at most 64 characters').isLength({ min: 8, max: 64 })];
+
+exports.validateEmail = [body('email', 'Email must be a valid email address').isEmail().normalizeEmail({ gmail_remove_dots: false }).trim().escape()];
 
 exports.validateProgram = [body('name').isLength({ min: 2 }).withMessage('Program name must be at least 2 characters').trim().escape(),
 body('location').isLength({ min: 2 }).withMessage('Program location must be at least 2 characters').trim().escape(),
