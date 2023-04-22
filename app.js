@@ -37,7 +37,7 @@ mongoose.connect(url)
 app.use(express.static('public'));
 app.use(express.urlencoded({extended: true}));
 app.use(morgan('tiny'));
-app.use(methodOverride("_method"));
+app.use(methodOverride('_method'));
 
 //Session
 app.use(session({
