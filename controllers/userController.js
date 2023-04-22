@@ -438,6 +438,12 @@ exports.updatePassword = (req, res, next) => {
 };
 
 
+/*exports.resetLogin = (req, res) => {
+    let data = req.flash('formdata');
+    res.locals.title = 'Reset Login - Cool Kids Campaign';
+    res.render('./user/resetLogin', { formData: data[0] });
+};*/
 
-
-
+exports.resetLogin = (req, res, next) => {
+    res.render('./user/resetLogin');
+};
