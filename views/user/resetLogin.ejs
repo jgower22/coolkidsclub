@@ -15,7 +15,7 @@
                     <input type="submit" value="Submit" class="submit float-right">
                 </form>
                 <form action="/users/reset-login/send-password-reset" method="POST">
-                    <h2>Forgot password?</h2>
+                    <h2 id="forgotPassword">Forgot password?</h2>
                     <%if (formData && Object.hasOwn(formData, 'password')) {%>
                         <label class="required" for="emailPassword">Email:</label>
                         <input type="text" class="user-input" id="emailPassword" name="email" value="<%=formData.email%>" required>
