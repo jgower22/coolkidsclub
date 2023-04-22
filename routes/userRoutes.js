@@ -1,7 +1,7 @@
 const express = require('express');
 const controller = require('../controllers/userController');
 const { isLoggedIn, isGuest, isAdmin } = require('../middlewares/auth.js');
-const { validateUserId, validateSignUp, validateLogIn, validateUsername, validateResult } = require('../middlewares/validator.js');
+const { validateUserId, validateSignUp, validateLogIn, validateEmail, validateUsername, validatePassword, validateResult } = require('../middlewares/validator.js');
 
 const router = express.Router();
 
@@ -29,9 +29,15 @@ router.get('/settings', isLoggedIn, controller.settings);
 
 router.put('/settings/update-username', isLoggedIn, validateUsername, validateResult, controller.updateUsername);
 
-router.put('/settings/update-password', isLoggedIn, controller.updatePassword);
+router.put('/settings/update-password', isLoggedIn, validatePassword, validateResult, controller.updatePassword);
 
 router.get('/admin', isLoggedIn, isAdmin, controller.admin);
+
+router.get('/reset-login', controller.resetLogin);
+
+router.post('/reset-login/send-username', validateEmail, validateResult, controller.sendUsername);
+
+router.post('/reset-login/send-password-reset', validateEmail, validateResult, controller.sendPasswordReset);
 
 router.get('/logout', isLoggedIn, controller.logout);
 
