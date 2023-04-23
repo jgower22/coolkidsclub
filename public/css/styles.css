@@ -167,7 +167,7 @@ a:hover {
 
 #login-container, #signup-container {
     display: block;
-    width: 30%;
+    width: 40%;
 }
 
 .alt-account-container {
@@ -338,6 +338,10 @@ label {
     #userIcon {
         float: none;
     }
+
+    #login-container, #signup-container {
+        width: fit-content;
+    }
 }
 
 .rsvp-table {
@@ -496,6 +500,10 @@ footer{
 }
 
 #forgotPassword {
+    margin-top: 3rem;
+}
+
+#passwordForm {
     margin-top: 3rem;
 }
 
