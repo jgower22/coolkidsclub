@@ -33,11 +33,11 @@ router.put('/settings/update-password', isLoggedIn, validatePassword, validateRe
 
 router.get('/admin', isLoggedIn, isAdmin, controller.admin);
 
-router.get('/reset-login', controller.resetLogin);
+router.get('/reset-login', isGuest, controller.resetLogin);
 
-router.post('/reset-login/send-username', validateEmail, validateResult, controller.sendUsername);
+router.post('/reset-login/send-username', isGuest, validateEmail, validateResult, controller.sendUsername);
 
-router.post('/reset-login/send-password-reset', validateEmail, validateResult, controller.sendPasswordReset);
+router.post('/reset-login/send-password-reset', isGuest, validateEmail, validateResult, controller.sendPasswordReset);
 
 router.get('/logout', isLoggedIn, controller.logout);
 
