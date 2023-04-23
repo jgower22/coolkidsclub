@@ -62,17 +62,21 @@ exports.addUser = (req, res, next) => {
     user.password = password;
     console.log('PASSWORD: ' + password);
 
-    let messageOptions = ({from: "servermanagementgroup5@gmail.com",
-    to: "" + req.body.email + "", //receiver
-    subject: "CKC Account Temporary Credentials",
-    html: "Hello, " + req.body.firstName + "<br>Here are your temporary account credentials for the Cool Kids Campaign <br>Username: " + user.username + "<br>Password: " + password,
+    let messageOptions = ({
+        from: "servermanagementgroup5@gmail.com",
+        to: "" + req.body.email + "", //receiver
+        subject: "CKC Account Temporary Credentials",
+        html: "Hello, " + req.body.firstName +
+            "<br>Here are your temporary account credentials for the Cool Kids Campaign" +
+            "<br>Username: " + user.username +
+            "<br>Password: " + password,
     });
 
     user.save()
         .then(() => {
             let successMessage = 'Account created successfully! Check your email for your username and password.';
-            let errorMessage = 'Error sending email with account credentials. Please use this form to reset your account.';
-            message(req, res, messageOptions, successMessage, '/users/login', errorMessage, '/users/reset-login');
+            let errorMessage = 'Error sending email with account credentials. Please save these temporary credentials. Username: ' + user.username + ' Password: ' + password;
+            message(req, res, messageOptions, successMessage, '/users/login', errorMessage, '/users/login');
         })
         .catch(err => {
             if (err.name === 'ValidationError') {
@@ -180,7 +184,7 @@ exports.myProfile = (req, res, next) => {
     Promise.all([User.findById({ _id: id }, { _id: 0, password: 0 }), rsvp.find({ user: id }).populate('program', '_id name startDate endDate startTime endTime')])
         .then(results => {
             const [user, rsvps] = results;
-            let adminView = (user.role === 'admin') ? true: false;
+            let adminView = (user.role === 'admin') ? true : false;
             if (user) {
                 res.render('./user/profile', { user, rsvps, adminView, DateTime });
             } else {
@@ -421,17 +425,27 @@ exports.resetLogin = (req, res) => {
 };
 
 exports.sendUsername = (req, res, next) => {
-    let userEmail = req.body.emailUsername;
+    let userEmail = req.body.email;
     let flashMessage = 'If we found an account associated with that email, then an email has been sent with your username.';
 
-    User.findOne({ email: userEmail }, { username: 1, firstName: 1})
+    User.findOne({ email: userEmail }, { email: 1, username: 1, firstName: 1 })
         .then(user => {
             if (user) {
-                console.log(user);
+
+                let messageOptions = ({
+                    from: "servermanagementgroup5@gmail.com",
+                    to: "" + user.email + "", //receiver
+                    subject: "CKC Forgot Username Request",
+                    html: "Hello, " + user.firstName +
+                        "<br>Here is your username that you requested:" +
+                        "<br>" + user.username
+                });
+
+                message(null, null, messageOptions, null, null, null, null);
                 req.flash('success', flashMessage);
-                res.redirect('back');
+                res.redirect('/users/reset-login');
             } else {
-                console.log('Cannot find user with email: ' + userEmail);
+                //Cannot find user email
                 req.flash('success', flashMessage);
                 res.redirect('back');
             }
@@ -442,7 +456,7 @@ exports.sendUsername = (req, res, next) => {
 exports.sendPasswordReset = (req, res, next) => {
     let userEmail = req.body.emailUsername;
 
-    User.findOne({ email: userEmail }, { username: 1, firstName: 1})
+    User.findOne({ email: userEmail }, { username: 1, firstName: 1 })
         .then(user => {
             if (user) {
                 console.log(user);

@@ -86,7 +86,8 @@
                 <%if (role === 'patient') {%>
                     <h1 class="program-header padding-header">RSVP</h1>
 
-                    <%let myRsvp = rsvps.filter(rsvp => rsvp.user._id == user);
+                    <%
+                    let myRsvp = rsvps.filter(rsvp => rsvp.user._id == user);
                     console.log('RSVPS: ' + rsvps);
                     console.log('MY RSVP: ' + myRsvp);
                     if (myRsvp.length) {%>

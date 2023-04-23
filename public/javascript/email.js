@@ -11,13 +11,19 @@ exports.message = async (req, res, messageOptions, successMessage, redirectSucce
 
     transporter.sendMail(messageOptions, function (error, info) {
         if (error) {
-            console.log('Error');
-            req.flash('error', errorMessage);
-            res.redirect(redirectError);
+            console.log('Error sending email');
+
+            if (errorMessage) 
+                req.flash('error', errorMessage);
+            if (redirectError) 
+                res.redirect(redirectError);
         } else {
             console.log("Email sent: " + info.response);
-            req.flash('success', successMessage);
-            res.redirect(redirectSuccess);
+
+            if (successMessage)
+                req.flash('success', successMessage);
+            if (redirectSuccess)
+                res.redirect(redirectSuccess);
         }
     });
 };
