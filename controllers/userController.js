@@ -6,7 +6,6 @@ const { generateFromEmail, generateUsername } = require("unique-username-generat
 const generator = require('generate-password');
 const { DateTime } = require('luxon');
 const { message } = require('../public/javascript/email.js');
-const JWT = require('jsonwebtoken');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const user = require('../models/user');
