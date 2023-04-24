@@ -176,7 +176,7 @@ a:hover {
     
 }
 
-#passwordForm {
+.margin-top-30px {
     margin-top: 30px;
 }
 
@@ -476,7 +476,6 @@ footer{
 #buttons-container {
     float: right;
 }
-
 
 .purple-button {
     background-color: var(--purple);
