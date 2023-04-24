@@ -17,8 +17,7 @@
 
                 <form class="margin-top-30px" action="/users/settings/update-password?_method=PUT" method="POST">
                     <h2>Change password</h2>
-                    <%if (formData && Object.hasOwn(formData, 'password')) {
-                        console.log('HERE');%>
+                    <%if (formData && Object.hasOwn(formData, 'password')) {%>
                         <label class="required" for="password">Current Password:</label>
                         <input type="password" class="user-input" id="password" name="password" value="<%=formData.password%>" required>
 
