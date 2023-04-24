@@ -21,6 +21,18 @@ const userSchema = new Schema({
 userSchema.pre('save', function(next) {
     let user = this;
 
+    //Normalize first and last name
+    console.log('USER: ' + user);
+    if (user.firstName) {
+        let firstName = user.firstName.toLowerCase();
+        user.firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+    }
+
+    if (user.lastName) {
+        let lastName = user.lastName.toLowerCase();
+        user.lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1);
+    }
+
     if (!user.isModified('password'))
         return next();
 
