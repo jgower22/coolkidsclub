@@ -31,25 +31,11 @@ exports.addUser = (req, res, next) => {
             req.body.tempEmail,
             numDigits
         );
-
-        /*Testing
-        if (req.body.tempEmail.length === 7)
-            user.username = 'p360165';
-        if (req.body.tempEmail.length === 8)
-            user.username = 'p8348222';
-        if (req.body.tempEmail.length === 9)
-            user.username = 'p89784709';
-        console.log('TEMP EMAIL HERE: ' + req.body.tempEmail);*/
-
     } else {
         user.username = generateFromEmail(
             req.body.email,
             numDigits
         );
-
-        /*Testing
-        if (user.email.length === 7)
-            user.username = 'p360165';*/
     }
     console.log('USERNAME: ' + user.username);
 
@@ -62,11 +48,15 @@ exports.addUser = (req, res, next) => {
     user.password = password;
     console.log('PASSWORD: ' + password);
 
+    //Normalize first name for email
+    let firstName = req.body.firstName.toLowerCase();
+    firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+
     let messageOptions = ({
         from: "servermanagementgroup5@gmail.com",
         to: "" + req.body.email + "", //receiver
         subject: "CKC Account Temporary Credentials",
-        html: "Hello, " + req.body.firstName +
+        html: "Hello, " + firstName +
             "<br>Here are your temporary account credentials for the Cool Kids Campaign" +
             "<br>Username: " + user.username +
             "<br>Password: " + password,
@@ -219,7 +209,7 @@ exports.inbox = (req, res, next) => {
 };
 
 exports.settings = (req, res, next) => {
-    User.findById(req.session.user, { username: 1 })
+    User.findById(req.session.user, { username: 1, firstName: 1, lastName: 1 })
         .then(user => {
             if (user) {
                 let data = req.flash('formdata');
@@ -407,6 +397,68 @@ exports.updatePassword = (req, res, next) => {
                         } else {
                             req.flash('error', 'Current password is incorrect.');
                             req.flash('formdata', req.body);
+                            return res.redirect('back');
+                        }
+                    });
+            } else {
+                let err = new Error('Cannot find user account. Please log out and log in again.');
+                err.status = 404;
+                return next(err);
+            }
+        })
+};
+
+exports.updateFirstName = (req, res, next) => {
+    let firstName = req.body.firstName;
+    User.findById(req.session.user, { firstName: 1 })
+        .then(user => {
+            if (user) {
+                if (firstName.toLowerCase() === user.firstName.toLowerCase()) {
+                    req.flash('error', 'New first name is the same as current first name.');
+                    req.flash('formdata', req.body);
+                    return res.redirect('back');
+                }
+                user.firstName = firstName;
+                user.save()
+                    .then(user => {
+                        console.log('SUCCESS');
+                        req.flash('success', 'First name updated successfully');
+                        return res.redirect('back');
+                    })
+                    .catch(err => {
+                        if (err.name === 'ValidationError') {
+                            req.flash('error', err.message);
+                            return res.redirect('back');
+                        }
+                    });
+            } else {
+                let err = new Error('Cannot find user account. Please log out and log in again.');
+                err.status = 404;
+                return next(err);
+            }
+        })
+};
+
+exports.updateLastName = (req, res, next) => {
+    let lastName = req.body.lastName;
+    User.findById(req.session.user, { lastName: 1 })
+        .then(user => {
+            if (user) {
+                if (lastName.toLowerCase() === user.lastName.toLowerCase()) {
+                    req.flash('error', 'New last name is the same as current last name.');
+                    req.flash('formdata', req.body);
+                    return res.redirect('back');
+                }
+                user.lastName = lastName;
+                user.save()
+                    .then(user => {
+                        console.log('SUCCESS');
+                        req.flash('success', 'Last name updated successfully');
+                        return res.redirect('back');
+                    })
+                    .catch(err => {
+                        if (err.name === 'ValidationError') {
+                            req.flash('error', err.message);
                             return res.redirect('back');
                         }
                     });
