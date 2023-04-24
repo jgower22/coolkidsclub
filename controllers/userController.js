@@ -478,7 +478,7 @@ exports.resetLogin = (req, res) => {
 
 exports.sendUsername = (req, res, next) => {
     let userEmail = req.body.email;
-    let flashMessage = 'If we found an account associated with that email, then an email has been sent with your username.';
+    let flashMessage = 'If we found an account associated with that email, then we\'ll send an email with your username.';
 
     User.findOne({ email: userEmail }, { email: 1, username: 1, firstName: 1 })
         .then(user => {
