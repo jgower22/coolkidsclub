@@ -52,6 +52,10 @@ exports.validateUsername = [body('username', 'Username cannot be empty').isLengt
 
 exports.validatePassword = [body('newPassword', 'New password must be at least 8 characters and at most 64 characters').isLength({ min: 8, max: 64 })];
 
+exports.validateFirstName = [body('firstName', 'First name cannot be empty').notEmpty().isAlpha().withMessage('First name can only contain letters').trim().escape()];
+
+exports.validateLastName = [body('lastName', 'Last name cannot be empty').notEmpty().isAlpha().withMessage('Last name can only contain letters').trim().escape()];
+
 exports.validateEmail = [body('email', 'Email must be a valid email address').isEmail().normalizeEmail({ gmail_remove_dots: false }).trim().escape()];
 
 exports.validateProgram = [body('name').isLength({ min: 2 }).withMessage('Program name must be at least 2 characters').trim().escape(),
