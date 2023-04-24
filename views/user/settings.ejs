@@ -15,9 +15,10 @@
                     <input type="submit" value="Update Username" class="submit float-right">
                 </form>
 
-                <form id="passwordForm" action="/users/settings/update-password?_method=PUT" method="POST">
+                <form class="margin-top-30px" action="/users/settings/update-password?_method=PUT" method="POST">
                     <h2>Change password</h2>
-                    <%if (formData) {%>
+                    <%if (formData && Object.hasOwn(formData, 'password')) {
+                        console.log('HERE');%>
                         <label class="required" for="password">Current Password:</label>
                         <input type="password" class="user-input" id="password" name="password" value="<%=formData.password%>" required>
 
@@ -38,6 +39,30 @@
                     <%}%>
 
                     <input type="submit" value="Update Password" class="submit float-right">
+                </form>
+
+                <form class="margin-top-30px" action="/users/settings/update-first-name?_method=PUT" method="POST">
+                    <h2>Change first name</h2>
+                    <%if (formData && Object.hasOwn(formData, 'firstName')) {%>
+                        <label class="required" for="firstName">First Name:</label>
+                        <input type="text" class="user-input" id="firstName" name="firstName" value="<%=formData.firstName%>" required>
+                    <%} else {%>
+                        <label class="required" for="firstName">First Name:</label>
+                        <input type="text" class="user-input" id="firstName" name="firstName" value="<%=user.firstName%>" required>
+                    <%}%>
+                    <input type="submit" value="Update First Name" class="submit float-right">
+                </form>
+
+                <form class="margin-top-30px" action="/users/settings/update-last-name?_method=PUT" method="POST">
+                    <h2>Change last name</h2>
+                    <%if (formData && Object.hasOwn(formData, 'lastName')) {%>
+                        <label class="required" for="lastName">Last Name:</label>
+                        <input type="text" class="user-input" id="lastName" name="lastName" value="<%=formData.lastName%>" required>
+                    <%} else {%>
+                        <label class="required" for="lastName">Last Name:</label>
+                        <input type="text" class="user-input" id="lastName" name="lastName" value="<%=user.lastName%>" required>
+                    <%}%>
+                    <input type="submit" value="Update Last Name" class="submit float-right">
                 </form>
 
             </div>
