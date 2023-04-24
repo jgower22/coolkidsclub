@@ -1,10 +1,16 @@
 const User = require('../models/user');
 const Program = require('../models/program');
 const rsvp = require('../models/rsvp');
+const Token = require('../models/token');
 const { generateFromEmail, generateUsername } = require("unique-username-generator");
 const generator = require('generate-password');
 const { DateTime } = require('luxon');
 const { message } = require('../public/javascript/email.js');
+const JWT = require('jsonwebtoken');
+const crypto = require('crypto');
+const bcrypt = require('bcrypt');
+const user = require('../models/user');
+const bcryptSalt = process.env.BCRYPT_SALT;
 
 exports.new = (req, res) => {
     let data = req.flash('formdata');
@@ -53,7 +59,7 @@ exports.addUser = (req, res, next) => {
     firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
 
     let messageOptions = ({
-        from: "servermanagementgroup5@gmail.com",
+        from: `${process.env.EMAIL}`,
         to: "" + req.body.email + "", //receiver
         subject: "CKC Account Temporary Credentials",
         html: "Hello, " + firstName +
@@ -485,7 +491,7 @@ exports.sendUsername = (req, res, next) => {
             if (user) {
 
                 let messageOptions = ({
-                    from: "servermanagementgroup5@gmail.com",
+                    from: `${process.env.EMAIL}`,
                     to: "" + user.email + "", //receiver
                     subject: "CKC Forgot Username Request",
                     html: "Hello, " + user.firstName +
@@ -506,17 +512,141 @@ exports.sendUsername = (req, res, next) => {
 };
 
 exports.sendPasswordReset = (req, res, next) => {
-    let userEmail = req.body.emailUsername;
+    let userEmail = req.body.email;
+    let flashMessage = 'If we found an account associated with that email, then we\'ll send an email with a password reset link.';
 
     User.findOne({ email: userEmail }, { username: 1, firstName: 1 })
         .then(user => {
             if (user) {
-                console.log(user);
-                res.redirect('back');
+                let resetToken = crypto.randomBytes(32).toString('hex');
+
+                Token.findOne({ user: user._id })
+                    .then(token => {
+                        console.log('TOKEN: ' + token);
+                        if (token) {
+                            token.deleteOne();
+                        }
+                        bcrypt.hash(resetToken, Number(bcryptSalt))
+                            .then(hash => {
+                                new Token({
+                                    user: user._id,
+                                    token: hash,
+                                    createdAt: Date.now()
+                                }).save()
+                                    .then(token => {
+                                        let link = `${process.env.CLIENT_URL}/users/reset-password?token=${resetToken}&id=${user._id}`;
+                                        console.log('LINK: ' + link);
+                                        let messageOptions = ({
+                                            from: `${process.env.EMAIL}`,
+                                            to: "" + req.body.email + "", //receiver
+                                            subject: "CKC Password Reset Link",
+                                            html: "Hello, " + user.firstName +
+                                                "<br>Here is the password reset link you requested:" +
+                                                '<br><p>Click <a href="' + link + '">here</a> to reset your password</p>'
+                                        });
+                                        message(null, null, messageOptions, null, null, null, null);
+                                        req.flash('success', flashMessage);
+                                        res.redirect('/users/reset-login');
+                                    })
+                                    .catch(err => next(err));
+                            });
+                    })
+                    .catch(err => next(err));
+
             } else {
-                console.log('Cannot find user with email: ' + userEmail);
+                //Cannot find user email
+                req.flash('success', flashMessage);
                 res.redirect('back');
             }
         })
         .catch(err => next(err));
+};
+
+exports.resetPasswordForm = (req, res, next) => {
+    let data = req.flash('formdata');
+    res.locals.title = 'Reset Password - Cool Kids Campaign';
+    let query = req._parsedOriginalUrl.query;
+    let token = null;
+    let id = null;
+    if (query) {
+        let splitQuery = query.split('&');
+        for (let i = 0; i < splitQuery.length; i++) {
+            let index = splitQuery[i].indexOf('=');
+            let queryString = splitQuery[i].substring(0, index).toLowerCase();
+            //Find token
+            if (queryString === 'token') {
+                token = splitQuery[i].substring(index + 1, splitQuery[i].length);
+            }
+            //Find id
+            if (queryString === 'id') {
+                id = splitQuery[i].substring(index + 1, splitQuery[i].length);
+            }
+        }
+    }
+    res.render('./user/resetPassword', { formData: data[0], token, id });
 }
+
+exports.resetPassword = (req, res, next) => {
+    const userId = req.body.id;
+    const tokenFromLink = req.body.token;
+    console.log('USER ID: ' + userId);
+    console.log('TOKEN FROM LINK: ' + tokenFromLink);
+    const newPassword = req.body.newPassword;
+    const confirmPassword = req.body.confirmPassword;
+    const errorMessage = 'Invalid or expired token';
+    Token.findOne({ user: userId })
+        .then(token => {
+            if (token) {
+                //Check if token is valid
+                console.log('TOKEN: ' + token);
+                bcrypt.compare(tokenFromLink, token.token)
+                    .then(result => {
+                        console.log('RESULT: ' + result);
+                        if (result) {
+                            //Token is valid
+                            //Check if new/confirm passwords match
+                            if (newPassword === confirmPassword) {
+
+                                //Check if new password is different from current password
+                                //User.findOne({})
+                                //Hash new password and save it
+                                bcrypt.hash(newPassword, Number(bcryptSalt))
+                                    .then(hash => {
+                                        User.updateOne({ _id: userId }, { $set: { password: hash } }, { new: true })
+                                            .then(user => {
+                                                if (user.modifiedCount > 0) {
+                                                    req.flash('success', 'Password reset successfully');
+                                                    token.deleteOne();
+                                                    return res.redirect('back');
+                                                } else {
+                                                    req.flash('error', 'New password cannot be the same as current password');
+                                                    return res.redirect('back');
+                                                }
+                                            })
+                                            .catch(err => {
+                                                if (err.name === 'ValidationError') {
+                                                    req.flash('error', err.message);
+                                                    return res.redirect('back');
+                                                }
+                                            });
+                                    })
+                                    .catch(err => next(err));
+
+                            } else {
+                                req.flash('error', 'New password must match confirm new password field.');
+                                req.flash('formdata', req.body);
+                                return res.redirect('back');
+                            }
+                        } else {
+                            let err = new Error(errorMessage);
+                            err.status = 498;
+                            next(err);
+                        }
+                    });
+            } else {
+                let err = new Error(errorMessage);
+                err.status = 498;
+                next(err);
+            }
+        })
+};
