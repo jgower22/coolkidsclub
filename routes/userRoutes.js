@@ -45,6 +45,10 @@ router.post('/reset-login/send-username', requestLimiter(3, 'Too many send usern
 
 router.post('/reset-login/send-password-reset', requestLimiter(3, 'Too many reset password requests. Try again later.'), isGuest, validateEmail, validateResult, controller.sendPasswordReset);
 
+router.get('/reset-password', isGuest, controller.resetPasswordForm);
+
+router.put('/reset-password', isGuest, validatePassword, validateResult, controller.resetPassword);
+
 router.get('/logout', isLoggedIn, controller.logout);
 
 module.exports = router;
