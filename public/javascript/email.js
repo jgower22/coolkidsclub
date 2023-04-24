@@ -4,8 +4,8 @@ exports.message = async (req, res, messageOptions, successMessage, redirectSucce
     const transporter = nodemailer.createTransport({
         service: "gmail.com",
         auth: {
-            user: "servermanagementgroup5@gmail.com",
-            pass: "iyiezvzvkevmgxan",
+            user: `${process.env.EMAIL}`,
+            pass: `${process.env.EMAIL_PASSWORD}`,
         },
     });
 
