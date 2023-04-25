@@ -85,7 +85,7 @@ a:hover {
     padding-right: 25px;
     text-transform: uppercase;
     font-family: sans-serif;
-    transition: all 0.5s ease-in-out 0.5s;
+    transition: 0.5s;
 }
 
 #bottom-banner-links a:hover {
@@ -167,7 +167,7 @@ a:hover {
 
 #login-container, #signup-container {
     display: block;
-    width: 40%;
+    width: 30%;
 }
 
 .alt-account-container {
@@ -301,7 +301,6 @@ label {
 
     #toggle:checked ~ #hamburger-btn{
         display: none;
-        transition-delay: 2s;
     }
 
     #toggle:checked ~ #delete-btn{
@@ -316,7 +315,7 @@ label {
     }
 
     #bottom-banner-links a{
-        z-index: 100;
+        z-index: 10;
         padding: 1rem;
         background-color: var(--green);
         width: 100%;
@@ -498,12 +497,8 @@ footer{
     z-index: 0;
 }
 
-#forgotPassword {
-    margin-top: 3rem;
-}
-
-#passwordForm {
-    margin-top: 3rem;
+#header-spacing {
+    margin-top: 4rem;
 }
 
 
