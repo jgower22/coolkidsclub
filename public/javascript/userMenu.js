@@ -8,3 +8,9 @@ try {
 } catch (e) {
 
 } 
+
+const xBtn = document.querySelector('#profile-delete-btn');
+const dropDownContainer = document.querySelector('.drop-down-menu-container');
+
+xBtn.addEventListener('click',e=>{ dropDownContainer.classList.remove('active');
+})
