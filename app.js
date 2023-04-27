@@ -10,6 +10,7 @@ const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
 const dotenv = require('dotenv');
 const eventReminders = require('./scheduledFunctions/eventReminders');
+const path = require('path');
 
 //create app
 const app = express();
@@ -35,9 +36,12 @@ mongoose.connect(url)
 
 //mount middleware
 app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, "node_modules/tabulator-tables/dist/css")));
+app.use(express.static(path.join(__dirname, "node_modules/tabulator-tables/dist/js")));
 app.use(express.urlencoded({extended: true}));
 app.use(morgan('tiny'));
 app.use(methodOverride('_method'));
+
 
 //Session
 app.use(session({

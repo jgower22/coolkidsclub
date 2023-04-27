@@ -2,6 +2,7 @@ let makeAdminButtons = document.querySelectorAll('.make-admin');
 let banUserButtons = document.querySelectorAll('.ban-user');
 let unbanUserButtons = document.querySelectorAll('.unban-user');
 
+console.log("mab: " + JSON.stringify(makeAdminButtons));
 for (i of makeAdminButtons) {
     i.addEventListener('click', function(event) {
         //Ask for confirmation

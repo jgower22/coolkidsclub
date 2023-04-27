@@ -1,148 +1,26 @@
 <%- include('../partials/header.ejs')%>
     <script defer src="/javascript/adminConfirmation.js"></script>
-    <main>
-        <div class="text-centered">
-
-            <%
-            let numUsers = users.length;
-            let admins = [];
-            let patients = [];
-            let bannedUsers = [];
-            for (let i = 0; i < users.length; i++) {
-                let user = users[i];
-                if (user.status === 'banned') {
-                    bannedUsers.push(user);
-                    continue;
-                }
-                if (user.role === 'admin')
-                    admins.push(user);
-                if (user.role === 'patient')
-                    patients.push(user);
-            }
-            %>
-
-            <h2>Admins (<%=admins.length%>)</h2>
-            <table class="user-table">
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Member Since</th>
-                </tr>
-                <%
-                for (let i = 0; i < admins.length; i++) {%>
-                    <tr>
-                        <%let admin = admins[i];
-                        if (admin.email === email) {%>
-                            <td>
-                                <a href="/users/profile"><%=admin.firstName + ' ' + admin.lastName + ' '%></a><b>(you)</b>
-                            </td>
-                        <%} else {%>
-                                <td>
-                                    <a href="/users/profile/<%=admin.id%>"><%=admin.firstName + ' ' + admin.lastName%></a>
-                                </td>
-                        <%}%>
-                        <td>
-                            <%=admin.email%>
-                        </td>
-                        <td>
-                            <%
-                            const dateFormat = {...DateTime.DATE_SHORT};
-                            var createdAtDate = new Date(admin.createdAt); 
-                            var formattedDate = createdAtDate.toLocaleString(dateFormat);
-                            formattedDate = formattedDate.split(',')[0];
-                            %>
-                            <%=formattedDate%>
-                        </td>
-                    </tr>
-                <%}%>
-            </table>
-
-            <%if (patients.length) {%>
-                <h2>Patients (<%=patients.length%>)</h2>
-                <table class="user-table">
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Member Since</th>
-                        <th>Actions</th>
-                    </tr>
-                    <%for (let i = 0; i < patients.length; i++) {%>
-                        <tr>
-                            <td>
-                                <%let patient = patients[i];%>
-                                <a href="/users/profile/<%=patient.id%>"><%=patient.firstName + ' ' + patient.lastName%></a>
-                            </td>
-                            <td>
-                                <%=patient.email%>
-                            </td>
-                            <td>
-                                <%
-                                const dateFormat = {...DateTime.DATE_SHORT};
-                                createdAtDate = new Date(patient.createdAt); 
-                                formattedDate = createdAtDate.toLocaleString(dateFormat);
-                                formattedDate = formattedDate.split(',')[0];
-                                %>
-                                <%=formattedDate%>
-                            </td>
-                            <td>
-                                <form>
-                                    <button class="action-button make-admin" type="submit" value="<%=patient.firstName + ' ' + patient.lastName%>" formmethod="POST" formaction="/users/<%=patient.id%>/make-admin?_method=PUT">Make Admin</button>
-                                </form>
-                                <form>
-                                    <button class="action-button ban-user" type="submit" value="<%=patient.firstName + ' ' + patient.lastName%>" formmethod="POST" formaction="/users/<%=patient.id%>/ban?_method=PUT">Ban User</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <%}%>
-                </table>
-            <%} else {%>
-                <h2>Patients</h2>
-                <p>No patients found.</p>
-            <%}%>
-
-            <%if (bannedUsers.length) {;%>
-                <h2>Banned Users (<%=bannedUsers.length%>)</h2>
-                <table class="user-table">
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Member Since</th>
-                        <th>Actions</th>
-                    </tr>
-                    <%console.log('TEST');%>
-                    <%for (let i = 0; i < bannedUsers.length; i++) {%>
-                        <tr>
-                            <td>
-                                <%console.log('TEST 2');%>
-                                <%let bannedUser = bannedUsers[i];%>
-                                <a href="/users/profile/<%=bannedUser.id%>"><%=bannedUser.firstName + ' ' + bannedUser.lastName%></a>
-                            </td>
-                            <td>
-                                <%=bannedUser.email%>
-                            </td>
-                            <td>
-                                <%
-                                const dateFormat = {...DateTime.DATE_SHORT};
-                                createdAtDate = new Date(bannedUser.createdAt); 
-                                formattedDate = createdAtDate.toLocaleString(dateFormat);
-                                formattedDate = formattedDate.split(',')[0];
-                                %>
-                                <%=formattedDate%>
-                            </td>
-                            <td>
-                                <form>
-                                    <button class="action-button unban-user" type="submit" value="<%=bannedUser.firstName + ' ' + bannedUser.lastName%>" formmethod="POST" formaction="/users/<%=bannedUser.id%>/unban?_method=PUT">Unban User</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <%}%>
-                </table>
-            <%} else {%>
-                <h2>Banned Users</h2>
-                <p>No users found.</p>
-            <%}%>
+    <script defer src="/javascript/tabulator.js"></script>
+    <link href="https://unpkg.com/tabulator-tables@5.4.4/dist/css/tabulator.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     
-            <h2>Total Users: <%=numUsers%></h2>
+    <main>
+        <div class="centered">
+            <div class="table-container">
+
+            
+            <div id="errorMessage"></div>
+
+            <%let numUsers = users.length;%>
+            
+            <h2 class="hidden">Admins</h2>
+            <div id="adminTable"></div>
+            <h2 class="hidden">Patients</h2>
+            <div id="patientTable"></div>
+            <h2 class="hidden">Total Users: <%=numUsers%></h2>
+            </div>
         </div>
+        <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.4.4/dist/js/tabulator.min.js"></script>
     </main>
+    
 <%- include('../partials/footer.ejs')%>

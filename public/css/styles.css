@@ -163,6 +163,7 @@ a:hover {
 
 .text-centered {
     text-align: center;
+   
 }
 
 #login-container, #signup-container {
@@ -405,6 +406,7 @@ label {
     border-collapse: separate;
  }
 
+
  .user-table tr, td, th {
     border: 1px solid black;
  }
@@ -424,7 +426,18 @@ label {
  .text-centered {
     text-align: center;
     
+    
  }
+
+.table-container {
+    width: 100%;
+    
+}
+
+ .tabulator{
+    width: 50%;
+
+}
 
  #descriptionContainer {
     float: left;
