@@ -243,19 +243,35 @@ label {
 
 .action-button {
     margin-top: 10px;
+    padding: 2px 10px;
     background-color: var(--green);
     color: white;
     border: none;
     text-align: center;
     border-radius: 6px;
-    padding: 2px 10px;
     float: right;
     cursor: pointer;
     width: fit-content;
 }
 
-.ban-user {
+.action-button-table {
+    padding: 2px 10px;
+    background-color: var(--green);
+    color: white;
+    border: none;
+    text-align: center;
+    border-radius: 6px;
+    float: right;
+    cursor: pointer;
+    width: fit-content;
+}
+
+.red-button {
     background-color: red;
+}
+
+.yellow-button {
+    background-color: goldenrod;
 }
 
 /****Menu navigation bar****/
@@ -436,7 +452,6 @@ label {
 
  .tabulator{
     width: 50%;
-
 }
 
  #descriptionContainer {
