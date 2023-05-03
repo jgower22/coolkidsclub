@@ -284,6 +284,10 @@ label {
         max-height: 0; 
     }
 
+    @keyframes menurotation {
+        100% {transform: rotate(360deg);}
+    }
+
     #hamburger-btn {
         display: flex;
         flex-direction: row;
@@ -298,6 +302,10 @@ label {
         max-height: 100%;
     }
 
+    .fa-solid {
+        animation: menurotation 0.5s;
+    }
+
     #toggle:checked ~ #hamburger-btn{
         display: none;
     }
@@ -309,7 +317,7 @@ label {
         align-items: center;
         font-size: 30px;
         cursor: pointer;
-        color: white;
+        color: white; 
     }
 
     #toggle:checked ~ .drop-down-menu-container {
@@ -367,6 +375,16 @@ label {
         margin-right: 10px;
         margin-bottom: 10px;
         border: none;
+    }
+
+    body #program-container, 
+    body #profile-container,
+    body #form-container {
+        width: 100%;
+    }
+
+    body .tabulator {
+        width: 100%;
     }
 }
 
