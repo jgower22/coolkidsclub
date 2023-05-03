@@ -645,14 +645,12 @@ exports.resetPassword = (req, res, next) => {
                                     .then(hash => {
                                         User.updateOne({ _id: userId }, { $set: { password: hash } }, { new: true })
                                             .then(user => {
-                                                if (user.modifiedCount > 0) {
-                                                    req.flash('success', 'Password reset successfully');
-                                                    token.deleteOne();
-                                                    return res.redirect('back');
-                                                } else {
-                                                    req.flash('error', 'New password cannot be the same as current password');
-                                                    return res.redirect('back');
-                                                }
+                                                req.flash('success', 'Password reset successfully');
+                                                token.deleteOne();
+
+                                                //Send confirmation email
+
+                                                return res.redirect('back');
                                             })
                                             .catch(err => {
                                                 if (err.name === 'ValidationError') {
