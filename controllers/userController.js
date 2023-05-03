@@ -238,6 +238,38 @@ exports.admin = (req, res, next) => {
         .catch(err => next(err));
 };
 
+exports.usersJSON = (req, res, next) => {
+    User.find({}, { firstName: 1, lastName: 1, email: 1, role: 1, createdAt: 1, status: 1 })
+        .then(users => {
+            const dateFormat = { ...DateTime.DATE_SHORT };
+            //console.log("before: " + users)
+            let formattedUsers = [];
+            for (let i = 0; i < users.length; i++) {
+                let user = users[i];
+                var createdAtDate = new Date(user.createdAt);
+                var formattedDate = createdAtDate.toLocaleString(dateFormat);
+                formattedDate = formattedDate.split(',')[0];
+                user.formattedDate = formattedDate;
+
+                let obj = {
+                    name: user.firstName + " " + user.lastName,
+                    email: user.email,
+                    date: user.formattedDate,
+                    role: user.role,
+                    id: user._id
+                };
+                formattedUsers.push(obj);
+                //console.log(user.formattedDate);
+            }
+            //console.log(formattedUsers)
+            res.json(formattedUsers);
+            //console.log("after: " + users);
+            
+     
+        })
+        .catch(err => next(err));
+}
+
 exports.makeAdmin = (req, res, next) => {
     let patientId = req.params.id;
     User.findById(patientId)

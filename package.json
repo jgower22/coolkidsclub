@@ -28,7 +28,6 @@
     "express-rate-limit": "^6.7.0",
     "express-session": "^1.17.3",
     "express-validator": "^6.15.0",
-    "fullcalendar": "^6.1.5",
     "generate-password": "^1.7.0",
     "handlebars": "^4.7.7",
     "luxon": "^3.3.0",
@@ -39,6 +38,7 @@
     "morgan": "^1.10.0",
     "node-cron": "^3.0.2",
     "nodemailer": "^6.9.1",
+    "tabulator-tables": "^5.4.4",
     "unique-username-generator": "^1.1.3",
     "validator": "^13.9.0"
   }

@@ -85,7 +85,7 @@ a:hover {
     padding-right: 25px;
     text-transform: uppercase;
     font-family: sans-serif;
-    transition: all 0.5s ease-in-out 0.5s;
+    transition: 0.5s;
 }
 
 #bottom-banner-links a:hover {
@@ -163,11 +163,12 @@ a:hover {
 
 .text-centered {
     text-align: center;
+   
 }
 
 #login-container, #signup-container {
     display: block;
-    width: 40%;
+    width: 30%;
 }
 
 .alt-account-container {
@@ -260,7 +261,8 @@ label {
 /****Menu navigation bar****/
 #hamburger-btn,
 #delete-btn,
-#toggle{
+#toggle,
+#profile-delete-btn{
    display: none;
 }
 
@@ -274,22 +276,23 @@ label {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        flex-direction: column;
-        align-items: stretch;
+        align-items: stretch;   
     }
 
     #bottom-banner-links{
         overflow: hidden;
-        width: 100%;
         max-height: 0; 
     }
 
+    @keyframes menurotation {
+        100% {transform: rotate(360deg);}
+    }
+
     #hamburger-btn {
-        display: inline-flex;
+        display: flex;
         flex-direction: row;
         justify-content: center;
         align-items:center;
-        padding: 1rem;
         font-size: 30px;
         cursor: pointer;
         color: white;
@@ -299,24 +302,30 @@ label {
         max-height: 100%;
     }
 
+    .fa-solid {
+        animation: menurotation 0.5s;
+    }
+
     #toggle:checked ~ #hamburger-btn{
         display: none;
-        transition-delay: 2s;
     }
 
     #toggle:checked ~ #delete-btn{
-        display: inline-flex;
+        display: flex;
         flex-direction: row;
         justify-content: center;
         align-items: center;
         font-size: 30px;
         cursor: pointer;
-        color: white;
-        transition-delay: 2s;
+        color: white; 
+    }
+
+    #toggle:checked ~ .drop-down-menu-container {
+        display: none;
     }
 
     #bottom-banner-links a{
-        z-index: 100;
+        z-index: 2;
         padding: 1rem;
         background-color: var(--green);
         width: 100%;
@@ -328,19 +337,71 @@ label {
         display: flex;
         flex-direction: column;
         align-items: center;
-        z-index: 100;
+        z-index: 2;
         width: 100%;
         left: 0;
         position: absolute;
-        transition: 0.2s opacity ease-in-out;
+        transition: 0.5s ease-in-out;
     } 
 
     #userIcon {
         float: none;
     }
 
+    #profile-delete-btn{
+        display: block;
+    }
+
     #login-container, #signup-container {
         width: fit-content;
+    }
+
+    .drop-down-menu-container {
+        max-height: 0px;
+    }
+    
+    .drop-down-menu-container.active {
+        max-height: 340px;
+        z-index: 3;
+        width: 100%;
+        margin-left: 0;
+    } 
+
+    #profile-delete-btn {
+        float: right;
+        cursor: pointer;
+        color: white;
+        background-color: transparent;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        border: none;
+    }
+
+    body #program-container, 
+    body #profile-container,
+    body #form-container {
+        width: 100%;
+    }
+
+    body .tabulator {
+        width: 100%;
+    }
+}
+
+@media all and (max-device-width: 515px) {
+    .fc .fc-toolbar {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    div.fc-toolbar-chunk {
+        margin: 0.5rem;
+    }
+
+    div.fc-button-group {
+        margin: 0.4rem;
     }
 }
 
@@ -363,6 +424,7 @@ label {
     border-collapse: separate;
  }
 
+
  .user-table tr, td, th {
     border: 1px solid black;
  }
@@ -382,7 +444,18 @@ label {
  .text-centered {
     text-align: center;
     
+    
  }
+
+.table-container {
+    width: 100%;
+    
+}
+
+ .tabulator{
+    width: 50%;
+
+}
 
  #descriptionContainer {
     float: left;
@@ -490,6 +563,7 @@ footer{
     font-size: 20px;
     border-radius: 1rem;
     height: fit-content;
+    margin: 0.2rem;
 }
 
 #calendar {
@@ -498,12 +572,8 @@ footer{
     z-index: 0;
 }
 
-#forgotPassword {
-    margin-top: 3rem;
-}
-
-#passwordForm {
-    margin-top: 3rem;
+#header-spacing {
+    margin-top: 4rem;
 }
 
 
