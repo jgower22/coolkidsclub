@@ -31,6 +31,8 @@ router.get('/settings', isLoggedIn, controller.settings);
 
 router.get('/usersJSON', controller.usersJSON);
 
+router.get('/rsvpsJSON', controller.rsvpsJSON);
+
 router.put('/settings/update-username', requestLimiter(5, 'Too many update username requests. Try again later.'), isLoggedIn, validateUsername, validateResult, controller.updateUsername);
 
 router.put('/settings/update-password', requestLimiter(3, 'Too many update password requests. Try again later.'), isLoggedIn, validatePassword, validateResult, controller.updatePassword);
