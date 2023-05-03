@@ -36,8 +36,6 @@ mongoose.connect(url)
 
 //mount middleware
 app.use(express.static('public'));
-app.use(express.static(path.join(__dirname, "node_modules/tabulator-tables/dist/css")));
-app.use(express.static(path.join(__dirname, "node_modules/tabulator-tables/dist/js")));
 app.use(express.urlencoded({extended: true}));
 app.use(morgan('tiny'));
 app.use(methodOverride('_method'));
