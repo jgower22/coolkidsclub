@@ -174,14 +174,40 @@ exports.processLogin = (req, res, next) => {
         .catch(err => next(err));
 };
 
+exports.rsvpsJSON = (req, res, next) => {
+    let id = req.session.user;
+    rsvp.find({ user: id }).populate('program', '_id name startDate endDate startTime endTime')
+        .then(rsvps => {
+            var programs = [];
+            if (rsvps.length) {
+                var date = new Date();
+                var createdAtDate = new Date(user.createdAt);
+                var formattedDate = createdAtDate.toLocaleString(dateFormat);
+                formattedDate = formattedDate.split(',')[0];
+                user.formattedDate = formattedDate;
+
+
+                for (let i = 0; i < rsvps.length; i++) {
+                    let object = rsvps[i].program.toObject();
+                    object.response = rsvps[i].response;
+                    programs.push(object);
+                    console.log(object);
+                }
+            }
+            //console.log(programs);
+            res.json(programs);
+
+        })
+        .catch(err => next(err));
+}
+
 exports.myProfile = (req, res, next) => {
     let id = req.session.user;
-    Promise.all([User.findById({ _id: id }, { _id: 0, password: 0 }), rsvp.find({ user: id }).populate('program', '_id name startDate endDate startTime endTime')])
-        .then(results => {
-            const [user, rsvps] = results;
+    User.findById({ _id: id }, { _id: 0, password: 0 })
+        .then(user => {
             let adminView = (user.role === 'admin') ? true : false;
             if (user) {
-                res.render('./user/profile', { user, rsvps, adminView, DateTime });
+                res.render('./user/profile', { user, adminView, DateTime });
             } else {
                 let err = new Error('Cannot find user with id: ' + id);
                 err.status = 404;
@@ -256,6 +282,7 @@ exports.usersJSON = (req, res, next) => {
                     email: user.email,
                     date: user.formattedDate,
                     role: user.role,
+                    status: user.status,
                     id: user._id
                 };
                 formattedUsers.push(obj);
@@ -264,8 +291,8 @@ exports.usersJSON = (req, res, next) => {
             //console.log(formattedUsers)
             res.json(formattedUsers);
             //console.log("after: " + users);
-            
-     
+
+
         })
         .catch(err => next(err));
 }
