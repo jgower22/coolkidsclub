@@ -93,13 +93,17 @@ a:hover {
 }
 
 #userIcon {
+    width: 40px;
     right: 3rem;
     position: absolute;
+    padding-bottom: 0.3rem !important;
 }
 
 .fa-chevron-down {
     float: right;
-    padding: 0.3rem;
+    font-size: 15px;;
+    padding-top: 0.5rem;
+    padding-right: 0.7rem;
     animation: dropdownicon 0.5s;
     color: white;
 }
@@ -111,7 +115,9 @@ a:hover {
 .fa-chevron-up {
     display: none !important;
     float: right;
-    padding: 0.3rem;
+    font-size: 15px;;
+    padding-top: 0.5rem;
+    padding-right: 0.7rem;
     color: white;
 }
 
@@ -347,11 +353,6 @@ label {
         max-height: 100%;
     }
 
-    .fa-chevron-down {
-        padding: 0.3rem;
-        float: right;
-    }
-
     .fa-solid {
         animation: menurotation 0.5s;
     }
@@ -513,6 +514,7 @@ label {
 
  .tabulator{
     width: 50%;
+    margin-bottom: 2rem !important;
 }
 
  #descriptionContainer {
@@ -634,5 +636,12 @@ footer{
     margin-top: 4rem;
 }
 
+@keyframes fadeInMessage {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+}
 
+.flash {
+    animation: fadeInMessage 1s;
+}
 
