@@ -21,6 +21,8 @@ router.get('/profile/:id', isLoggedIn, isAdmin, validateUserId, controller.userP
 
 router.put('/:id/make-admin', isLoggedIn, isAdmin, validateUserId, controller.makeAdmin);
 
+router.put('/:id/remove-admin', isLoggedIn, isAdmin, validateUserId, controller.removeAdmin);
+
 router.put('/:id/ban', isLoggedIn, isAdmin, validateUserId, controller.banUser);
 
 router.put('/:id/unban', isLoggedIn, isAdmin, validateUserId, controller.unbanUser);
