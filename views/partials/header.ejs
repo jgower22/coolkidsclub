@@ -69,11 +69,13 @@
             </div>
             <div class="drop-drop-menu">
                 <ul class="drop-down-links">
-                    <li><img class="drop-down-icon" src="/images/profile.png"><a href="/users/profile">My Profile</a></li>
+                    <li><img class="drop-down-icon" src="/images/profile.png"><a href="/users/profile/<%=id%>">My Profile</a></li>
                     <%if (role === 'admin') {%>
                         <li><img class="drop-down-icon" src="/images/tools.png"><a href="/users/admin">Admin Tools</a></li>
                     <%}%> 
-                    <li><img class="drop-down-icon" src="/images/inbox.png"><a href="/users/inbox">Inbox</a></li>
+                    <%if (role === 'patient') {%>
+                        <li><img class="drop-down-icon" src="/images/inbox.png"><a href="/users/questions">Questions?</a></li>
+                    <%}%>
                     <li><img class="drop-down-icon" src="/images/settings.png"><a href="/users/settings">Settings</a></li>
                     <li><img class="drop-down-icon" src="/images/log-out.png"><a href="/users/logout">Logout</a></li>
                 </ul>
