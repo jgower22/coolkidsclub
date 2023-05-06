@@ -298,10 +298,45 @@ exports.makeAdmin = (req, res, next) => {
     User.findById(patientId)
         .then(user => {
             if (user) {
+                if (user.role === 'admin') {
+                    let err = new Error('User is already an admin');
+                    err.status = 400;
+                    return next(err);
+                }
                 user.role = 'admin';
                 user.save()
                     .then(user => {
-                        req.flash('success', 'User role has been updated to admin.');
+                        req.flash('success', 'User role has been updated to admin');
+                        res.redirect('back');
+                    })
+                    .catch(err => next(err));
+            } else {
+                let err = new Error('Cannot find user with id: ' + id);
+                err.status = 404;
+                next(err);
+            }
+        })
+        .catch(err => next(err));
+};
+
+exports.removeAdmin = (req, res, next) => {
+    let adminId = req.params.id;
+    if (adminId === req.session.user) {
+        req.flash('error', 'You cannot remove yourself as an admin');
+        return res.redirect('back');
+    }
+    User.findById(adminId)
+        .then(user => {
+            if (user) {
+                if (user.role === 'patient') {
+                    let err = new Error('User is already a patient');
+                    err.status = 400;
+                    return next(err);
+                }
+                user.role = 'patient';
+                user.save()
+                    .then(user => {
+                        req.flash('success', 'User role has been updated to patient');
                         res.redirect('back');
                     })
                     .catch(err => next(err));
@@ -332,7 +367,7 @@ exports.banUser = (req, res, next) => {
                 user.status = 'banned';
                 user.save()
                     .then(user => {
-                        req.flash('success', 'User has been banned.');
+                        req.flash('success', 'User has been banned');
                         res.redirect('back');
                     })
                     .catch(err => next(err));
