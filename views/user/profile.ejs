@@ -19,8 +19,12 @@
                 <h3>Member Since: <%=formattedDate%></h3>
                 <h3>Role: <%=user.role.charAt(0).toUpperCase() + user.role.slice(1)%></h3>
                 
-                <div id="rsvpsTable"></div>
-                <div id="errorMessage"></div>
+                <%if (user.role === 'patient') {%>
+                    <h2><%=user.firstName%>'s RSVP's</h2>
+                    <div id="rsvpsTable"></div>
+                    <div id="errorMessage"></div>
+                <%}%>
+                
                 
             </div>
         </div>
