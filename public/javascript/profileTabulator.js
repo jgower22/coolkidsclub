@@ -5,7 +5,7 @@ async function makeTable() {
     let id = url.substring(url.lastIndexOf('/') + 1, url.length);
     console.log('url: ' + url);
     console.log('id: ' + id);
-    fetch("/users/rsvpsJSON").then((response) => {
+    fetch("/users/rsvpsJSON/" + id).then((response) => {
         if (response.ok) {
             return response.json();
         }
