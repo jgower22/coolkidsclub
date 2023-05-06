@@ -1,6 +1,6 @@
 const express = require('express');
 const controller = require('../controllers/userController');
-const { isLoggedIn, isGuest, isAdmin } = require('../middlewares/auth.js');
+const { isLoggedIn, isGuest, isAdmin, verifyProfileId, isPatient } = require('../middlewares/auth.js');
 const { requestLimiter } = require('../middlewares/rateLimiter');
 const { validateUserId, validateSignUp, validateLogIn, validateEmail, validateUsername, 
         validatePassword, validateFirstName, validateLastName, validateResult } = require('../middlewares/validator.js');
@@ -17,7 +17,7 @@ router.post('/login', requestLimiter(5, 'Too many login requests. Try again late
 
 router.get('/profile', isLoggedIn, controller.myProfile);
 
-router.get('/profile/:id', isLoggedIn, isAdmin, validateUserId, controller.userProfile);
+router.get('/profile/:id', isLoggedIn, verifyProfileId, validateUserId, controller.userProfile);
 
 router.put('/:id/make-admin', isLoggedIn, isAdmin, validateUserId, controller.makeAdmin);
 
@@ -27,7 +27,7 @@ router.put('/:id/ban', isLoggedIn, isAdmin, validateUserId, controller.banUser);
 
 router.put('/:id/unban', isLoggedIn, isAdmin, validateUserId, controller.unbanUser);
 
-router.get('/inbox', isLoggedIn, controller.inbox);
+router.get('/questions', isLoggedIn, isPatient, controller.questions);
 
 router.get('/settings', isLoggedIn, controller.settings);
 
