@@ -175,9 +175,12 @@ exports.processLogin = (req, res, next) => {
 };
 
 exports.rsvpsJSON = (req, res, next) => {
-    let id = req.session.user;
+    //let id = req.session.user;
+    let id = req.params.id;
+    console.log('ID: ' + id);
     rsvp.find({ user: id }).populate('program', '_id name startDate endDate startTime endTime')
         .then(rsvps => {
+            console.log(rsvps);
             var programs = [];
             if (rsvps.length) {
                 var date = new Date();
@@ -186,7 +189,6 @@ exports.rsvpsJSON = (req, res, next) => {
                 formattedDate = formattedDate.split(',')[0];
                 user.formattedDate = formattedDate;
 
-
                 for (let i = 0; i < rsvps.length; i++) {
                     let object = rsvps[i].program.toObject();
                     object.response = rsvps[i].response;
@@ -194,7 +196,7 @@ exports.rsvpsJSON = (req, res, next) => {
                     console.log(object);
                 }
             }
-            //console.log(programs);
+            console.log(programs);
             res.json(programs);
 
         })
