@@ -42,6 +42,22 @@ exports.isAdmin = (req, res, next) => {
         .catch(err => next(err));
 };
 
+exports.verifyProfileId = (req, res, next) => {
+    User.findById(req.session.user)
+        .then(user => {
+            if (user.role === 'admin') {
+                return next();
+            }
+            if (req.params.id === req.session.user) {
+                return next();
+            }
+            let err = new Error('Unauthorized to access the resource');
+            err.status = 401;
+            return next(err);
+        })
+        .catch(err => next(err));
+};
+
 exports.isPatient = (req, res, next) => {
     User.findById(req.session.user)
         .then(user => {
