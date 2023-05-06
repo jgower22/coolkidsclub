@@ -179,15 +179,11 @@ exports.rsvpsJSON = (req, res, next) => {
     rsvp.find({ user: id }).populate('program', '_id name startDate endDate startTime endTime')
         .then(rsvps => {
             var programs = [];
+            const dateFormat = { ...DateTime.DATE_SHORT };
             if (rsvps.length) {
-                var date = new Date();
-                var createdAtDate = new Date(user.createdAt);
-                var formattedDate = createdAtDate.toLocaleString(dateFormat);
-                formattedDate = formattedDate.split(',')[0];
-                user.formattedDate = formattedDate;
-
-
+                
                 for (let i = 0; i < rsvps.length; i++) {
+                    //console.log(rsvps[i].createdAt);
                     let object = rsvps[i].program.toObject();
                     object.response = rsvps[i].response;
                     programs.push(object);
