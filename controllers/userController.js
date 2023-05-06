@@ -155,12 +155,12 @@ exports.processLogin = (req, res, next) => {
                                 //User.findOne({  })
                                 console.log("success " + Date.now());
                                 req.flash('success', 'You have successfully logged in');
-                                res.redirect(req.session.returnTo || '/users/profile');
+                                res.redirect(req.session.returnTo || '/users/profile/' + user._id);
                                 delete req.session.returnTo;
                             } else {
                                 console.log("success " + Date.now());
                                 req.flash('success', 'You have successfully logged in');
-                                res.redirect(req.session.returnTo || '/users/profile');
+                                res.redirect(req.session.returnTo || '/users/profile/' + user._id);
                                 delete req.session.returnTo;
                             }
                         } else {
@@ -240,8 +240,9 @@ exports.userProfile = (req, res, next) => {
         .catch(err => next(err));
 };
 
-exports.inbox = (req, res, next) => {
-    res.render('./user/inbox');
+exports.questions = (req, res, next) => {
+    let data = req.flash('formdata');
+    res.render('./user/questions', { formData: data[0] });
 };
 
 exports.settings = (req, res, next) => {
