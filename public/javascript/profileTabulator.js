@@ -28,7 +28,7 @@ async function makeTable() {
                         title: "Name", field: "name", formatter: "link", frozen: true, formatterParams: {
                             labelField: "name",
                             urlPrefix: "/programs/",
-                            urlField: "id"
+                            urlField: "_id"
                         }
                     },
                     { title: "Going?", field: "response" },

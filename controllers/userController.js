@@ -182,6 +182,7 @@ exports.rsvpsJSON = (req, res, next) => {
         .then(rsvps => {
             console.log(rsvps);
             var programs = [];
+            const dateFormat = { ...DateTime.DATE_SHORT };
             if (rsvps.length) {
                 var date = new Date();
                 var createdAtDate = new Date(user.createdAt);
@@ -189,7 +190,9 @@ exports.rsvpsJSON = (req, res, next) => {
                 formattedDate = formattedDate.split(',')[0];
                 user.formattedDate = formattedDate;
 
+
                 for (let i = 0; i < rsvps.length; i++) {
+                    //console.log(rsvps[i].createdAt);
                     let object = rsvps[i].program.toObject();
                     object.response = rsvps[i].response;
                     programs.push(object);
