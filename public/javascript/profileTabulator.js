@@ -1,6 +1,10 @@
 async function makeTable() {
     var paginationSizeSelector = [10, 20, 30];
     var paginationSize = 10;
+    let url = window.location.href;
+    let id = url.substring(url.lastIndexOf('/') + 1, url.length);
+    console.log('url: ' + url);
+    console.log('id: ' + id);
     fetch("/users/rsvpsJSON").then((response) => {
         if (response.ok) {
             return response.json();

@@ -22,8 +22,6 @@ var unbanButton = function (cell, formatterParams, onRendered) { //plain text va
     return "<form><button class='action-button-table yellow-button' type='submit' formmethod='POST' formaction='/users/" + id + "/unban?_method=PUT'>Unban User</button></form>";
 };
 
-
-
 async function makeTable() {
     var paginationSizeSelector = [10, 20, 30];
     var paginationSize = 10;
