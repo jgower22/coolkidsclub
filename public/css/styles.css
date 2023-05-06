@@ -512,6 +512,10 @@ label {
     
 }
 
+#rsvpsTable {
+    width: 100%;
+}
+
  .tabulator{
     width: 50%;
     margin-bottom: 2rem !important;
