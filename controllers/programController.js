@@ -2,7 +2,7 @@ const User = require('../models/user');
 const Program = require('../models/program');
 const rsvp = require('../models/rsvp');
 const { DateTime } = require('luxon');
-const { unescapeProgramNames, unescapeProgram } = require('../public/javascript/unescape.js');
+const { unescapeProgramTitles, unescapeProgram } = require('../public/javascript/unescape.js');
 exports.index = (req, res, next) => {
     res.locals.title = 'Programs - Cool Kids Campaign';
     Program.find({}, { _id: 1, name: 1, startDate: 1, startTime: 1, endDate: 1, endTime: 1 })
@@ -30,7 +30,7 @@ exports.programsJSON = async (req, res, next) => {
         };
         formattedPrograms.push(obj);
     }
-    unescapeProgramNames(formattedPrograms);
+    unescapeProgramTitles(formattedPrograms);
     res.json(formattedPrograms);
 }
 
