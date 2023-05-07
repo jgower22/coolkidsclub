@@ -1,5 +1,6 @@
 const { body } = require('express-validator');
 const { validationResult } = require('express-validator');
+const validator = require('validator');
 
 exports.validateProgramId = (req, res, next) => {
     let id = req.params.id;
@@ -31,8 +32,11 @@ exports.validateResult = (req, res, next) => {
         errors.array().forEach(error => {
             req.flash('error', error.msg);
         });
+        //Unescape form data
+        for (const [key, value] of Object.entries(req.body)) {
+            req.body[key] = validator.unescape(value);
+        }
         //Load form data into flash
-        console.log('REQ BODY: ' + JSON.stringify(req.body));
         req.flash('formdata', req.body);
         return res.redirect('back');
     } else {
