@@ -102,7 +102,7 @@ async function makeTable() {
                     {
                         title: "Make Admin", formatter: adminButton, width: "fitColumn", hozAlign: "center", headerSort: false,
                         cellClick: function (e, cell) {
-                            if (confirm('Are you sure make ' + cell.getRow().getData().name + ' an admin? Press OK to continue or press cancel.') === false) {
+                            if (confirm('Are you sure make ' + cell.getRow().getData().name + ' an admin? This will delete all RSVPs they may have. Press OK to continue or press cancel.') === false) {
                                 e.preventDefault();
                             }
                         }
@@ -110,7 +110,7 @@ async function makeTable() {
                     {
                         title: "Ban User", formatter: banButton, width: "fitColumn", hozAlign: "center", headerSort: false,
                         cellClick: function (e, cell) {
-                            if (confirm('Are you sure ban ' + cell.getRow().getData().name + '? Press OK to continue or press cancel.') === false) {
+                            if (confirm('Are you sure ban ' + cell.getRow().getData().name + '? This will delete all RSVPs they may have. Press OK to continue or press cancel.') === false) {
                                 e.preventDefault();
                             }
                         }
