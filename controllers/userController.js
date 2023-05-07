@@ -10,6 +10,7 @@ const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const user = require('../models/user');
 const bcryptSalt = process.env.BCRYPT_SALT;
+const { unescapeProgramNames } = require('../public/javascript/unescape.js');
 
 exports.new = (req, res) => {
     let data = req.flash('formdata');
@@ -200,11 +201,33 @@ exports.rsvpsJSON = (req, res, next) => {
                 }
             }
             console.log(programs);
+
+            unescapeProgramNames(programs);
             res.json(programs);
 
         })
         .catch(err => next(err));
-}
+};
+
+exports.rsvpsProgramJSON = (req, res, next) => {
+    //let id = req.session.user;
+    let id = req.params.id;
+    console.log('ID: ' + id);
+    rsvp.find({ program: id }).populate('user', '_id firstName lastName email')
+        .then(rsvps => {
+            let formattedRsvps = [];
+            for (let i = 0; i < rsvps.length; i++) {
+                let object = rsvps[i].toObject();
+                object.name = rsvps[i].user.firstName + " " + rsvps[i].user.lastName;
+                object.id = rsvps[i].user._id;
+                formattedRsvps.push(object);
+            }
+            console.log(formattedRsvps);
+            res.json(formattedRsvps);
+        })
+        .catch(err => next(err));
+
+};
 
 exports.myProfile = (req, res, next) => {
     let id = req.session.user;

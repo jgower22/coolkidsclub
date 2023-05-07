@@ -33,7 +33,7 @@ router.get('/settings', isLoggedIn, controller.settings);
 
 router.get('/usersJSON', isLoggedIn, isAdmin, controller.usersJSON);
 
-router.get('/rsvpsJSON/:id', isLoggedIn, controller.rsvpsJSON);
+router.get('/rsvpsJSON/:id', controller.rsvpsJSON);
 
 router.put('/settings/update-username', requestLimiter(5, 'Too many update username requests. Try again later.'), isLoggedIn, validateUsername, validateResult, controller.updateUsername);
 

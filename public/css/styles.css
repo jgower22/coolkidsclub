@@ -297,7 +297,7 @@ label {
     float: right;
     cursor: pointer;
     width: fit-content;
-}
+} 
 
 .red-button {
     background-color: red;
@@ -465,12 +465,6 @@ label {
     }
 }
 
-.rsvp-table {
-    margin-top: 10px;
-    float: left;
-    
-}
-
 .float-left {
     float: left;
 }
@@ -479,47 +473,22 @@ label {
     float: right;
 }
 
- .user-table {
-    border: 1px solid black;
-    border-collapse: separate;
- }
-
-
- .user-table tr, td, th {
-    border: 1px solid black;
- }
-
- .user-table td {
-    font-size: 20px;
-    padding: 5px 5px;
+.text-centered {
     text-align: center;
-    word-break: break-all;
- }
- 
- .user-table th {
-    font-size: 20px;
-    padding: 5px 5px;
- }
-
- .text-centered {
-    text-align: center;
-    
-    
  }
 
 .table-container {
     width: 100%;
-    
 }
 
-#rsvpsTable {
+#rsvpsTable, #rsvpsProgramTable {
     width: 100%;
 }
 
- .tabulator{
+.tabulator{
     width: 50%;
     margin-bottom: 2rem !important;
-}
+} 
 
  #descriptionContainer {
     float: left;
@@ -616,6 +585,33 @@ footer{
 
 #buttons-container {
     float: right;
+}
+
+#shareMessage {
+    width: fit-content;
+    padding: 10px;
+    color: black;
+    font-size: 18px;
+    
+}
+
+.successCopy {
+    background-color: #dafbe1;
+}
+
+.errorCopy {
+    background-color: #ffebe9;
+}
+
+.closebtn {
+    margin-left: 15px;
+    color: black;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 .purple-button {
