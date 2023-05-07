@@ -6,18 +6,17 @@
         <div class="centered">
             <div class="table-container">
 
-            
             <div id="errorMessage"></div>
 
             <%let numUsers = users.length;%>
-            
+            <h2 class="hidden">Total Users: <%=numUsers%></h2>
             <h2 class="hidden">Admins</h2>
             <div id="adminTable"></div>
             <h2 class="hidden">Patients</h2>
             <div id="patientTable"></div>
             <h2 class="hidden">Banned Users</h2>
             <div id="bannedTable"></div>
-            <h2 class="hidden">Total Users: <%=numUsers%></h2>
+            
             </div>
         </div>
         <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.4.4/dist/js/tabulator.min.js"></script>
