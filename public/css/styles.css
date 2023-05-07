@@ -485,6 +485,10 @@ label {
     width: 100%;
 }
 
+#rsvpsProgramTable {
+    margin-bottom: 0 !important;
+}
+
 .tabulator{
     width: 50%;
     margin-bottom: 2rem !important;
