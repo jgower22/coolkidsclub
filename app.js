@@ -86,4 +86,4 @@ app.use((err, req, res, next) => {
 });
 
 //Email reminders
-//eventReminders.initScheduledJobs();
+eventReminders.initScheduledJobs();
