@@ -399,7 +399,9 @@ exports.banUser = (req, res, next) => {
                     return next(err);
                 }
                 user.status = 'banned';
-                user.save()
+
+                //Save new bamned status and delete any RSVPs for user
+                Promise.all([user.save(), rsvp.deleteMany({ user: user._id })])
                     .then(user => {
                         req.flash('success', 'User has been banned');
                         res.redirect('back');
