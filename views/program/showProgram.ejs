@@ -1,8 +1,11 @@
 <%- include('../partials/header.ejs')%>
     <script defer src="/javascript/deleteConfirmation.js"></script>
     <script defer src="/javascript/copyLink.js"></script>
-    <script src="/javascript/rsvpTabulator.js"></script>
-    <link href="https://unpkg.com/tabulator-tables@5.4.4/dist/css/tabulator.min.css" rel="stylesheet">
+    <%if (role === 'admin') {%>
+        <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.4.4/dist/js/tabulator.min.js"></script>
+        <script src="/javascript/rsvpTabulator.js"></script>
+        <link href="https://unpkg.com/tabulator-tables@5.4.4/dist/css/tabulator.min.css" rel="stylesheet">
+    <%}%>
     <main>
         <div class="centered">
             <div id="program-container">
@@ -100,6 +103,5 @@
                 
             </div>
         </div>
-        <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.4.4/dist/js/tabulator.min.js"></script>
     </main>
 <%- include('../partials/footer.ejs')%>
