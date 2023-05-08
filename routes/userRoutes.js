@@ -33,7 +33,7 @@ router.get('/settings', isLoggedIn, controller.settings);
 
 router.get('/usersJSON', isLoggedIn, isAdmin, controller.usersJSON);
 
-router.get('/rsvpsJSON/:id', isLoggedIn, verifyProfileId, controller.rsvpsJSON);
+router.get('/rsvpsProfileJSON/:id', isLoggedIn, verifyProfileId, controller.rsvpsProfileJSON);
 
 router.get('/rsvpsProgramJSON/:id', isLoggedIn, isAdmin, controller.rsvpsProgramJSON);
 
