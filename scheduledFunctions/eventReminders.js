@@ -1,24 +1,40 @@
 const cron = require('node-cron');
 const Program = require('../models/program');
-const rsvp = require('../models/rsvp');
 const validator = require('validator');
+const { message } = require('../public/javascript/email.js');
+const { DateTime } = require('luxon');
 
 exports.initScheduledJobs = () => {
     //Email reminders for events
     cron.schedule('* * * * *', () => {
         console.log('running a task every minute ' + new Date().toLocaleString());
 
-        let startDateString = '2023-04-20';
-        let startDateTomorrowString = '2023-04-21';
-        let startTimeString = '18:00';
-
+        let options = {
+            timeZone: 'America/New_York',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: false
+          },
+        formatter = new Intl.DateTimeFormat([], options);
+        
+        //Get current date
+        let dateNow = new Date();
+        //Add one day to date
+        dateNow.setDate(dateNow.getDate() + 1);
+        //Format date and time
+        let dateTmr = formatter.format(dateNow);
+        let startDateTmrString = dateTmr.split(',')[0].trim();
+        let startTimeString = dateTmr.split(',')[1].trim();
+        startDateTmrString = startDateTmrString.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
+        
         Program.aggregate([
             {
                 $match: {
-                    'startDate': {
-                        '$gt': startDateString,
-                        '$lte': startDateTomorrowString,
-                    }, startTime: startTimeString
+                    startDate: startDateTmrString,
+                    startTime: startTimeString
                 }
             },
             {
@@ -49,25 +65,69 @@ exports.initScheduledJobs = () => {
                     foreignField: '_id',
                     as: 'profiles',
                     pipeline: [
-                        { $project: { firstName: 1, lastName: 1, email: 1 }}
+                        { $project: { firstName: 1, lastName: 1, email: 1 } }
                     ]
                 }
             },
 
         ])
             .then(results => {
-                //console.log('RESULTS: ' + JSON.stringify(results));
+                if (!results) {
+                    console.log('No event reminders sent.');
+                    return;
+                }
                 for (let i = 0; i < results.length; i++) {
                     let event = results[i];
                     console.log('EVENT: ' + JSON.stringify(event));
-                    console.log(validator.unescape(event.name));
-                    console.log(validator.unescape(event.details));
-                    console.log(validator.unescape(event.location));
-                    console.log(event.startDate + ' ' + event.startTime);
-                    console.log(event.endDate + ' ' + event.endTime);
-                    console.log(event.profiles[i].firstName);
-                    console.log(event.profiles[i].lastName);
-                    console.log(event.profiles[i].email);
+
+                    let eventName = validator.unescape(event.name);
+                    let eventDetails = validator.unescape(event.details);
+                    let eventLocation = validator.unescape(event.location);
+
+                    const dateFormat = { 
+                        ...DateTime.DATE_FULL, 
+                        weekday: 'short',
+                        month: 'short'
+                    };
+                    const startDate = DateTime.fromISO(event.startDate);
+                    const formattedStartDate = startDate.toLocaleString(dateFormat);
+    
+                    const endDate = DateTime.fromISO(event.endDate);
+                    const formattedEndDate = endDate.toLocaleString(dateFormat);
+    
+                    const startTime = DateTime.fromISO(event.startTime);
+                    const formattedStartTime = startTime.toLocaleString(DateTime.TIME_SIMPLE);
+
+                    const endTime = DateTime.fromISO(event.endTime);
+                    const formattedEndTime = endTime.toLocaleString(DateTime.TIME_SIMPLE);
+
+                    let eventStartDetails = formattedStartDate + ' @ ' + formattedStartTime;
+                    let eventEndDetails = formattedEndDate + ' @ ' + formattedEndTime;
+                    console.log('EVENT PROFILES: ' + JSON.stringify(event.profiles));
+                    if (event.profiles.length > 0) {
+                        for (let j = 0; j < event.profiles.length; j++) {
+                            let profile = event.profiles[j];
+                            console.log(profile);
+                            let firstName = profile.firstName;
+                            let lastName = profile.lastName;
+                            let email = profile.email;
+                            let messageOptions = ({
+                                from: `${process.env.EMAIL}`,
+                                to: "" + email + "", //receiver
+                                subject: "Program Reminder for " + eventName,
+                                html: "Hello, " + firstName +
+                                    "<br><br>This is a 24 hour reminder for " + eventName +
+                                    "<br><br>Start Date: " + eventStartDetails +
+                                    "<br>End Date: " + eventEndDetails +
+                                    "<br><br>Location: " + eventLocation + 
+                                    "<br>Details: " + eventDetails
+                            });
+                            message(null, null, messageOptions, null, null, null, null);
+                            console.log('SENDING EMAIL');
+                        }
+                    } else {
+                        console.log('No one is attending this event');
+                    }
                     console.log('-----------------------------------------');
                 }
             })
