@@ -337,7 +337,8 @@ exports.makeAdmin = (req, res, next) => {
                     return next(err);
                 }
                 user.role = 'admin';
-                user.save()
+                //Save new admin role and delete any RSVPs for user
+                Promise.all([user.save(), rsvp.deleteMany({ user: user._id })])
                     .then(user => {
                         req.flash('success', 'User role has been updated to admin');
                         res.redirect('back');
