@@ -25,12 +25,10 @@ exports.addUser = (req, res, next) => {
     //Users are patients by default
     user.role = 'patient';
 
-    //User will be pending by default
-    //user.status = 'pending';
+    //Active by default
     user.status = 'active';
 
     //Generate a username from email
-    console.log('TEMP EMAIL: ' + req.body.tempEmail);
     if (req.body.tempEmail) {
         //If username has to be regenerated
         user.username = generateFromEmail(
@@ -43,7 +41,6 @@ exports.addUser = (req, res, next) => {
             numDigits
         );
     }
-    console.log('USERNAME: ' + user.username);
 
     //Generate a random password
     let password = generator.generate({
@@ -52,7 +49,6 @@ exports.addUser = (req, res, next) => {
         uppercase: true
     });
     user.password = password;
-    console.log('PASSWORD: ' + password);
 
     //Normalize first name for email
     let firstName = req.body.firstName.toLowerCase();
@@ -77,7 +73,6 @@ exports.addUser = (req, res, next) => {
         .catch(err => {
             if (err.name === 'ValidationError') {
                 req.flash('error', err.message);
-                console.log('ERROR: ' + err);
                 return res.redirect('/users/new');
             }
 
@@ -136,10 +131,6 @@ exports.processLogin = (req, res, next) => {
                     .then(result => {
                         if (result) {
 
-                            if (user.status === 'pending') {
-                                req.flash('error', 'Please confirm your email address before logging in.');
-                                return res.redirect('/users/login');
-                            }
                             if (user.status === 'banned') {
                                 req.flash('error', 'Your account has been banned.');
                                 return res.redirect('/users/login');
@@ -153,11 +144,15 @@ exports.processLogin = (req, res, next) => {
                             console.log('Success');
                             if (user.firstLogin) {
                                 //Redirect to ask user to change username/password
-                                //User.findOne({  })
-                                console.log("success " + Date.now());
-                                req.flash('success', 'You have successfully logged in');
-                                res.redirect(req.session.returnTo || '/users/profile/' + user._id);
-                                delete req.session.returnTo;
+                                user.firstLogin = false;
+                                user.save()
+                                    .then(user => {
+                                        console.log("success " + Date.now());
+                                        req.flash('success', 'Welcome! Here you can update your username/password if you want to');
+                                        delete req.session.returnTo;
+                                        return res.redirect('/users/settings');
+                                    })
+                                    .catch(err => next(err));
                             } else {
                                 console.log("success " + Date.now());
                                 req.flash('success', 'You have successfully logged in');
@@ -175,7 +170,7 @@ exports.processLogin = (req, res, next) => {
         .catch(err => next(err));
 };
 
-exports.rsvpsJSON = (req, res, next) => {
+exports.rsvpsProfileJSON = (req, res, next) => {
     //let id = req.session.user;
     let id = req.params.id;
     console.log('ID: ' + id);
