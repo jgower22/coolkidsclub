@@ -5,7 +5,7 @@ try {
     const xBtn = document.querySelector('#profile-delete-btn');
     const dropDownContainer = document.querySelector('.drop-down-menu-container');
 
-    document.getElementById('userIcon').addEventListener('click', e => {
+    document.getElementById('dropDownBtn').addEventListener('click', e => {
         e.preventDefault();
         let element = document.querySelector(".drop-down-menu-container");
         console.log(element);
@@ -16,6 +16,8 @@ try {
 
     xBtn.addEventListener('click', e => {
         dropDownContainer.classList.remove('active');
+        chevronUp.classList.remove('active');
+        chevronDown.classList.remove('active');
     })
 } catch (e) {
 
