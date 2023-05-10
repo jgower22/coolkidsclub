@@ -84,7 +84,7 @@ body('endTime').isTime().withMessage('End time must be a valid time').custom((va
 
     if (startDate === endDate) {
         if (endTime <= startTime) {
-            throw new Error('End time must later than start time');
+            throw new Error('End time must be later than start time');
         }
     }
 
