@@ -137,7 +137,7 @@ exports.copyProgram = (req, res, next) => {
 
 exports.deleteProgram = (req, res, next) => {
     var id = req.params.id;
-    //Delete program and all associated RSVPs
+
     Promise.all([Program.findById(id), rsvp.find({ program: id, response: 'yes' }).populate('user', 'firstName lastName email')])
         .then(results => {
             const [program, rsvps] = results;
@@ -168,6 +168,7 @@ exports.deleteProgram = (req, res, next) => {
                 let eventEndDetails = formattedEndDate + ' @ ' + formattedEndTime;
 
                 console.log('ID: ' + id);
+                //Delete program and all associated RSVPs
                 Promise.all([Program.findByIdAndDelete(id, { useFindAndModify: false }), rsvp.deleteMany({ program: id })])
                     .then(results => {
                         const [program, deletedRsvp] = results;
