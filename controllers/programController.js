@@ -3,6 +3,8 @@ const Program = require('../models/program');
 const rsvp = require('../models/rsvp');
 const { DateTime } = require('luxon');
 const { unescapeProgramTitles, unescapeProgram } = require('../public/javascript/unescape.js');
+const { message } = require('../public/javascript/email.js');
+
 exports.index = (req, res, next) => {
     res.locals.title = 'Programs - Cool Kids Campaign';
     Program.find({}, { _id: 1, name: 1, startDate: 1, startTime: 1, endDate: 1, endTime: 1 })
@@ -32,7 +34,7 @@ exports.programsJSON = async (req, res, next) => {
     }
     unescapeProgramTitles(formattedPrograms);
     res.json(formattedPrograms);
-}
+};
 
 exports.newProgram = (req, res, next) => {
     res.locals.title = 'New Program - Cool Kids Campaign';
@@ -56,7 +58,6 @@ exports.createProgram = (req, res, next) => {
 exports.showProgram = (req, res, next) => {
     let id = req.params.id;
 
-    //rsvp.find( { program: id, user: req.session.user })
     Promise.all([Program.findById(id), rsvp.find({ program: id }).populate('user', 'firstName lastName _id, email')])
         .then(results => {
             const [program, rsvps] = results;
@@ -135,21 +136,81 @@ exports.copyProgram = (req, res, next) => {
 };
 
 exports.deleteProgram = (req, res, next) => {
-    let id = req.params.id;
+    var id = req.params.id;
     //Delete program and all associated RSVPs
-    Promise.all([Program.findByIdAndDelete(id, { useFindAndModify: false }), rsvp.deleteMany({ program: id })])
+    Promise.all([Program.findById(id), rsvp.find({ program: id, response: 'yes' }).populate('user', 'firstName lastName email')])
         .then(results => {
-            const [program, rsvp] = results;
+            const [program, rsvps] = results;
             if (program) {
-                req.flash('success', 'Program was deleted successfully');
-                res.redirect('/programs');
+                //Save program details in vars
+                let eventName = program.name;
+                let eventLocation = program.location;
+                let eventDetails = program.details;
+
+                const dateFormat = { 
+                    ...DateTime.DATE_FULL, 
+                    weekday: 'short',
+                    month: 'short'
+                };
+                const startDate = DateTime.fromISO(program.startDate);
+                const formattedStartDate = startDate.toLocaleString(dateFormat);
+
+                const endDate = DateTime.fromISO(program.endDate);
+                const formattedEndDate = endDate.toLocaleString(dateFormat);
+
+                const startTime = DateTime.fromISO(program.startTime);
+                const formattedStartTime = startTime.toLocaleString(DateTime.TIME_SIMPLE);
+
+                const endTime = DateTime.fromISO(program.endTime);
+                const formattedEndTime = endTime.toLocaleString(DateTime.TIME_SIMPLE);
+
+                let eventStartDetails = formattedStartDate + ' @ ' + formattedStartTime;
+                let eventEndDetails = formattedEndDate + ' @ ' + formattedEndTime;
+
+                console.log('ID: ' + id);
+                Promise.all([Program.findByIdAndDelete(id, { useFindAndModify: false }), rsvp.deleteMany({ program: id })])
+                    .then(results => {
+                        const [program, deletedRsvp] = results;
+                        req.flash('success', 'Program was deleted successfully');
+                        res.redirect('/programs');
+
+                        //Send cancellation emails to those who have RSVP'd as 'Yes'
+                        console.log('RSVP: ' + JSON.stringify(rsvp));
+                        for (let i = 0; i < rsvp.length; i++) {
+                            let profile = rsvp[i];
+                            let firstName = profile.firstName;
+                            let lastName = profile.lastName;
+                            let email = profile.email;
+                            let messageOptions = ({
+                                from: `${process.env.EMAIL}`,
+                                to: "" + email + "", //receiver
+                                subject: "Cancellation Alert for " + eventName,
+                                html: "Hello, " + firstName +
+                                    "<br><br>We're sorry, but the program '" + eventName + "' has been cancelled." + 
+                                    "<br><br>Start Date: " + eventStartDetails +
+                                    "<br>End Date: " + eventEndDetails +
+                                    "<br><br>Location: " + eventLocation +
+                                    "<br>Details: " + eventDetails
+                            });
+                            message(null, null, messageOptions, null, null, null, null);
+                            console.log('SENDING EMAIL');
+                        }
+                        
+                    })
+                    .catch(err => {
+                        console.log('ERROR: ' + err);
+                        next(err);
+                    });
             } else {
                 let err = new Error('Cannot find program with id: ' + id);
                 err.status = 404;
                 next(err);
             }
         })
-        .catch(err => next(err));
+        .catch(err => {
+            console.log('ERRORRR: ' + err);
+            next(err);
+        });
 };
 
 exports.rsvp = (req, res, next) => {
