@@ -29,6 +29,8 @@ router.put('/:id/unban', isLoggedIn, isAdmin, validateUserId, controller.unbanUs
 
 router.get('/questions', isLoggedIn, isPatient, controller.questions);
 
+router.post('/questions', requestLimiter(5, 'Too many questions sent. Try again later.'), isLoggedIn, isPatient, controller.questionsEmail);
+
 router.get('/settings', isLoggedIn, controller.settings);
 
 router.get('/usersJSON', isLoggedIn, isAdmin, controller.usersJSON);
