@@ -58,7 +58,7 @@ exports.addUser = (req, res, next) => {
         from: `${process.env.EMAIL}`,
         to: "" + req.body.email + "", //receiver
         subject: "CKC Account Temporary Credentials",
-        html: "Hello, " + firstName +
+        html: "Hello " + firstName + "," +
             "<br>Here are your temporary account credentials for the Cool Kids Campaign" +
             "<br>Username: " + user.username +
             "<br>Password: " + password,
@@ -138,6 +138,8 @@ exports.processLogin = (req, res, next) => {
 
                             req.session.user = user._id;
                             req.session.fullName = user.firstName + ' ' + user.lastName;
+                            req.session.firstName = user.firstName;
+                            req.session.lastName = user.lastName;
                             req.session.email = user.email;
                             req.session.role = user.role;
 
@@ -261,6 +263,57 @@ exports.userProfile = (req, res, next) => {
 exports.questions = (req, res, next) => {
     let data = req.flash('formdata');
     res.render('./user/questions', { formData: data[0] });
+};
+
+exports.questionsEmail = (req, res, next) => {
+    let subject = req.body.subject;
+    let details = req.body.details;
+    let email = req.session.email;
+    let firstName = req.session.firstName;
+    let lastName = req.session.lastName;
+    let fullName = req.session.fullName;
+
+    let messageOptions = ({
+        from: `${process.env.EMAIL}`,
+        to: "" + email + "", //receiver
+        subject: "Cool Kids Club - Question Received",
+        html: "Hello " + firstName + "," + 
+        "<br><br>We have received your question and we'll respond to you by email " +
+        "<br>Subject: " + subject + 
+        "<br>Details: " + details
+    });
+
+    console.log('MESSAGE OPTIONS: ' + JSON.stringify(messageOptions));
+
+    let serverMessageOptions = ({
+        from: `${process.env.EMAIL}`,
+        to: `${process.env.EMAIL}`, //receiver
+        subject: "New Patient Question",
+        html: "Hello, " + 
+        "<br><br>A patient has submitted a new question " +
+        "<br>Name: " + fullName + 
+        "<br>Email: " + email + 
+        "<br><br>Subject: " + subject + 
+        "<br>Details: " + details
+    });
+
+    let successMessage = 'Question submitted successfully! Check your email for a confirmation.';
+    let errorMessage = 'Error sending question via email.';
+
+    let id = req.session.user;
+
+    User.findById({ _id: id }, { _id: 0, password: 0 })
+    .then(() =>{
+        message(req, res, serverMessageOptions, successMessage, '/users/questions',errorMessage, '/users/questions');
+        message(req, res, messageOptions, successMessage, '/users/questions',errorMessage, '/users/questions');
+    })
+        .catch(err => {
+            if (err.name === 'ValidationError') {
+                req.flash('error', err.message);
+                return res.redirect('/users/questions');
+            }
+            next(err);
+        });
 };
 
 exports.settings = (req, res, next) => {
@@ -614,7 +667,7 @@ exports.sendUsername = (req, res, next) => {
                     from: `${process.env.EMAIL}`,
                     to: "" + user.email + "", //receiver
                     subject: "CKC Forgot Username Request",
-                    html: "Hello, " + user.firstName +
+                    html: "Hello " + user.firstName + "," +
                         "<br>Here is your username that you requested:" +
                         "<br>" + user.username
                 });
@@ -660,7 +713,7 @@ exports.sendPasswordReset = (req, res, next) => {
                                             from: `${process.env.EMAIL}`,
                                             to: "" + req.body.email + "", //receiver
                                             subject: "CKC Password Reset Link",
-                                            html: "Hello, " + user.firstName +
+                                            html: "Hello " + user.firstName + "," + 
                                                 "<br>Here is the password reset link you requested:" +
                                                 '<br><p>Click <a href="' + link + '">here</a> to reset your password</p>'
                                         });
