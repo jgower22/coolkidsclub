@@ -93,3 +93,6 @@ body('endTime').isTime().withMessage('End time must be a valid time').custom((va
 body('details').isLength({ min: 3}).withMessage('Program details must be at least 3 characters').trim().escape()];
 
 exports.validateRSVP = [body('response', 'RSVP response must be \'yes\' or \'no\'').toLowerCase().isIn(['yes', 'no']).trim().escape()];
+
+exports.validateQuestion = [body('subject').isLength({ min: 2 }).withMessage('Subject must be at least 2 characters').trim().escape(),
+body('details').isLength({ min: 3 }).withMessage('Details must be at least 3 characters').trim().escape()];
