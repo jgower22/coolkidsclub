@@ -321,6 +321,10 @@ label {
 }
 
 @media screen and (max-width: 700px) {
+    main {
+        padding: 20px 20px;
+    }
+
     .bottom-banner {
         align-items: center;
         display: flex;
@@ -443,8 +447,10 @@ label {
         width: 100%;
     }
 
-    body .tabulator {
+    #dropDownBtn {
         width: 100%;
+        background: var(--green);
+        padding-top: 15px;
     }
 }
 
@@ -462,6 +468,22 @@ label {
 
     div.fc-button-group {
         margin: 0.4rem;
+    }
+}
+
+@media all and (max-device-width: 840px) {
+    body #program-container {
+        width: 100%;
+        overflow-x: scroll;
+    }
+
+    body .tabulator {
+        width: 100%;
+        overflow: scroll;
+    }
+
+    .float-left {
+        width: 98%;
     }
 }
 

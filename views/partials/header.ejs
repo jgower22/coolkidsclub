@@ -41,7 +41,7 @@
             
             <div class="bottom-banner">
                 <input type="checkbox"id="toggle"/>
-                <label  for="toggle" id="hamburger-btn">MENU<i class="fa-solid fa-bars"></i></label>
+                <label for="toggle" id="hamburger-btn">MENU<i class="fa-solid fa-bars"></i></label>
                 <label for="toggle" id="delete-btn">MENU<i class="fa-solid fa-xmark"></i></label>
                 <nav>
                     <ul id="bottom-banner-links">
@@ -50,7 +50,7 @@
                             <%if (role === 'admin') {%>
                                 <a href="/programs/new">New Program</a>
                             <%}%>
-                            <a href=""><img id="userIcon" src="/images/user.png"><i class="fa-solid fa-chevron-down"></i><i class="fa-solid fa-chevron-up"></i></a>
+                            <label id="dropDownBtn"><a href=""><img id="userIcon" src="/images/user.png"><i class="fa-solid fa-chevron-down"></i><i class="fa-solid fa-chevron-up"></i></a></label>
                         <%} else {%>
                             <a href="/users/login">Login</a>
                             <a href="/users/new">Sign Up</a>   
