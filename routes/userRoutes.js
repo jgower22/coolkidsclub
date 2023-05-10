@@ -3,7 +3,7 @@ const controller = require('../controllers/userController');
 const { isLoggedIn, isGuest, isAdmin, verifyProfileId, isPatient } = require('../middlewares/auth.js');
 const { requestLimiter } = require('../middlewares/rateLimiter');
 const { validateUserId, validateSignUp, validateLogIn, validateEmail, validateUsername, 
-        validatePassword, validateFirstName, validateLastName, validateResult } = require('../middlewares/validator.js');
+        validatePassword, validateFirstName, validateLastName, validateQuestion, validateResult } = require('../middlewares/validator.js');
 
 const router = express.Router();
 
@@ -29,7 +29,7 @@ router.put('/:id/unban', isLoggedIn, isAdmin, validateUserId, controller.unbanUs
 
 router.get('/questions', isLoggedIn, isPatient, controller.questions);
 
-router.post('/questions', requestLimiter(5, 'Too many questions sent. Try again later.'), isLoggedIn, isPatient, controller.questionsEmail);
+router.post('/questions', requestLimiter(5, 'Too many questions sent. Try again later.'), isLoggedIn, isPatient, validateQuestion, validateResult, controller.questionsEmail);
 
 router.get('/settings', isLoggedIn, controller.settings);
 
