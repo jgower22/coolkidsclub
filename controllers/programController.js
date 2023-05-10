@@ -185,7 +185,7 @@ exports.deleteProgram = (req, res, next) => {
                                 from: `${process.env.EMAIL}`,
                                 to: "" + email + "", //receiver
                                 subject: "Cancellation Alert for " + eventName,
-                                html: "Hello, " + firstName +
+                                html: "Hello " + firstName + "," +
                                     "<br><br>We're sorry, but the program '" + eventName + "' has been cancelled." + 
                                     "<br><br>Start Date: " + eventStartDetails +
                                     "<br>End Date: " + eventEndDetails +
