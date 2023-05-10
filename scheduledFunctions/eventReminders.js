@@ -16,7 +16,7 @@ exports.initScheduledJobs = () => {
             day: '2-digit',
             hour: 'numeric',
             minute: 'numeric',
-            hour12: false
+            hourCycle: 'h23'
           },
         formatter = new Intl.DateTimeFormat([], options);
         
@@ -26,8 +26,9 @@ exports.initScheduledJobs = () => {
         dateNow.setDate(dateNow.getDate() + 1);
         //Format date and time
         let dateTmr = formatter.format(dateNow);
-        let startDateTmrString = dateTmr.split(',')[0].trim();
         let startTimeString = dateTmr.split(',')[1].trim();
+        let startDateTmrString = dateTmr.split(',')[0].trim();
+        
         startDateTmrString = startDateTmrString.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
         
         Program.aggregate([
@@ -76,6 +77,7 @@ exports.initScheduledJobs = () => {
                     console.log('No event reminders sent.');
                     return;
                 }
+                console.log('RESULTS: ' + results);
                 for (let i = 0; i < results.length; i++) {
                     let event = results[i];
                     console.log(i + ' EVENT: ' + JSON.stringify(event));
