@@ -78,7 +78,7 @@ exports.initScheduledJobs = () => {
                 }
                 for (let i = 0; i < results.length; i++) {
                     let event = results[i];
-                    console.log('EVENT: ' + JSON.stringify(event));
+                    console.log(i + ' EVENT: ' + JSON.stringify(event));
 
                     let eventName = validator.unescape(event.name);
                     let eventDetails = validator.unescape(event.details);
