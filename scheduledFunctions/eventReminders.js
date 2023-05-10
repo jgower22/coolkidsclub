@@ -77,7 +77,6 @@ exports.initScheduledJobs = () => {
                     console.log('No event reminders sent.');
                     return;
                 }
-                console.log('RESULTS: ' + results);
                 for (let i = 0; i < results.length; i++) {
                     let event = results[i];
                     console.log(i + ' EVENT: ' + JSON.stringify(event));
