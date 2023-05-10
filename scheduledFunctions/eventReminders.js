@@ -116,7 +116,7 @@ exports.initScheduledJobs = () => {
                                 from: `${process.env.EMAIL}`,
                                 to: "" + email + "", //receiver
                                 subject: "Program Reminder for " + eventName,
-                                html: "Hello, " + firstName +
+                                html: "Hello " + firstName + "," + 
                                     "<br><br>This is a 24 hour reminder for " + eventName +
                                     "<br><br>Start Date: " + eventStartDetails +
                                     "<br>End Date: " + eventEndDetails +
