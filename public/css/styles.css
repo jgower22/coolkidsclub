@@ -260,6 +260,14 @@ label {
     width: fit-content;
 }
 
+.submit:hover, 
+.cancel:hover,
+.purple-button:hover,
+#yes:hover,
+#no:hover {
+    opacity: 88%;
+}
+
 #cancel, .cancel {
     margin-top: 10px;
     background-color: red;
@@ -577,8 +585,7 @@ footer{
 .program-header {
     font-weight: bold;
     color: darkblue;
-    
-  
+    word-break: keep-all;
 }
 
 .padding-header {
@@ -670,5 +677,9 @@ footer{
 
 .flash {
     animation: fadeInMessage 1s;
+}
+
+#subject {
+    margin-bottom: 1rem;
 }
 
