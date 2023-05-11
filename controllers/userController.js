@@ -210,7 +210,7 @@ exports.rsvpsProgramJSON = (req, res, next) => {
     //let id = req.session.user;
     let id = req.params.id;
     console.log('ID: ' + id);
-    rsvp.find({ program: id }).populate('user', '_id firstName lastName email')
+    rsvp.find({ program: id, response: 'yes' }).populate('user', '_id firstName lastName email')
         .then(rsvps => {
             let formattedRsvps = [];
             for (let i = 0; i < rsvps.length; i++) {

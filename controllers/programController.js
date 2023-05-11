@@ -176,12 +176,12 @@ exports.deleteProgram = (req, res, next) => {
                         res.redirect('/programs');
 
                         //Send cancellation emails to those who have RSVP'd as 'Yes'
-                        console.log('RSVP: ' + JSON.stringify(rsvp));
-                        for (let i = 0; i < rsvp.length; i++) {
-                            let profile = rsvp[i];
-                            let firstName = profile.firstName;
-                            let lastName = profile.lastName;
-                            let email = profile.email;
+                        console.log('RSVP: ' + JSON.stringify(rsvps));
+                        for (let i = 0; i < rsvps.length; i++) {
+                            let profile = rsvps[i];
+                            let firstName = profile.user.firstName;
+                            let lastName = profile.user.lastName;
+                            let email = profile.user.email;
                             let messageOptions = ({
                                 from: `${process.env.EMAIL}`,
                                 to: "" + email + "", //receiver
