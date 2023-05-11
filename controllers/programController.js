@@ -95,84 +95,75 @@ exports.editProgram = (req, res, next) => {
 exports.updateProgram = (req, res, next) => {
     let id = req.params.id;
     let program = req.body;
-    let updatebox = req.body.sendChangeEmail;
+    program.lastModifiedBy = req.session.user;
+    let updateBox = req.body.sendChangeEmail || false;
 
-    Promise.all([Program.findById(id), rsvp.find({ program: id, response: 'yes' }).populate('user', 'firstName lastName email')])
-        .then(results => {
-            const [program, rsvps] = results;
-            if (program) {
-                //Save program details in vars
-                let eventName = program.name;
-                let eventLocation = program.location;
-                let eventDetails = program.details;
+    //Get yes RSVP's
+    rsvp.find({ program: id, response: 'yes' }).populate('user', 'firstName lastName email')
+        .then(rsvps => {
 
-                const dateFormat = {
-                    ...DateTime.DATE_FULL,
-                    weekday: 'short',
-                    month: 'short'
-                };
-                const startDate = DateTime.fromISO(program.startDate);
-                const formattedStartDate = startDate.toLocaleString(dateFormat);
-
-                const endDate = DateTime.fromISO(program.endDate);
-                const formattedEndDate = endDate.toLocaleString(dateFormat);
-
-                const startTime = DateTime.fromISO(program.startTime);
-                const formattedStartTime = startTime.toLocaleString(DateTime.TIME_SIMPLE);
-
-                const endTime = DateTime.fromISO(program.endTime);
-                const formattedEndTime = endTime.toLocaleString(DateTime.TIME_SIMPLE);
-
-                let eventStartDetails = formattedStartDate + ' @ ' + formattedStartTime;
-                let eventEndDetails = formattedEndDate + ' @ ' + formattedEndTime;
-
-                console.log('ID: ' + id);
-                //Update program and all associated RSVPs
-                Promise.all([Program.findByIdAndUpdate(id, { useFindAndModify: false, runValidators: true }), rsvp.updateMany({ program: id })])
-                    .then(results => {
-                        const [program, deletedRsvp] = results;
+            Program.findByIdAndUpdate(id, program, { useFindAndModify: false, runValidators: true })
+                .then(foundProgram => {
+                    if (foundProgram) {
                         req.flash('success', 'Program was updated successfully');
                         res.redirect('/programs/' + id);
 
-                        //Send update emails to those who have RSVP'd as 'Yes'
-                        console.log('RSVP: ' + JSON.stringify(rsvps));
-                        if(updatebox){
-                        for (let i = 0; i < rsvps.length; i++) {
-                            let profile = rsvps[i];
-                            let firstName = profile.user.firstName;
-                            let email = profile.user.email;
-                            let messageOptions = ({
-                                from: `${process.env.EMAIL}`,
-                                to: "" + email + "", //receiver
-                                subject: "Cancellation Alert for " + eventName,
-                                html: "Hello " + firstName + "," +
-                                    "<br><br>We would like to notify you that the program '" + eventName + "' has been updated." +
-                                    "<br><br>Start Date: " + eventStartDetails +
-                                    "<br>End Date: " + eventEndDetails +
-                                    "<br><br>Location: " + eventLocation +
-                                    "<br>Details: " + eventDetails
-                            });
-                            message(null, null, messageOptions, null, null, null, null);
-                            console.log('SENDING EMAIL');
-                        }
-                        }
+                        //If change emails are to be sent
+                        if (updateBox) {
 
-                    })
-                    .catch(err => {
-                        console.log('ERROR: ' + err);
+                            //Save program details in vars
+                            let eventName = program.name;
+                            let eventLocation = program.location;
+                            let eventDetails = program.details;
+
+                            const dateFormat = {
+                                ...DateTime.DATE_FULL,
+                                weekday: 'short',
+                                month: 'short'
+                            };
+
+                            const startDate = DateTime.fromISO(program.startDate);
+                            const formattedStartDate = startDate.toLocaleString(dateFormat);
+
+                            const endDate = DateTime.fromISO(program.endDate);
+                            const formattedEndDate = endDate.toLocaleString(dateFormat);
+
+                            const startTime = DateTime.fromISO(program.startTime);
+                            const formattedStartTime = startTime.toLocaleString(DateTime.TIME_SIMPLE);
+
+                            const endTime = DateTime.fromISO(program.endTime);
+                            const formattedEndTime = endTime.toLocaleString(DateTime.TIME_SIMPLE);
+
+                            let eventStartDetails = formattedStartDate + ' @ ' + formattedStartTime;
+                            let eventEndDetails = formattedEndDate + ' @ ' + formattedEndTime;
+
+                            for (let i = 0; i < rsvps.length; i++) {
+                                let profile = rsvps[i];
+                                let firstName = profile.user.firstName;
+                                let email = profile.user.email;
+                                let messageOptions = ({
+                                    from: `${process.env.EMAIL}`,
+                                    to: "" + email + "", //receiver
+                                    subject: "Program Change for " + eventName,
+                                    html: "Hello " + firstName + "," +
+                                        "<br><br>We would like to notify you that the program '" + eventName + "' has been updated." +
+                                        "<br><br>Start Date: " + eventStartDetails +
+                                        "<br>End Date: " + eventEndDetails +
+                                        "<br><br>Location: " + eventLocation +
+                                        "<br>Details: " + eventDetails
+                                });
+                                message(null, null, messageOptions, null, null, null, null);
+                            }
+                        }
+                    } else {
+                        let err = new Error('Cannot find program with id: ' + id);
+                        err.status = 404;
                         next(err);
-                    });
-            } else {
-                let err = new Error('Cannot find program with id: ' + id);
-                err.status = 404;
-                next(err);
-            }
+                    }
+                })
+                .catch(err => next(err));
         })
-        .catch(err => {
-            console.log('ERRORRR: ' + err);
-            next(err);
-        });
-
+        .catch(err => next(err));
 };
 
 exports.copyProgram = (req, res, next) => {
@@ -213,8 +204,8 @@ exports.deleteProgram = (req, res, next) => {
                 let eventLocation = program.location;
                 let eventDetails = program.details;
 
-                const dateFormat = { 
-                    ...DateTime.DATE_FULL, 
+                const dateFormat = {
+                    ...DateTime.DATE_FULL,
                     weekday: 'short',
                     month: 'short'
                 };
@@ -242,7 +233,6 @@ exports.deleteProgram = (req, res, next) => {
                         res.redirect('/programs');
 
                         //Send cancellation emails to those who have RSVP'd as 'Yes'
-                        console.log('RSVP: ' + JSON.stringify(rsvps));
                         for (let i = 0; i < rsvps.length; i++) {
                             let profile = rsvps[i];
                             let firstName = profile.user.firstName;
@@ -253,31 +243,24 @@ exports.deleteProgram = (req, res, next) => {
                                 to: "" + email + "", //receiver
                                 subject: "Cancellation Alert for " + eventName,
                                 html: "Hello " + firstName + "," +
-                                    "<br><br>We're sorry, but the program '" + eventName + "' has been cancelled." + 
+                                    "<br><br>We're sorry, but the program '" + eventName + "' has been cancelled." +
                                     "<br><br>Start Date: " + eventStartDetails +
                                     "<br>End Date: " + eventEndDetails +
                                     "<br><br>Location: " + eventLocation +
                                     "<br>Details: " + eventDetails
                             });
                             message(null, null, messageOptions, null, null, null, null);
-                            console.log('SENDING EMAIL');
                         }
-                        
+
                     })
-                    .catch(err => {
-                        console.log('ERROR: ' + err);
-                        next(err);
-                    });
+                    .catch(err => next(err));
             } else {
                 let err = new Error('Cannot find program with id: ' + id);
                 err.status = 404;
                 next(err);
             }
         })
-        .catch(err => {
-            console.log('ERRORRR: ' + err);
-            next(err);
-        });
+        .catch(err => next(err));
 };
 
 exports.rsvp = (req, res, next) => {
