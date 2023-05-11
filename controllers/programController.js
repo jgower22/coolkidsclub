@@ -98,10 +98,10 @@ exports.updateProgram = (req, res, next) => {
     program.lastModifiedBy = req.session.user;
     let updateBox = req.body.sendChangeEmail || false;
 
-    //Get yes RSVP's
-    rsvp.find({ program: id, response: 'yes' }).populate('user', 'firstName lastName email')
-        .then(rsvps => {
-
+    //Get old program details and yes RSVP's
+    Promise.all([Program.findById(id), rsvp.find({ program: id, response: 'yes' }).populate('user', 'firstName lastName email')])
+        .then(results => {
+            const [oldProgram, rsvps] = results;
             Program.findByIdAndUpdate(id, program, { useFindAndModify: false, runValidators: true })
                 .then(foundProgram => {
                     if (foundProgram) {
@@ -112,6 +112,7 @@ exports.updateProgram = (req, res, next) => {
                         if (updateBox) {
 
                             //Save program details in vars
+                            let oldEventName = oldProgram.name;
                             let eventName = program.name;
                             let eventLocation = program.location;
                             let eventDetails = program.details;
@@ -144,9 +145,10 @@ exports.updateProgram = (req, res, next) => {
                                 let messageOptions = ({
                                     from: `${process.env.EMAIL}`,
                                     to: "" + email + "", //receiver
-                                    subject: "Program Change for " + eventName,
+                                    subject: "Program Change for " + oldEventName,
                                     html: "Hello " + firstName + "," +
-                                        "<br><br>We would like to notify you that the program '" + eventName + "' has been updated." +
+                                        "<br><br>We would like to notify you that the program '" + oldEventName + "' has been updated." +
+                                        "<br><br>Event Name: " + eventName +
                                         "<br><br>Start Date: " + eventStartDetails +
                                         "<br>End Date: " + eventEndDetails +
                                         "<br><br>Location: " + eventLocation +
