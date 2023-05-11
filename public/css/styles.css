@@ -589,7 +589,7 @@ footer{
 /***RSVP Confirm***/
 #program-container, #profile-container {
     width: 50%;
-    word-break: break-all;
+    word-wrap: break-word;
 }
 
 .rsvp-confirm {
