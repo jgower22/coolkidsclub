@@ -6,6 +6,8 @@
                     <h2>Edit this program</h2>
 
                     <%if (formData) {%>
+                        <label id="checkboxLabel"><input type="checkbox" id="sendChangeEmail" name="sendChangeEmail"><b>Send emails to those who have RSVP'd 'Yes' about this change?</b></label>
+
                         <label for="name">Name:</label>
                         <input type="text" id="name" name="name" placeholder="Program Name" minlength="2" value="<%=formData.name%>" required>
 
@@ -27,6 +29,8 @@
                         <label for="details">Details:</label>
                         <textarea id="details" name="details" placeholder="Description of Program" rows="4" minlength="3" required><%=formData.details%></textarea>
                     <%} else {%>
+                        <label id="checkboxLabel"><input type="checkbox" id="sendChangeEmail" name="sendChangeEmail"><b>Send emails to those who have RSVP'd 'Yes' about this change?</b></label>
+
                         <label for="name">Name:</label>
                         <input type="text" id="name" name="name" placeholder="Program Name" minlength="2" value="<%=program.name%>" required>
 
