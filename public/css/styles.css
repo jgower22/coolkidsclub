@@ -590,6 +590,7 @@ footer{
 #program-container, #profile-container {
     width: 50%;
     word-wrap: break-word;
+    word-break: break-all;
 }
 
 .rsvp-confirm {
