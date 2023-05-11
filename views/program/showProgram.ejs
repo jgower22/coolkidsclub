@@ -75,6 +75,11 @@
                 }%>
 
                 <%if (role === 'patient') {%>
+                    <div>
+                        <h1 class="program-header padding-header">Description</h1>
+                        <p><%=program.details%></p>
+                    </div>
+                    
                     <h1 class="program-header padding-header">RSVP</h1>
 
                     <%
