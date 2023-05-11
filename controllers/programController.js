@@ -95,6 +95,7 @@ exports.editProgram = (req, res, next) => {
 exports.updateProgram = (req, res, next) => {
     let id = req.params.id;
     let program = req.body;
+    program.lastModifiedBy = req.session.user;
     let updateBox = req.body.sendChangeEmail || false;
 
     //Get all people who have RSVP'd as yes
