@@ -111,11 +111,15 @@ exports.updateProgram = (req, res, next) => {
                         //If change emails are to be sent
                         if (updateBox) {
 
-                            //Save program details in vars
+                            //Old program details
                             let oldEventName = oldProgram.name;
-                            let eventName = program.name;
-                            let eventLocation = program.location;
-                            let eventDetails = program.details;
+                            let oldEventLocation = oldProgram.location;
+                            let oldEventDetails = oldProgram.details;
+
+                            //New program details
+                            let newEventName = program.name;
+                            let newEventLocation = program.location;
+                            let newEventDetails = program.details;
 
                             const dateFormat = {
                                 ...DateTime.DATE_FULL,
@@ -123,20 +127,37 @@ exports.updateProgram = (req, res, next) => {
                                 month: 'short'
                             };
 
-                            const startDate = DateTime.fromISO(program.startDate);
-                            const formattedStartDate = startDate.toLocaleString(dateFormat);
+                            //Old program time
+                            const oldStartDate = DateTime.fromISO(oldProgram.startDate);
+                            const formattedOldStartDate = oldStartDate.toLocaleString(dateFormat);
 
-                            const endDate = DateTime.fromISO(program.endDate);
-                            const formattedEndDate = endDate.toLocaleString(dateFormat);
+                            const oldEndDate = DateTime.fromISO(oldProgram.endDate);
+                            const formattedOldEndDate = oldEndDate.toLocaleString(dateFormat);
 
-                            const startTime = DateTime.fromISO(program.startTime);
-                            const formattedStartTime = startTime.toLocaleString(DateTime.TIME_SIMPLE);
+                            const oldStartTime = DateTime.fromISO(oldProgram.startTime);
+                            const formattedOldStartTime = oldStartTime.toLocaleString(DateTime.TIME_SIMPLE);
 
-                            const endTime = DateTime.fromISO(program.endTime);
-                            const formattedEndTime = endTime.toLocaleString(DateTime.TIME_SIMPLE);
+                            const oldEndTime = DateTime.fromISO(oldProgram.endTime);
+                            const formattedOldEndTime = oldEndTime.toLocaleString(DateTime.TIME_SIMPLE);
 
-                            let eventStartDetails = formattedStartDate + ' @ ' + formattedStartTime;
-                            let eventEndDetails = formattedEndDate + ' @ ' + formattedEndTime;
+                            let oldEventStartDetails = formattedOldStartDate + ' @ ' + formattedOldStartTime;
+                            let oldEventEndDetails = formattedOldEndDate + ' @ ' + formattedOldEndTime;
+
+                            //New program time
+                            const newStartDate = DateTime.fromISO(program.startDate);
+                            const formattedNewStartDate = newStartDate.toLocaleString(dateFormat);
+
+                            const newEndDate = DateTime.fromISO(program.endDate);
+                            const formattedNewEndDate = newEndDate.toLocaleString(dateFormat);
+
+                            const newStartTime = DateTime.fromISO(program.startTime);
+                            const formattedNewStartTime = newStartTime.toLocaleString(DateTime.TIME_SIMPLE);
+
+                            const newEndTime = DateTime.fromISO(program.endTime);
+                            const formattedNewEndTime = newEndTime.toLocaleString(DateTime.TIME_SIMPLE);
+
+                            let newEventStartDetails = formattedNewStartDate + ' @ ' + formattedNewStartTime;
+                            let newEventEndDetails = formattedNewEndDate + ' @ ' + formattedNewEndTime;
 
                             for (let i = 0; i < rsvps.length; i++) {
                                 let profile = rsvps[i];
@@ -148,11 +169,18 @@ exports.updateProgram = (req, res, next) => {
                                     subject: "Program Change for " + oldEventName,
                                     html: "Hello " + firstName + "," +
                                         "<br><br>We would like to notify you that the program '" + oldEventName + "' has been updated." +
-                                        "<br><br>Event Name: " + eventName +
-                                        "<br><br>Start Date: " + eventStartDetails +
-                                        "<br>End Date: " + eventEndDetails +
-                                        "<br><br>Location: " + eventLocation +
-                                        "<br>Details: " + eventDetails
+                                        "<br><br>New Program Details: " + 
+                                        "<br>Event Name: " + newEventName +
+                                        "<br>Start Date: " + newEventStartDetails +
+                                        "<br>End Date: " + newEventEndDetails +
+                                        "<br>Location: " + newEventLocation +
+                                        "<br>Details: " + newEventDetails + 
+                                        "<br><br>Previous Program Details: " +
+                                        "<br>Event Name: " + oldEventName +
+                                        "<br>Start Date: " + oldEventStartDetails +
+                                        "<br>End Date: " + oldEventEndDetails +
+                                        "<br>Location: " + oldEventLocation +
+                                        "<br>Details: " + oldEventDetails
                                 });
                                 message(null, null, messageOptions, null, null, null, null);
                             }
