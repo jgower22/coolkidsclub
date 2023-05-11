@@ -98,10 +98,7 @@ exports.updateProgram = (req, res, next) => {
     program.lastModifiedBy = req.session.user;
     let updateBox = req.body.sendChangeEmail || false;
 
-    //Get all people who have RSVP'd as yes
-    //Update program
-    //Send update emails to those who have RSVP'd as yes
-
+    //Get yes RSVP's
     rsvp.find({ program: id, response: 'yes' }).populate('user', 'firstName lastName email')
         .then(rsvps => {
 
@@ -111,6 +108,7 @@ exports.updateProgram = (req, res, next) => {
                         req.flash('success', 'Program was updated successfully');
                         res.redirect('/programs/' + id);
 
+                        //If change emails are to be sent
                         if (updateBox) {
 
                             //Save program details in vars
